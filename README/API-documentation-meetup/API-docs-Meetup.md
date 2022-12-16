@@ -451,7 +451,7 @@ Create and return a new image for a group specified by id.
 * Require proper authorization: Current User must be the organizer for the group
 * Request
   * Method: POST
-  * URL: /users/:userId/groups/:groupId/add-image
+  * URL: /users/:userId/groups/:groupId/images
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -577,7 +577,7 @@ Deletes an existing group.
 * Require proper authorization: Group must belong to the current user
 * Request
   * Method: DELETE
-  * URL: /users/:userId/groups/:groupId
+  * URL: /users/:userId/groups
   * Body: none
 
 * Successful Response
@@ -1113,7 +1113,7 @@ Create and return a new image for an event specified by id.
 * Require proper authorization: Current User must be an attendee of the event
 * Request
   * Method: POST
-  * URL: /users/:userId/events/:eventId/add-image
+  * URL: /users/:userId/events/:eventId/images
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -1258,7 +1258,7 @@ Delete an event specified by its id
   the group with a status of "co-host"
 * Request
   * Method: DELETE
-  * URL: /users/:userId/groups/:groupId/events/:eventId
+  * URL: /users/:userId/groups/:groupId/events
   * Body: none
 
 * Successful Response
@@ -1625,8 +1625,8 @@ Returns the attendees of an event specified by its id.
 
 * Require Authentication: false
 * Request
-  * Method: ?
-  * URL: ?
+  * Method: GET
+  * URL: /users/:userId/events/:eventId/attendees
   * Body: none
 
 * Successful Response: If you ARE the organizer of the group or a member of the
@@ -1719,8 +1719,8 @@ Request attendance for an event specified by id.
 * Require Authentication: true
 * Require Authorization: Current User must be a member of the group
 * Request
-  * Method: ?
-  * URL: ?
+  * Method: POST
+  * URL: /users/:userId/events/:eventId/join
   * Headers:
     * Content-Type: application/json
   * Body: none
@@ -1787,8 +1787,8 @@ Change the status of an attendance for an event specified by id.
 * Require proper authorization: Current User must already be the organizer or
   have a membership to the group with the status of "co-host"
 * Request
-  * Method: ?
-  * URL: ?
+  * Method: POST
+  * URL: /users/:userId/events/:eventId/status
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -1862,8 +1862,8 @@ Delete an attendance to an event specified by id.
 * Require proper authorization: Current User must be the host of the group, or
   the user whose attendance is being deleted
 * Request
-  * Method: ?
-  * URL: ?
+  * Method: DELETE
+  * URL: /users/:userId/events/:eventId/attendees
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -1935,8 +1935,8 @@ Delete an existing image for a Group.
 * Require proper authorization: Current user must be the organizer or "co-host"
   of the Group
 * Request
-  * Method: ?
-  * URL: ?
+  * Method: DELETE
+  * URL: /users/:userId/group/:groupId/images
   * Body: none
 
 * Successful Response
@@ -1974,8 +1974,8 @@ Delete an existing image for an Event.
 * Require proper authorization: Current user must be the organizer or "co-host"
   of the Group that the Event belongs to
 * Request
-  * Method: ?
-  * URL: ?
+  * Method: DELETE
+  * URL: /users/:userId/events/:eventId/images
   * Body: none
 
 * Successful Response
@@ -2011,8 +2011,8 @@ Return events filtered by query parameters.
 
 * Require Authentication: false
 * Request
-  * Method: ?
-  * URL: ?
+  * Method: GET
+  * URL: /search/events/?page=&size=&name=&type=&startDate=
   * Query Parameters
     * page: integer, minimum: 0, maximum: 10, default: 0
     * size: integer, minimum: 0, maximum: 20, default: 20
