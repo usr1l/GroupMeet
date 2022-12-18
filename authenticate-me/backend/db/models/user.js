@@ -6,8 +6,8 @@ const { Model, Validator } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     toSafeObject() {
-      const { id, username, email } = this; // context will be the User instance
-      return { id, username, email };
+      const { id, firstName, lastName, username, email } = this; // context will be the User instance
+      return { id, firstName, lastName, username, email };
     };
 
     validatePassword(password) {
@@ -33,9 +33,11 @@ module.exports = (sequelize, DataTypes) => {
       }
     };
 
-    static async signup({ username, email, password }) {
+    static async signup({ firstName, lastName, username, email, password }) {
       const hashedPassword = bcrypt.hashSync(password);
       const user = await User.create({
+        firstName,
+        lastName,
         username,
         email,
         hashedPassword
@@ -48,6 +50,23 @@ module.exports = (sequelize, DataTypes) => {
     };
   }
   User.init({
+    firstName: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    lastName: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+      validate: {
+        len: [3, 256],
+        isEmail: true
+      }
+    },
     username: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -59,15 +78,6 @@ module.exports = (sequelize, DataTypes) => {
             throw new Error('Username cannot be an email')
           }
         }
-      }
-    },
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
-      validate: {
-        len: [3, 256],
-        isEmail: true
       }
     },
     hashedPassword: {
