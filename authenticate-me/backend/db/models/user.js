@@ -6,8 +6,8 @@ const { Model, Validator } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     toSafeObject() {
-      const { id, username, email } = this; // context will be the User instance
-      return { id, username, email };
+      const { id, firstName, lastName, username, email } = this; // context will be the User instance
+      return { id, firstName, lastName, username, email };
     };
 
     validatePassword(password) {
@@ -48,6 +48,25 @@ module.exports = (sequelize, DataTypes) => {
     };
   }
   User.init({
+    firstName: {
+      type: DataTypes.STRING,
+      unique: true,
+      allowNull: false
+    },
+    lastName: {
+      type: DataTypes.STRING,
+      unique: true,
+      allowNull: false
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+      validate: {
+        len: [3, 256],
+        isEmail: true
+      }
+    },
     username: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -59,15 +78,6 @@ module.exports = (sequelize, DataTypes) => {
             throw new Error('Username cannot be an email')
           }
         }
-      }
-    },
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
-      validate: {
-        len: [3, 256],
-        isEmail: true
       }
     },
     hashedPassword: {
