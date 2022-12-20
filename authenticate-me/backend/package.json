@@ -9,7 +9,9 @@
     "start": "per-env",
     "start:development": "nodemon ./bin/www",
     "start:production": "node ./bin/www",
-    "build": "node psql-setup-script.js"
+    "build": "node psql-setup-script.js",
+    "unseed": "npx dotenv sequelize db:seed:undo:all && npx dotenv sequelize db:migrate:undo:all",
+    "seed": "npx dotenv sequelize db:migrate && npx dotenv sequelize db:seed:all"
   },
   "keywords": [],
   "author": "",

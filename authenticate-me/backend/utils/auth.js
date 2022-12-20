@@ -74,4 +74,7 @@ const requireAuth = function (req, _res, next) {
 //   return next(err);
 // }
 
+// use default scopes with permissions?
+// if not in default scope
+
 module.exports = { setTokenCookie, restoreUser, requireAuth };
