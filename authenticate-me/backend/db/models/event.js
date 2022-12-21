@@ -1,5 +1,5 @@
 'use strict';
-const { Venue } = require('./venue')
+const { Venue } = require('../models')
 const {
   Model
 } = require('sequelize');
@@ -14,6 +14,14 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Event.belongsTo(models.Group, { foreignKey: 'groupId' });
       Event.belongsTo(models.Venue, { foreignKey: 'venueId' });
+      Event.belongsToMany(models.User,
+        {
+          through: models.Attendance,
+          foreignKey: 'eventId',
+          otherKey: 'userId'
+        });
+      Event.hasMany(models.EventImage, { foreignKey: 'eventId' });
+      Event.hasMany(models.Attendence, { foreignKey: 'eventId' });
     }
   }
   Event.init({
@@ -45,7 +53,6 @@ module.exports = (sequelize, DataTypes) => {
     capacity: {
       type: DataTypes.INTEGER
     },
-    // why is price an integer and not a decimal?
     price: {
       type: DataTypes.INTEGER,
       validate: {
