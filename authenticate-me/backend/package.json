@@ -10,9 +10,11 @@
     "start:development": "nodemon ./bin/www",
     "start:production": "node ./bin/www",
     "build": "node psql-setup-script.js",
-    "unseed": "npx dotenv sequelize db:seed:undo:all && npx dotenv sequelize db:migrate:undo:all",
-    "seed": "npx dotenv sequelize db:migrate && npx dotenv sequelize db:seed:all",
-    "resetdb": "npm run unseed && npm run seed"
+    "mig": "npx dotenv sequelize db:migrate",
+    "undo-mig": "npx dotenv sequelize db:migrate:undo:all",
+    "unseed": "npx dotenv sequelize db:seed:undo:all",
+    "seed": "npx dotenv sequelize db:seed:all",
+    "resetdb": "npm run unseed && npm run undo-mig && npm run mig && npm run seed"
   },
   "keywords": [],
   "author": "",
