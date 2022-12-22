@@ -18,11 +18,12 @@ module.exports = (sequelize, DataTypes) => {
   Attendance.init({
     status: {
       type: DataTypes.ENUM,
-      validate: {
-        isIn: {
-          args: [['member', 'co-host', 'pending', 'waitlist', 'attending']],
-        }
-      }
+      values: ['member', 'co-host', 'pending', 'waitlist', 'attending'],
+      // validate: {
+      //   isIn: {
+      //     args: [['member', 'co-host', 'pending', 'waitlist', 'attending']],
+      //   }
+      // }
     },
     eventId: {
       type: DataTypes.INTEGER,

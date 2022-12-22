@@ -1,5 +1,5 @@
 'use strict';
-const { Venue } = require('../models')
+
 const {
   Model
 } = require('sequelize');
@@ -21,7 +21,6 @@ module.exports = (sequelize, DataTypes) => {
           otherKey: 'userId'
         });
       Event.hasMany(models.EventImage, { foreignKey: 'eventId' });
-      Event.hasMany(models.Attendence, { foreignKey: 'eventId' });
     }
   }
   Event.init({
@@ -42,6 +41,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     type: {
       type: DataTypes.ENUM,
+      values: ['In person', 'Online'],
       allowNull: false,
       validate: {
         isIn: {

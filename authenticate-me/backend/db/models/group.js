@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Group.belongsTo(models.User, { foreignKey: 'organizerId' });
-      Group.belongsTo(models.User, {
+      Group.belongsToMany(models.User, {
         through: models.Membership,
         foreignKey: 'groupId',
         otherKey: 'userId'
@@ -41,6 +41,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     type: {
       type: DataTypes.ENUM,
+      values: ['In person', 'Online'],
       allowNull: false,
       validate: {
         isIn: {

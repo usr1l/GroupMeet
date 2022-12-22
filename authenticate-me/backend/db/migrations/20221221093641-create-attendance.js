@@ -1,4 +1,11 @@
 'use strict';
+
+// need this in all seeder and migration files
+let options = {};
+if (process.env.NODE_ENV === 'production') {
+  options.schema = process.env.SCHEMA;  // define your schema in options object
+}
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -16,12 +23,16 @@ module.exports = {
       eventId: {
         allowNull: false,
         type: Sequelize.INTEGER,
-        references: { model: 'Events' }
+        references: { model: 'Events' },
+        onDelete: 'CASCADE',
+        hooks: true
       },
       userId: {
         allowNull: false,
         type: Sequelize.INTEGER,
-        references: { model: 'Users' }
+        references: { model: 'Users' },
+        onDelete: 'CASCADE',
+        hooks: true
       },
       createdAt: {
         allowNull: false,

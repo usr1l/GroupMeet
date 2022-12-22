@@ -1,4 +1,11 @@
 'use strict';
+
+// need this in all seeder and migration files
+let options = {};
+if (process.env.NODE_ENV === 'production') {
+  options.schema = process.env.SCHEMA;  // define your schema in options object
+}
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -18,7 +25,8 @@ module.exports = {
         allowNull: false
       },
       type: {
-        type: Sequelize.ENUM('In person', 'Online')
+        type: Sequelize.ENUM('In person', 'Online'),
+        allowNull: false
       },
       private: {
         type: Sequelize.BOOLEAN,
@@ -35,7 +43,11 @@ module.exports = {
       organizerId: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        references: { model: 'Users' }
+        references: {
+          model: 'Users',
+          key: 'id'
+        },
+        onDelete: 'CASCADE'
       },
       createdAt: {
         allowNull: false,
