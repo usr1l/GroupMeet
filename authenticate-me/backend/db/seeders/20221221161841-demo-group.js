@@ -22,7 +22,7 @@ module.exports = {
       {
         name: 'Event on the lake',
         about: '[About is 50 characters]',
-        type: 'In Person',
+        type: 'In person',
         private: false,
         city: 'Los Angeles',
         state: 'NV',
