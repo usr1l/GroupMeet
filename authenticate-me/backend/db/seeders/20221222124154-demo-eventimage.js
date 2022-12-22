@@ -14,12 +14,12 @@ module.exports = {
     await queryInterface.bulkInsert(options, [
       {
         url: 'photo1.url',
-        preview: true,
+        preview: false,
         eventId: 1
       },
       {
         url: 'photo2.url',
-        preview: true,
+        preview: false,
         eventId: 2
       },
       {
@@ -27,15 +27,14 @@ module.exports = {
         preview: true,
         eventId: 3
       },
-    ])
+    ]);
   },
 
   async down(queryInterface, Sequelize) {
-    /**
-     * Add commands to revert seed here.
-     *
-     * Example:
-     * await queryInterface.bulkDelete('People', null, {});
-     */
+    options.tableName = 'EventImages';
+    const Op = Sequelize.Op;
+    await queryInterface.bulkDelete(options, {
+      url: { [Op.in]: ['photo1.url', 'photo2.url', 'photo3.url'] }
+    })
   }
 };
