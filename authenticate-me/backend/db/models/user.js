@@ -47,6 +47,18 @@ module.exports = (sequelize, DataTypes) => {
 
     static associate(models) {
       // define association here
+      User.hasMany(models.Group, { foreignKey: 'organizerId' });
+      User.belongsToMany(models.Group,
+        {
+          through: models.Attendance,
+          foreignKey: 'userId',
+          otherKey: 'groupId'
+        });
+      User.belongsToMany(models.Group, {
+        through: models.Membership,
+        foreignKey: 'userId',
+        otherKey: 'groupId'
+      });
     };
   }
   User.init({
@@ -81,7 +93,7 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     hashedPassword: {
-      type: DataTypes.STRING.BINARY,
+      type: DataTypes.STRING,
       allowNull: false,
       validate: {
         len: [60, 60]
