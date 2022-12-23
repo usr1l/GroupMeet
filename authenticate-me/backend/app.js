@@ -57,13 +57,13 @@ app.use((_req, _res, next) => {
   next(err);
 });
 
-// process jsonwebtoken errors
-app.use((err, _req, _res, next) => {
-  // check if error is an instance of jsonwebtoken error
-  if (err instanceof JsonWebTokenError) {
-    err.title = ''
-  }
-})
+// // process jsonwebtoken errors
+// app.use((err, _req, _res, next) => {
+//   // check if error is an instance of jsonwebtoken error
+//   if (err instanceof JsonWebTokenError) {
+//     err.title = ''
+//   }
+// })
 
 // Process sequelize errors
 app.use((err, _req, _res, next) => {

@@ -1,15 +1,15 @@
 'use strict';
-/** @type {import('sequelize-cli').Migration} */
 
 // need this in all seeder and migration files
 let options = {};
 if (process.env.NODE_ENV === 'production') {
   options.schema = process.env.SCHEMA;  // define your schema in options object
 }
+options.tableName = 'Groups';
 
+/** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    options.tableName = 'Users';
     await queryInterface.createTable(options, {
       id: {
         allowNull: false,
@@ -17,27 +17,35 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      firstName: {
-        type: Sequelize.STRING(50),
-        allowNull: false,
-      },
-      lastName: {
-        type: Sequelize.STRING(50),
-        allowNull: false,
-      },
-      email: {
-        type: Sequelize.STRING(256),
-        allowNull: false,
-        unique: true
-      },
-      username: {
-        type: Sequelize.STRING(30),
-        allowNull: false,
-        unique: true
-      },
-      hashedPassword: {
-        type: Sequelize.STRING.BINARY,
+      name: {
+        type: Sequelize.STRING(60),
         allowNull: false
+      },
+      about: {
+        type: Sequelize.TEXT,
+        allowNull: false
+      },
+      type: {
+        type: Sequelize.ENUM('In person', 'Online'),
+        allowNull: false
+      },
+      private: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false
+      },
+      city: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      state: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      organizerId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: { model: 'Users' },
+        onDelete: 'CASCADE'
       },
       createdAt: {
         allowNull: false,
@@ -49,10 +57,9 @@ module.exports = {
         type: Sequelize.DATE,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       }
-    }, options);
+    });
   },
   async down(queryInterface, Sequelize) {
-    options.tableName = 'Users';
     await queryInterface.dropTable(options);
   }
 };

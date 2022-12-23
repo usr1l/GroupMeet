@@ -64,6 +64,8 @@ router.get(
   (req, res) => {
     const { user } = req;
 
+    console.log('REQ-------', req)
+    console.log('USER-------', user)
     {
 
       const { token } = req.cookies

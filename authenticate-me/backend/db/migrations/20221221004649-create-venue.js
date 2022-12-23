@@ -1,15 +1,15 @@
 'use strict';
-/** @type {import('sequelize-cli').Migration} */
 
 // need this in all seeder and migration files
 let options = {};
 if (process.env.NODE_ENV === 'production') {
   options.schema = process.env.SCHEMA;  // define your schema in options object
 }
+options.tableName = 'Venues';
 
+/** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    options.tableName = 'Users';
     await queryInterface.createTable(options, {
       id: {
         allowNull: false,
@@ -17,27 +17,29 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      firstName: {
-        type: Sequelize.STRING(50),
+      address: {
+        type: Sequelize.STRING,
         allowNull: false,
       },
-      lastName: {
-        type: Sequelize.STRING(50),
+      city: {
         allowNull: false,
+        type: Sequelize.STRING
       },
-      email: {
-        type: Sequelize.STRING(256),
+      state: {
         allowNull: false,
-        unique: true
+        type: Sequelize.STRING
       },
-      username: {
-        type: Sequelize.STRING(30),
-        allowNull: false,
-        unique: true
+      lat: {
+        type: Sequelize.DECIMAL
       },
-      hashedPassword: {
-        type: Sequelize.STRING.BINARY,
-        allowNull: false
+      lng: {
+        type: Sequelize.DECIMAL
+      },
+      groupId: {
+        type: Sequelize.INTEGER,
+        references: { model: 'Groups' },
+        onDelete: 'CASCADE',
+        hooks: true
       },
       createdAt: {
         allowNull: false,
@@ -49,10 +51,9 @@ module.exports = {
         type: Sequelize.DATE,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       }
-    }, options);
+    });
   },
   async down(queryInterface, Sequelize) {
-    options.tableName = 'Users';
     await queryInterface.dropTable(options);
   }
 };
