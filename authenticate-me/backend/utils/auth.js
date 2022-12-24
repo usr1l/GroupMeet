@@ -60,21 +60,24 @@ const requireAuth = function (req, _res, next) {
   err.errors = ['Authentication required'];
   err.status = 401;
   return next(err);
-};
-
-// if current user doe not have the correct role(s) or permission(s)
-const reqAuthorization = function (req, _res, next) {
-  const { xsrftoken } = req.headers;
-
-
-  const err = new Error('Forbidden');
-  err.title = 'Forbidden';
-  err.errors = ['Forbidden'];
-  err.status = 403;
-  return next(err);
 }
 
-// use default scopes with permissions?
-// if not in default scope
+
+// // if current user doe not have the correct role(s) or permission(s)
+// const reqAuthorization = [
+//   restoreUser,
+//   function (req, _res, next) {
+//     const { xsrftoken } = req.headers;
+
+
+//     const err = new Error('Forbidden');
+//     err.title = 'Forbidden';
+//     err.errors = ['Forbidden'];
+//     err.status = 403;
+//     return next(err);
+//   }]
+
+// // use default scopes with permissions?
+// // if not in default scope
 
 module.exports = { setTokenCookie, restoreUser, requireAuth };

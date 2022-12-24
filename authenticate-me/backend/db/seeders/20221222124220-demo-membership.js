@@ -27,8 +27,28 @@ module.exports = {
       },
       {
         status: 'member',
+        userId: 1,
+        groupId: 2
+      },
+      {
+        status: 'member',
+        userId: 1,
+        groupId: 3
+      },
+      {
+        status: 'member',
         userId: 2,
         groupId: 1
+      },
+      {
+        status: 'member',
+        userId: 2,
+        groupId: 3
+      },
+      {
+        status: 'member',
+        userId: 3,
+        groupId: 2
       },
     ])
   },

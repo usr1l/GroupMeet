@@ -18,12 +18,12 @@ module.exports = {
       },
       {
         url: 'img2.url',
-        preview: false,
+        preview: true,
         groupId: 2
       },
       {
         url: 'img3.url',
-        preview: false,
+        preview: true,
         groupId: 3
       },
     ])
