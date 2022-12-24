@@ -3,6 +3,55 @@ const router = require('express').Router();
 const { Group, GroupImage, User, Membership } = require('../../db/models');
 const { Op } = require('sequelize');
 const { requireAuth, restoreUser } = require('../../utils/auth');
+const { check } = require('express-validator');
+const { handleValidationErrors } = require('../../utils/validation');
+
+const validateGroupData = [
+  check('name')
+    .exists({ checkFalsy: true }),
+  check('name')
+    .custom(name => {
+      if (name.length > 60) {
+        return Promise.reject('name')
+      }
+      return true;
+    })
+    .withMessage('Name must be 60 characters or less'),
+  check('about')
+    .exists({ checkFalsy: true })
+    .custom(about => {
+      if (about.length < 50) {
+        return Promise.reject('about')
+      }
+      return true;
+    })
+    .withMessage('About must be 50 characters or more'),
+  check('type')
+    .exists({ checkFalsy: true })
+    .custom(type => {
+      if (!['Online', 'In person'].includes(type)) {
+        return Promise.reject('type')
+      }
+      return true;
+    })
+    .withMessage('Type must be \'Online\' or \'In person\''),
+  check('private')
+    .exists({ checkFalsy: true })
+    .custom(private => {
+      if (typeof private !== 'boolean') {
+        return Promise.reject('private')
+      }
+      return true;
+    })
+    .withMessage('Private must be a boolean'),
+  check('city')
+    .exists({ checkFalsy: true })
+    .withMessage('City is required'),
+  check('state')
+    .exists({ checkFalsy: true })
+    .withMessage('State is required'),
+  handleValidationErrors
+];
 
 // get the count of memebers of a group
 async function getNumMembers(groupId) {
@@ -84,8 +133,13 @@ router.get('/current', requireAuth, async (req, res) => {
 
 
 // create a group
-router.post('/', requireAuth, async (req, res, next) => {
-
-})
+router.post(
+  '/',
+  requireAuth,
+  validateGroupData,
+  async (req, res) => {
+    const { name, about, type, private, city, state } = req.body;
+    res.json('end')
+  })
 
 module.exports = router;
