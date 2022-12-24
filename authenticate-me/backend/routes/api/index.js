@@ -12,6 +12,7 @@ const { restoreUser } = require("../../utils/auth.js");
 router.use(restoreUser);
 
 // router.use('/random', randomRouter)
+
 router.use('/groups', groupsRouter);
 
 router.use('/session', sessionRouter);

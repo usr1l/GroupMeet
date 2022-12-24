@@ -53,6 +53,8 @@ const validateGroupData = [
   handleValidationErrors
 ];
 
+
+
 // get the count of memebers of a group
 async function getNumMembers(groupId) {
   const numMembers = await Membership.count({
@@ -69,9 +71,12 @@ async function getGroups(groups) {
   const groupsArr = groups.map(group => group.toJSON());
   for (let group of groupsArr) {
     // get url of the image, and attach to each json object
-    const { url } = group.GroupImages[0];
+    if (group.GroupImages[0]) {
+      const { url } = group.GroupImages[0];
+      group.previewImage = url;
+    }
+
     delete group.GroupImages;
-    group.previewImage = url;
     const { id } = group;
 
     // get count of members and attach to each json object, function at top
@@ -82,20 +87,81 @@ async function getGroups(groups) {
 };
 
 
+// add an image by groupid
+router.post('/:groupId/images', requireAuth, async (req, res) => {
+  const { groupId } = req.params;
+  const userId = req.user.id;
 
-// get all groups
-router.get('/', async (_req, res) => {
-  // find all and include GroupImages table
-  const groups = await Group.findAll({
+  // if group does not exist throw error
+  let group = await Group.findByPk(groupId)
+  if (!group) {
+    const err = new Error('Group couldn\'t be found')
+    err.status = 404;
+    throw err;
+  }
+
+  // only organizer can add an image
+  const { organizerId } = group;
+
+  if (organizerId !== userId) {
+    const err = new Error('Must be the organizer of the group to add an image.');
+    err.status = 403;
+    throw err;
+  }
+
+  const { url, preview } = req.body
+
+  // change preview img
+  if (preview === true) {
+    const img = await GroupImage.findOne({
+      where: {
+        [Op.and]: [{ groupId }, { preview: true }]
+      }
+    })
+
+    const imgJSON = img.toJSON();
+    const imgId = imgJSON.id
+
+    const currPreviewImg = await GroupImage.findByPk(imgId);
+    currPreviewImg.update({
+      preview: false
+    })
+  }
+
+  // add the new img
+  const newImg = await GroupImage.create({
+    url,
+    preview,
+    groupId
+  });
+
+  let addedImg;
+
+  if (newImg) {
+    addedImg = newImg.toSafeObject();
+  } else {
+    addedImg = null;
+  }
+
+  res.json(addedImg);
+});
+
+// get details of a group by groupid
+router.get('/:groupId', requireAuth, async (req, res) => {
+  const { groupId } = req.params;
+
+  const group = await Group.findAll({
+    where: {
+      id: groupId
+    },
     include: {
       model: GroupImage,
     }
+
   });
-  const groupsArr = await getGroups(groups);
-  return res.json({ "Groups": groupsArr });
-});
 
-
+  res.json(group);
+})
 
 // get all groups joined or organized by current user
 router.get('/current', requireAuth, async (req, res) => {
@@ -132,14 +198,39 @@ router.get('/current', requireAuth, async (req, res) => {
 
 
 
+// get all groups
+router.get('/', async (_req, res) => {
+  // find all and include GroupImages table
+  const groups = await Group.findAll({
+    include: {
+      model: GroupImage,
+    }
+  });
+  const groupsArr = await getGroups(groups);
+  return res.json({ "Groups": groupsArr });
+});
+
+
+
+
 // create a group
-router.post(
-  '/',
-  requireAuth,
-  validateGroupData,
-  async (req, res) => {
-    const { name, about, type, private, city, state } = req.body;
-    res.json('end')
+router.post('/', requireAuth, validateGroupData, async (req, res) => {
+  const { name, about, type, private, city, state } = req.body;
+  const organizerId = req.user.id;
+  const newGroup = await Group.create({
+    name,
+    about,
+    type,
+    private,
+    city,
+    state,
+    organizerId
   })
+
+  res.json(newGroup);
+})
+
+
+
 
 module.exports = router;
