@@ -50,6 +50,11 @@ module.exports = {
         userId: 3,
         groupId: 2
       },
+      {
+        status: 'pending',
+        userId: 3,
+        groupId: 1
+      },
     ])
   },
 
