@@ -67,6 +67,7 @@ async function getNumMembers(groupId) {
   return numMembers;
 };
 
+
 // map all groups
 async function getGroups(groups) {
   // map out the groups into JSON objects
@@ -88,12 +89,36 @@ async function getGroups(groups) {
   return groupsArr;
 };
 
+
 // throw group does not exist error
 function groupDoesNotExist(next) {
   const err = new Error('A group with that id does not exist');
   err.status = 404;
   return next(err);
 };
+
+
+// check for cohost and organizer
+async function checkCohost(userId, organizerId, next) {
+  const organizerBool = parseInt(organizerId) === parseInt(userId);
+
+  const cohosts = await Membership.findAll(({
+    where: {
+      [Op.and]: [{ userId }, { status: 'co-host' }]
+    }
+  }));
+
+  if (!organizerBool && !cohosts.length) {
+    const err = new Error('Must be a co-host or organizer of this group');
+    err.status = 403;
+    err.title = 'Forbidden';
+    return next(err);
+  };
+
+  return true;
+};
+
+
 
 
 // get all groups joined or organized by current user
@@ -142,20 +167,7 @@ router.get('/:groupId/venues', async (req, res, next) => {
     groupDoesNotExist(next)
   };
 
-  const organizerBool = parseInt(group.organizerId) === parseInt(userId);
-
-  const cohosts = await Membership.findAll(({
-    where: {
-      [Op.and]: [{ userId }, { status: 'co-host' }]
-    }
-  }));
-
-  if (!organizerBool && !cohosts.length) {
-    const err = new Error('Must be a co-host or organizer of this group');
-    err.status = 403;
-    err.title = 'Forbidden';
-    next(err)
-  };
+  await checkCohost(parseInt(userId), group.organizerId, next);
 
   const venues = await Venue.findAll({
     where: {
@@ -179,20 +191,7 @@ router.post('/:groupId/venues', requireAuth, validateVenueData, async (req, res,
     groupDoesNotExist(next)
   };
 
-  const organizerBool = parseInt(group.organizerId) === parseInt(userId);
-
-  const cohosts = await Membership.findAll(({
-    where: {
-      [Op.and]: [{ userId }, { status: 'co-host' }]
-    }
-  }));
-
-  if (!organizerBool && !cohosts.length) {
-    const err = new Error('Must be a co-host or organizer of this group');
-    err.status = 403;
-    err.title = 'Forbidden';
-    next(err);
-  };
+  await checkCohost(parseInt(userId), group.organizerId, next);
 
   const { address, city, state, lat, lng } = req.body;
   await Venue.create({

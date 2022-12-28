@@ -61,8 +61,9 @@ const requireAuth = function (req, _res, next) {
   err.errors = ['Authentication required'];
   err.status = 401;
   return next(err);
-}
+};
 
+// check for organizer
 function checkAuth(userId, otherId, next) {
   if (parseInt(userId) !== parseInt(otherId)) {
     const err = new Error('You are not the organizer of this group')
@@ -70,6 +71,8 @@ function checkAuth(userId, otherId, next) {
     return next(err)
   }
   return true;
-}
+};
+
+
 
 module.exports = { setTokenCookie, restoreUser, requireAuth, checkAuth };

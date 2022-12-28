@@ -27,7 +27,7 @@ const validateVenueData = [
       }
       return true;
     })
-    .withMessage('Latitude must be bwetween 180 and -180'),
+    .withMessage('Latitude must be a number bwetween 180 and -180'),
   check('lng')
     .exists({ checkFalsy: true })
     .withMessage("SLongitude is required"),
@@ -39,7 +39,7 @@ const validateVenueData = [
       }
       return true;
     })
-    .withMessage('Longitude must be bwetween 180 and -180'),
+    .withMessage('Longitude must be a number bwetween 180 and -180'),
   handleValidationErrors
 ];
 
