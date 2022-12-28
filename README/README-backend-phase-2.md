@@ -2,7 +2,7 @@
 
 The next step is to set up your server error handlers.
 
-Connect the following error handling middlewares after your route connections in
+Connect the following error handling dlewares after your route connections in
 `app.js` (i.e., after `app.use(routes)`). Here is a refresher on how to create
 an [Express error-handling middleware].
 

@@ -72,6 +72,9 @@ module.exports = (sequelize, DataTypes) => {
       attributes: {
         exclude: ['createdAt', 'updatedAt']
       }
+    },
+    scopes: {
+      allDetails: { exclude: [] }
     }
   });
   return Group;

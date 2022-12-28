@@ -63,22 +63,6 @@ router.get(
   restoreUser,
   (req, res) => {
     const { user } = req;
-    // console.log('REQ-------', req)
-    // console.log('USER-------', user)
-    // {
-    //   const { token } = req.cookies
-    //   const headerToken = req.headers['xsrf-token']
-    //   console.log('token-----', headerToken)
-    //   console.log('cookie-----', token)
-    //   const [header, payload, secretKey] = token.split('.')
-    //   console.log('SCRETKEY-----', secretKey)
-    //   console.log('PAYLOAD-----', payload)
-    //   const payload2 = jwt.decode(token)
-    //   console.log('PAYLOAD2', payload2)
-    //   const verify = jwt.verify(token, secret)
-    //   console.log('VERYIFY-----', verify)
-    // }
-    // console.log('token', xsrftoken)
     if (user) {
       return res.json({
         user: user.toSafeObject()

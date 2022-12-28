@@ -2,6 +2,7 @@
 const jwt = require('jsonwebtoken');
 const { jwtConfig } = require('../config');
 const { User } = require('../db/models');
+// const user = require('../db/models/user');
 
 const { secret, expiresIn } = jwtConfig;
 
@@ -62,22 +63,13 @@ const requireAuth = function (req, _res, next) {
   return next(err);
 }
 
+function checkAuth(userId, otherId, next) {
+  if (parseInt(userId) !== parseInt(otherId)) {
+    const err = new Error('You are not the organizer of this group')
+    err.status = 403;
+    return next(err)
+  }
+  return true;
+}
 
-// // if current user doe not have the correct role(s) or permission(s)
-// const reqAuthorization = [
-//   restoreUser,
-//   function (req, _res, next) {
-//     const { xsrftoken } = req.headers;
-
-
-//     const err = new Error('Forbidden');
-//     err.title = 'Forbidden';
-//     err.errors = ['Forbidden'];
-//     err.status = 403;
-//     return next(err);
-//   }]
-
-// // use default scopes with permissions?
-// // if not in default scope
-
-module.exports = { setTokenCookie, restoreUser, requireAuth };
+module.exports = { setTokenCookie, restoreUser, requireAuth, checkAuth };
