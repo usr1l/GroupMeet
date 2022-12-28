@@ -2,10 +2,10 @@
 const router = require('express').Router();
 const { Group, GroupImage, User, Membership, Venue } = require('../../db/models');
 const { Op } = require('sequelize');
-const { requireAuth, restoreUser, checkAuth } = require('../../utils/auth');
+const { requireAuth, checkAuth, checkCohost } = require('../../utils/auth');
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
-const validateVenueData = require('./venues.js');
+const { validateVenueData } = require('./venues.js');
 // const venuesRouter = require('./venues');
 
 
@@ -96,28 +96,6 @@ function groupDoesNotExist(next) {
   err.status = 404;
   return next(err);
 };
-
-
-// check for cohost and organizer
-async function checkCohost(userId, organizerId, next) {
-  const organizerBool = parseInt(organizerId) === parseInt(userId);
-
-  const cohosts = await Membership.findAll(({
-    where: {
-      [Op.and]: [{ userId }, { status: 'co-host' }]
-    }
-  }));
-
-  if (!organizerBool && !cohosts.length) {
-    const err = new Error('Must be a co-host or organizer of this group');
-    err.status = 403;
-    err.title = 'Forbidden';
-    return next(err);
-  };
-
-  return true;
-};
-
 
 
 

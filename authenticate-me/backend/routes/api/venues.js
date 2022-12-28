@@ -1,10 +1,11 @@
 // backend/routes/api/venues.js
-const router = require('express').Router();
-const { Group, GroupImage, User, Membership } = require('../../db/models');
+const venuesRouter = require('express').Router();
+const { Group, GroupImage, User, Membership, Venue } = require('../../db/models');
 const { Op } = require('sequelize');
-const { requireAuth, restoreUser } = require('../../utils/auth');
+const { requireAuth, checkAuth, checkCohost } = require('../../utils/auth');
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
+
 
 const validateVenueData = [
   check('address')
@@ -43,10 +44,32 @@ const validateVenueData = [
   handleValidationErrors
 ];
 
-router.get('/', async (req, res) => {
-  res.json('done')
+
+
+// throw group does not exist error
+function venueDoesNotExist(next) {
+  const err = new Error('Venue could not be found');
+  err.status = 404;
+  return next(err);
+};
+
+
+
+venuesRouter.put('/:venueId', requireAuth, async (req, res, next) => {
+
+  const { venueId } = req.params;
+  const venue = await Venue.findByPk(venueId);
+
+  if (!venue) {
+    venueDoesNotExist(next)
+  };
+
+  const group = await Group.findByPk(venue.groupId);
+
+
+  res.json({ venue, group })
 })
 
 
 // module.exports = router;
-module.exports = validateVenueData;
+module.exports = { validateVenueData, venuesRouter }

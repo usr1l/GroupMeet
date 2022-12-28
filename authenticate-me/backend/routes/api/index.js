@@ -1,9 +1,9 @@
-4// backend/routes/api/index.js
+// backend/routes/api/index.js
 const router = require('express').Router();
 const sessionRouter = require('./session.js');
 const usersRouter = require('./users.js');
 const groupsRouter = require('./groups.js');
-const venuesRouter = require('./venues')
+const { venuesRouter } = require('../api/venues')
 const { restoreUser } = require("../../utils/auth.js");
 // const randomRouter = require('../random');
 
@@ -14,7 +14,7 @@ router.use(restoreUser);
 
 // router.use('/random', randomRouter)
 
-// router.use('/venues', venuesRouter);
+router.use('/venues', venuesRouter);
 
 router.use('/groups', groupsRouter);
 

@@ -2,7 +2,8 @@
 const jwt = require('jsonwebtoken');
 const { jwtConfig } = require('../config');
 const { User } = require('../db/models');
-// const user = require('../db/models/user');
+const { Membership } = require('../db/models');
+const { Op } = require('sequelize');
 
 const { secret, expiresIn } = jwtConfig;
 
@@ -73,6 +74,25 @@ function checkAuth(userId, otherId, next) {
   return true;
 };
 
+// check for cohost and organizer
+async function checkCohost(userId, organizerId, next) {
+  const organizerBool = parseInt(organizerId) === parseInt(userId);
+
+  const cohosts = await Membership.findAll(({
+    where: {
+      [Op.and]: [{ userId }, { status: 'co-host' }]
+    }
+  }));
+
+  if (!organizerBool && !cohosts.length) {
+    const err = new Error('Must be a co-host or organizer of this group');
+    err.status = 403;
+    err.title = 'Forbidden';
+    return next(err);
+  };
+
+  return true;
+};
 
 
-module.exports = { setTokenCookie, restoreUser, requireAuth, checkAuth };
+module.exports = { setTokenCookie, restoreUser, requireAuth, checkAuth, checkCohost };
