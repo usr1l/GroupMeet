@@ -61,7 +61,8 @@ const validateGroupData = [
 async function getNumMembers(groupId) {
   const numMembers = await Membership.count({
     where: {
-      [Op.and]: [{ groupId }, { status: { [Op.in]: ['member', 'co-host'] } }]
+      groupId,
+      status: { [Op.in]: ['member', 'co-host'] }
     }
   });
   return numMembers;
@@ -134,7 +135,7 @@ router.get('/current', requireAuth, async (req, res) => {
 
 
 // get all venues by groupId
-router.get('/:groupId/venues', async (req, res, next) => {
+router.get('/:groupId/venues', requireAuth, async (req, res, next) => {
   let userId = req.user.id;
   let { groupId } = req.params;
   groupId = parseInt(groupId);
@@ -145,14 +146,18 @@ router.get('/:groupId/venues', async (req, res, next) => {
     groupDoesNotExist(next)
   };
 
-  await checkCohost(parseInt(userId), group.organizerId, next);
+  const cohostBool = await checkCohost(parseInt(userId), group.organizerId);
 
-  const venues = await Venue.findAll({
-    where: {
-      groupId
-    }
-  });
-  res.json({ Venues: venues });
+  if (cohostBool === true) {
+    const venues = await Venue.findAll({
+      where: {
+        groupId
+      }
+    });
+
+    return res.json({ Venues: venues });
+
+  } else return next(cohostBool);
 });
 
 
@@ -169,20 +174,24 @@ router.post('/:groupId/venues', requireAuth, validateVenueData, async (req, res,
     groupDoesNotExist(next)
   };
 
-  await checkCohost(parseInt(userId), group.organizerId, next);
+  const cohostBool = await checkCohost(parseInt(userId), group.organizerId);
 
-  const { address, city, state, lat, lng } = req.body;
-  await Venue.create({
-    address, city, state, lat, lng, groupId
-  })
+  if (cohostBool === true) {
 
-  const newVenue = await Venue.findOne({
-    where: {
+    const { address, city, state, lat, lng } = req.body;
+    await Venue.create({
       address, city, state, lat, lng, groupId
-    }
-  })
+    })
 
-  res.json(newVenue);
+    const newVenue = await Venue.findOne({
+      where: {
+        address, city, state, lat, lng, groupId
+      }
+    })
+
+    return res.json(newVenue);
+
+  } else return next(cohostBool);
 });
 
 

@@ -75,12 +75,13 @@ function checkAuth(userId, otherId, next) {
 };
 
 // check for cohost and organizer
-async function checkCohost(userId, organizerId, next) {
+async function checkCohost(userId, organizerId) {
   const organizerBool = parseInt(organizerId) === parseInt(userId);
 
   const cohosts = await Membership.findAll(({
     where: {
-      [Op.and]: [{ userId }, { status: 'co-host' }]
+      userId,
+      status: 'co-host'
     }
   }));
 
@@ -88,10 +89,8 @@ async function checkCohost(userId, organizerId, next) {
     const err = new Error('Must be a co-host or organizer of this group');
     err.status = 403;
     err.title = 'Forbidden';
-    return next(err);
-  };
-
-  return true;
+    return err;
+  } else return true;
 };
 
 

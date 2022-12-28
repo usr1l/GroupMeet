@@ -9,11 +9,11 @@ if (process.env.NODE_ENV === 'production') {
 module.exports = {
   async up(queryInterface, Sequelize) {
     options.tableName = 'Memberships'
-    await queryInterface.addIndex(options, ['userId', 'groupId'], { unique: true })
+    await queryInterface.addIndex(options, ['userId', 'groupId', 'status'], { unique: true })
   },
 
   async down(queryInterface, Sequelize) {
     options.tableName = 'Memberships'
-    await queryInterface.removeIndex(options, ['userId', 'groupId'])
+    await queryInterface.removeIndex(options, ['userId', 'groupId', 'status'])
   }
 };

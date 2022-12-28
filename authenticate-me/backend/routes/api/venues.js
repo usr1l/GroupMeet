@@ -64,10 +64,19 @@ venuesRouter.put('/:venueId', requireAuth, async (req, res, next) => {
     venueDoesNotExist(next)
   };
 
+  const userId = req.user.id;
   const group = await Group.findByPk(venue.groupId);
 
+  const cohostBool = await checkCohost(userId, group.organizerId)
 
-  res.json({ venue, group })
+  if (cohostBool === true) {
+
+
+
+    return res.json({ userId })
+  } else return next(cohostBool);
+
+
 })
 
 
