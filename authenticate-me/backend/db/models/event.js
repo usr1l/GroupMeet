@@ -54,7 +54,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER
     },
     price: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.DECIMAL,
       validate: {
         isNumeric: true,
         greaterThanZero(input) {
@@ -68,9 +68,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE,
       allowNull: false,
       validate: {
-        isAfter: {
-          args: new Date(),
-          msg: 'Start date must be in the future'
+        checkStartDate(input) {
+          if (input < new Date()) {
+            throw new Error('Start date must be in the future')
+          }
         }
       }
     },
@@ -78,9 +79,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE,
       allowNull: false,
       validate: {
-        isAfter: {
-          args: this.startDate,
-          msg: 'End date is less than start date'
+        checkEndDate(input) {
+          if (input < this.startDate) {
+            throw new Error('End date is less than start date')
+          }
         }
       }
     },
@@ -88,6 +90,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       validate: {
         checkForVenue(input) {
+          const { Venue } = require('../models');
           const venue = Venue.findByPk(input);
           if (!venue) {
             throw new Error('Venue does not exist')
@@ -102,6 +105,11 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Event',
+    defaultScope: {
+      attributes: {
+        exclude: ['createdAt', 'updatedAt']
+      }
+    }
   });
   return Event;
 };
