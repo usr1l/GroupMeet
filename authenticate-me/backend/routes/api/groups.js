@@ -6,10 +6,9 @@ const { requireAuth, checkAuth, checkCohost } = require('../../utils/auth');
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 const { validateVenueData } = require('./venues.js');
-const { validateEventData } = require('./events');
+const { validateEventData, getEvents } = require('./events');
 const { inputToDate, getDisplayDate, toJSONDisplay } = require('../../utils/helpers')
-const { venueDoesNotExist } = require('./venues')
-// const venuesRouter = require('./venues');
+const { venueDoesNotExist } = require('./venues');
 
 
 const validateGroupData = [
@@ -39,7 +38,7 @@ const validateGroupData = [
 ];
 
 
-// get the count of memebers of a group
+// get the count of members of a group
 async function getNumMembers(groupId) {
   const numMembers = await Membership.count({
     where: {
@@ -86,7 +85,6 @@ function groupDoesNotExist(next) {
 };
 
 
-
 // get all groups joined or organized by current user
 router.get('/current', requireAuth, async (req, res) => {
   const { id } = req.user;
@@ -118,6 +116,39 @@ router.get('/current', requireAuth, async (req, res) => {
 
   // displays same as res from get all
   return res.json({ Groups });
+});
+
+
+// gets all events of a group specified by its id
+router.get('/:groupId/events', async (req, res, next) => {
+  // const userId = req.user.id;
+  let { groupId } = req.params;
+  groupId = parseInt(groupId);
+
+  const group = await Group.findByPk(groupId);
+
+  if (!group) {
+    return groupDoesNotExist(next);
+  };
+
+  const events = await Event.findAll({
+    attributes: {
+      exclude: ['price', 'capacity', 'description']
+    },
+    where: {
+      groupId
+    },
+    include: {
+      model: Group,
+      attributes: ['id', 'name', 'city', 'state']
+    }
+  });
+
+  const eventsArr = await getEvents(events);
+
+  return res.json({ "Events": eventsArr });
+
+
 });
 
 
@@ -422,7 +453,7 @@ router.get('/:groupId', requireAuth, async (req, res) => {
   groupJSON.Venues = venues;
 
   return res.json(groupJSON);
-})
+});
 
 
 // get all groups

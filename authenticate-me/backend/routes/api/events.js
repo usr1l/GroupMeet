@@ -5,7 +5,7 @@ const { Op } = require('sequelize');
 const { requireAuth, checkAuth, checkCohost, checkAttendance } = require('../../utils/auth');
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
-const { inputToDate, toJSONDisplay } = require('../../utils/helpers')
+const { inputToDate, toJSONDisplay, getDisplayDate } = require('../../utils/helpers')
 
 
 const validateEventData = [
@@ -59,6 +59,64 @@ const validateEventData = [
     .withMessage('End date must be after start date, format must be YYYY-MM-DD hh:mm:ss'),
   handleValidationErrors
 ];
+
+
+// get the count of members of a group
+async function getNumAttendees(eventId) {
+  const numAttendees = await Attendance.count({
+    where: {
+      eventId,
+      status: { [Op.in]: ['member', 'attending'] }
+    }
+  });
+  return numAttendees;
+};
+
+
+// map all events
+async function getEvents(events) {
+  // map out the groups into JSON objects
+  const eventsArr = events.map(event => event.toJSON());
+  for (let event of eventsArr) {
+    // manipulate each json object
+    const { venueId, groupId, id } = event;
+    event.numAttending = await getNumAttendees(id);
+    const venue = await Venue.findOne({
+      attributes: {
+        exclude: ['address', 'lng', 'lat', 'groupId']
+      },
+      where: {
+        id: venueId,
+      },
+    });
+
+    if (venue) {
+      const venueJSON = venue.toJSON();
+      event.Venue = venueJSON;
+    } else {
+      event.Venue = null;
+    }
+
+    const previewImage = await EventImage.findOne({
+      where: {
+        eventId: id,
+        preview: true
+      }
+    });
+
+    if (previewImage) {
+      const previewImageJSON = previewImage.toJSON();
+      event.previewImage = previewImageJSON.url;
+    } else {
+      event.previewImage = null;
+    };
+
+    event.startDate = getDisplayDate(event.startDate);
+    event.endDate = getDisplayDate(event.endDate);
+  };
+
+  return eventsArr;
+};
 
 
 // throw event does not exist error
@@ -136,8 +194,28 @@ eventsRouter.post('/:eventId/images', requireAuth, async (req, res, next) => {
 });
 
 
+// edit an event specified by its id
+eventsRouter.put('/:eventId', requireAuth, async (req, res, next) => {
+  return res.json('done')
+})
+
+
 // get all events
-// eventsRouter
+eventsRouter.get('/', async (req, res, next) => {
+  const events = await Event.findAll({
+    attributes: {
+      exclude: ['price', 'capacity', 'description']
+    },
+    include: {
+      model: Group,
+      attributes: ['id', 'name', 'city', 'state']
+    }
+  });
+
+  const eventsArr = await getEvents(events);
+
+  return res.json({ "Events": eventsArr });
+});
 
 
-module.exports = { validateEventData, eventsRouter }
+module.exports = { validateEventData, eventsRouter, getEvents }

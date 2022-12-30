@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         longerThanFiveChars(input) {
           if (input.length < 5) {
-            throw new Error('Name must be at least 5 characters')
+            throw new Error('Name must be at least 5 characters');
           }
         }
       }
@@ -59,7 +59,7 @@ module.exports = (sequelize, DataTypes) => {
         isNumeric: true,
         greaterThanZero(input) {
           if (input < 0) {
-            throw new Error('Price is invalid')
+            throw new Error('Price is invalid');
           }
         }
       }
@@ -70,7 +70,7 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         checkStartDate(input) {
           if (input < new Date()) {
-            throw new Error('Start date must be in the future')
+            throw new Error('Start date must be in the future');
           }
         }
       }
@@ -81,7 +81,7 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         checkEndDate(input) {
           if (input < this.startDate) {
-            throw new Error('End date is less than start date')
+            throw new Error('End date is less than start date');
           }
         }
       }
@@ -93,7 +93,7 @@ module.exports = (sequelize, DataTypes) => {
           const { Venue } = require('../models');
           const venue = Venue.findByPk(input);
           if (!venue) {
-            throw new Error('Venue does not exist')
+            throw new Error('Venue does not exist');
           }
         }
       }
