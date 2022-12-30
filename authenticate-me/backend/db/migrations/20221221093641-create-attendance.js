@@ -19,7 +19,7 @@ module.exports = {
       },
       status: {
         allowNull: false,
-        type: Sequelize.ENUM('member', 'co-host', 'pending', 'waitlist', 'attending')
+        type: Sequelize.ENUM('member', 'pending', 'waitlist', 'attending')
       },
       eventId: {
         allowNull: false,

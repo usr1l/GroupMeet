@@ -16,9 +16,17 @@ function inputToDate(date) {
   return newDate;
 };
 
-getDisplayDate(new Date())
+function toJSONDisplay(input, startField, endField) {
+  const inputJSON = input.toJSON();
+
+  inputJSON[`${startField}`] = getDisplayDate(inputJSON[`${startField}`]);
+  inputJSON[`${endField}`] = getDisplayDate(inputJSON[`${endField}`]);
+
+  return inputJSON;
+}
 
 module.exports = {
   inputToDate,
-  getDisplayDate
+  getDisplayDate,
+  toJSONDisplay
 }

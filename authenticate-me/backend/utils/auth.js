@@ -1,8 +1,7 @@
 // backend/utils/auth.js
 const jwt = require('jsonwebtoken');
 const { jwtConfig } = require('../config');
-const { User } = require('../db/models');
-const { Membership } = require('../db/models');
+const { User, Membership, EventImage, Attendance } = require('../db/models');
 const { Op } = require('sequelize');
 
 const { secret, expiresIn } = jwtConfig;
@@ -69,6 +68,7 @@ function checkAuth(userId, otherId) {
   if (parseInt(userId) !== parseInt(otherId)) {
     const err = new Error('You are not the organizer of this group');
     err.status = 403;
+    err.title = 'Forbidden';
     return err;
   }
   return true;
@@ -86,6 +86,7 @@ async function checkCohost(userId, organizerId, groupId) {
     }
   }));
 
+
   if (organizerBool || cohosts.length) {
     return true;
   } else {
@@ -97,4 +98,24 @@ async function checkCohost(userId, organizerId, groupId) {
 };
 
 
-module.exports = { setTokenCookie, restoreUser, requireAuth, checkAuth, checkCohost };
+// check for attendee
+async function checkAttendance(userId, eventId) {
+  const attendance = await Attendance.findAll({
+    where: {
+      userId,
+      eventId,
+      status: { [Op.in]: ['attending', 'member'] }
+    }
+  });
+
+  if (!attendance.length) {
+    return false;
+  } else {
+    return true;
+  };
+
+};
+
+
+
+module.exports = { setTokenCookie, restoreUser, requireAuth, checkAuth, checkCohost, checkAttendance };

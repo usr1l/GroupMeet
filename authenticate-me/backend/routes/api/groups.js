@@ -7,7 +7,7 @@ const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 const { validateVenueData } = require('./venues.js');
 const { validateEventData } = require('./events');
-const { inputToDate, getDisplayDate } = require('../../utils/helpers')
+const { inputToDate, getDisplayDate, toJSONDisplay } = require('../../utils/helpers')
 const { venueDoesNotExist } = require('./venues')
 // const venuesRouter = require('./venues');
 
@@ -101,8 +101,8 @@ router.get('/current', requireAuth, async (req, res) => {
 
   // get groupIds from memberships entries and display groups
   const groupsId = memberships.map(membership => {
-    const group = membership.toJSON();
-    return group.groupId;
+    const membershipJSON = membership.toJSON();
+    return membershipJSON.groupId;
   });
 
   const groups = await Group.scope('allDetails').findAll({
@@ -152,7 +152,6 @@ router.post('/:groupId/events', requireAuth, validateEventData, async (req, res,
     venueId
   } = req.body;
 
-
   // check if venue exists
   if (venueId) {
     const venue = await Venue.findByPk(venueId);
@@ -160,8 +159,6 @@ router.post('/:groupId/events', requireAuth, validateEventData, async (req, res,
       return venueDoesNotExist(next);
     };
   };
-
-  console.log(endDate, startDate)
 
   // try to create venue
   try {
@@ -200,7 +197,9 @@ router.post('/:groupId/events', requireAuth, validateEventData, async (req, res,
     }
   });
 
-  return res.json(newEvent);
+  const newEventJSON = toJSONDisplay(newEvent, 'startDate', 'endDate')
+
+  return res.json(newEventJSON);
 });
 
 
@@ -297,13 +296,15 @@ router.post('/:groupId/images', requireAuth, async (req, res, next) => {
       }
     })
 
-    const imgJSON = img.toJSON();
-    const imgId = imgJSON.id
+    if (img) {
+      const imgJSON = img.toJSON();
+      const imgId = imgJSON.id
 
-    const currPreviewImg = await GroupImage.findByPk(imgId);
-    await currPreviewImg.update({
-      preview: false
-    });
+      const currPreviewImg = await GroupImage.findByPk(imgId);
+      await currPreviewImg.update({
+        preview: false
+      });
+    };
   };
 
   // add the new img
@@ -388,10 +389,7 @@ router.put('/:groupId', requireAuth, async (req, res, next) => {
 
   const updatedGroup = await Group.scope('allDetails').findByPk(groupId);
 
-  const updatedGroupJSON = updatedGroup.toJSON();
-
-  updatedGroupJSON.createdAt = getDisplayDate(updatedGroupJSON.createdAt);
-  updatedGroupJSON.updatedAt = getDisplayDate(updatedGroupJSON.updatedAt);
+  const updatedGroupJSON = toJSONDisplay(updatedGroup, 'createdAt', 'updatedAt')
 
   return res.json(updatedGroupJSON);
 });
@@ -417,14 +415,11 @@ router.get('/:groupId', requireAuth, async (req, res) => {
   const organizer = await User.scope('nameOnly').findByPk(group.organizerId);
   const venues = await group.getVenues();
 
-  const groupJSON = group.toJSON();
+  const groupJSON = toJSONDisplay(group, 'createdAt', 'updatedAt');
 
   groupJSON.numMembers = numMembers;
   groupJSON.Organizer = organizer;
   groupJSON.Venues = venues;
-
-  groupJSON.createdAt = getDisplayDate(groupJSON.createdAt);
-  groupJSON.updatedAt = getDisplayDate(groupJSON.updatedAt);
 
   return res.json(groupJSON);
 })
@@ -480,17 +475,13 @@ router.post('/', requireAuth, validateGroupData, async (req, res, next) => {
     }
   });
 
-  const displayDate = getDisplayDate(new Date())
-
   await Membership.create({
     userId: newGroup.organizerId,
     groupId: newGroup.id,
     status: 'co-host'
   });
 
-  const newGroupJSON = newGroup.toJSON();
-  newGroupJSON.createdAt = displayDate;
-  newGroupJSON.updatedAt = displayDate;
+  const newGroupJSON = toJSONDisplay(newGroup, 'createdAt', 'updatedAt');
 
   return res.json(newGroupJSON);
 });

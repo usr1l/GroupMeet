@@ -4,6 +4,7 @@ const {
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class GroupImage extends Model {
+
     toSafeObject() {
       const { id, url, preview } = this;
       return { id, url, preview }

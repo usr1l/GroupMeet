@@ -11,19 +11,49 @@ module.exports = {
     options.tableName = 'Attendances';
     await queryInterface.bulkInsert(options, [
       {
-        status: 'waitlist',
+        status: 'attending',
         eventId: 3,
-        userId: 2
+        userId: 1
       },
       {
-        status: 'co-host',
+        status: 'member',
         eventId: 1,
         userId: 1
       },
       {
-        status: 'co-host',
+        status: 'pending',
+        eventId: 2,
+        userId: 1
+      },
+      {
+        status: 'member',
         eventId: 2,
         userId: 3
+      },
+      {
+        status: 'pending',
+        eventId: 2,
+        userId: 2
+      },
+      {
+        status: 'member',
+        eventId: 3,
+        userId: 2
+      },
+      {
+        status: 'pending',
+        eventId: 3,
+        userId: 3
+      },
+      {
+        status: 'attending',
+        eventId: 1,
+        userId: 3
+      },
+      {
+        status: 'attending',
+        eventId: 1,
+        userId: 2
       },
     ])
   },
@@ -31,8 +61,6 @@ module.exports = {
   async down(queryInterface, Sequelize) {
     options.tableName = 'Attendances';
     const Op = Sequelize.Op;
-    await queryInterface.bulkDelete(options, [
-      { id: { [Op.in]: [1, 2, 3] } }
-    ])
+    await queryInterface.bulkDelete(options)
   }
 };
