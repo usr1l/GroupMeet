@@ -1,7 +1,7 @@
 'use strict';
 
 const {
-  Model
+  Model, Validator
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Event extends Model {
@@ -68,10 +68,22 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE,
       allowNull: false,
       validate: {
+        isProperFormat(input) {
+          if (!Validator.isISO8601(input.toISOString())) {
+            throw new Error('Date format must be YYYY-MM-DD hh:mm:ss');
+          };
+        },
+        isProperLength(input) {
+          const { getDisplayDate } = require('../../utils/helpers');
+          const inputISO = getDisplayDate(input);
+          if (inputISO.length !== 19) {
+            throw new Error('Date format must be YYYY-MM-DD hh:mm:ss');
+          };
+        },
         checkStartDate(input) {
           if (input < new Date()) {
             throw new Error('Start date must be in the future');
-          }
+          };
         }
       }
     },
@@ -79,6 +91,18 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE,
       allowNull: false,
       validate: {
+        isProperFormat(input) {
+          if (!Validator.isISO8601(input.toISOString())) {
+            throw new Error('Date format must be YYYY-MM-DD hh:mm:ss');
+          };
+        },
+        isProperLength(input) {
+          const { getDisplayDate } = require('../../utils/helpers');
+          const inputISO = getDisplayDate(input);
+          if (inputISO.length !== 19) {
+            throw new Error('Date format must be YYYY-MM-DD hh:mm:ss');
+          };
+        },
         checkEndDate(input) {
           if (input < this.startDate) {
             throw new Error('End date is less than start date');

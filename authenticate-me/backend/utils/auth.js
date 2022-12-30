@@ -87,6 +87,8 @@ async function checkCohost(userId, organizerId, groupId) {
   }));
 
 
+  console.log(cohosts, organizerBool);
+
   if (organizerBool || cohosts.length) {
     return true;
   } else {

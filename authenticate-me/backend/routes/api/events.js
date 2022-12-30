@@ -1,11 +1,12 @@
 // backend/routes/api/events.js
 const eventsRouter = require('express').Router();
 const { Group, GroupImage, User, Membership, Venue, Event, EventImage, Attendance } = require('../../db/models');
-const { Op } = require('sequelize');
+const { Op, Validator } = require('sequelize');
 const { requireAuth, checkAuth, checkCohost, checkAttendance } = require('../../utils/auth');
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
-const { inputToDate, toJSONDisplay, getDisplayDate } = require('../../utils/helpers')
+const { inputToDate, toJSONDisplay, getDisplayDate } = require('../../utils/helpers');
+const { venueDoesNotExist } = require('./venues');
 
 
 const validateEventData = [
@@ -22,7 +23,7 @@ const validateEventData = [
     .withMessage('Type must be \'Online\' or \'In person\''),
   check('capacity')
     .isInt()
-    .withMessage('Capacity must be an integer'),
+    .withMessage('Capacity must be a positive integer'),
   check('price')
     .custom(price => {
       const newPrice = parseFloat(price).toFixed(2);
@@ -37,6 +38,7 @@ const validateEventData = [
   check('startDate')
     .exists({ checkFalsy: true })
     .isISO8601()
+    .isLength({ min: 19, max: 19 })
     .custom(startDate => {
       const date = inputToDate(startDate);
       if (date < new Date()) {
@@ -48,6 +50,7 @@ const validateEventData = [
   check('endDate')
     .exists({ checkFalsy: true })
     .isISO8601()
+    .isLength({ min: 19, max: 19 })
     .custom((endDate, { req }) => {
       const startDate = inputToDate(req.body.startDate);
       const date = inputToDate(endDate);
@@ -196,8 +199,104 @@ eventsRouter.post('/:eventId/images', requireAuth, async (req, res, next) => {
 
 // edit an event specified by its id
 eventsRouter.put('/:eventId', requireAuth, async (req, res, next) => {
-  return res.json('done')
-})
+  const userId = req.user.id;
+  const { eventId } = req.params;
+  const event = await Event.findByPk(eventId);
+
+  if (!event) {
+    return eventDoesNotExist(next);
+  };
+
+  const { groupId } = event;
+
+  const group = await Group.findByPk(groupId);
+
+  const cohostBool = await checkCohost(userId, group.organizerId, groupId);
+
+  if (cohostBool instanceof Error) {
+    next(cohostBool);
+  };
+
+  const errors = {};
+
+  const { venueId, name, type, capacity, price, description, startDate, endDate } = req.body;
+
+  if (venueId) {
+    const venue = await Venue.findByPk(venueId);
+    if (!venue) {
+      venueDoesNotExist(next);
+    };
+  };
+
+  if (name) {
+    if (name.length < 5) {
+      errors.name = 'Name must be at least 5 characters long';
+    };
+  };
+
+  if (type) {
+    if (!['Online', 'In person'].includes(type)) {
+      errors.type = 'Type must be \'Online\' or \'In person\'';
+    };
+  };
+
+  if (capacity) {
+    if ((typeof capacity !== 'number') || (parseInt(capacity) !== capacity)) {
+      errors.capacity = 'Capacity must be a positive integer';
+    };
+  };
+
+  if (price) {
+    const newPrice = parseFloat(price).toFixed(2);
+    const newPriceParsed = parseFloat(newPrice);
+    const bool = newPriceParsed === price;
+    if (!bool) {
+      errors.price = 'Price is invalid';
+    };
+  };
+
+  if (startDate) {
+    const isoBool = Validator.isISO8601(startDate);
+    const lengthBool = Validator.isLength(startDate, { min: 19, max: 19 });
+
+    if (!isoBool || !lengthBool) {
+      errors.startDate = 'Start date must be in the future, format must be YYYY-MM-DD hh:mm:ss'
+    };
+  };
+
+  if (endDate) {
+    const isoBool = Validator.isISO8601(endDate);
+    const lengthBool = Validator.isLength(endDate, { min: 19, max: 19 });
+
+    if (!isoBool || !lengthBool) {
+      errors.endDate = 'End date must be after start date, format must be YYYY-MM-DD hh:mm:ss'
+    };
+  };
+
+  if (Object.keys(errors).length > 0) {
+    const err = new Error('Validation error');
+    err.status = 400;
+    err.errors = errors;
+    return next(err);
+  };
+
+  await event.update({
+    "venueId": venueId ? venueId : event.venueId,
+    "name": name ? name : event.name,
+    "description": description ? description : event.description,
+    "type": type ? type : event.type,
+    "capacity": capacity ? capacity : group.capacity,
+    "price": price ? price : event.price,
+    "startDate": startDate ? startDate : event.price,
+    "endDate": endDate ? endDate : event.endDate
+  })
+
+  const updatedEvent = await Event.findByPk(eventId);
+
+  const updatedEventJSON = toJSONDisplay(updatedEvent, 'startDate', 'endDate');
+
+  return res.json(updatedEventJSON);
+});
 
 
 // get all events

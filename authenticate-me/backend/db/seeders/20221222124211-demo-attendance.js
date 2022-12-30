@@ -11,7 +11,7 @@ module.exports = {
     options.tableName = 'Attendances';
     await queryInterface.bulkInsert(options, [
       {
-        status: 'attending',
+        status: 'member',
         eventId: 3,
         userId: 1
       },

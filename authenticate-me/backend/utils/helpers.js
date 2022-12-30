@@ -1,5 +1,4 @@
 function getDisplayDate(date) {
-
   const displayDate = date.toISOString().split('');
   displayDate.splice(10, 1, ' ');
   displayDate.splice(19, 5);

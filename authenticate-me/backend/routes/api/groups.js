@@ -191,9 +191,10 @@ router.post('/:groupId/events', requireAuth, validateEventData, async (req, res,
     };
   };
 
-  // try to create venue
-  try {
-    await Event.create({
+
+  // create a new event if it doesn't already exist
+  const eventExists = await Event.findOne({
+    where: {
       name,
       description,
       type,
@@ -203,14 +204,27 @@ router.post('/:groupId/events', requireAuth, validateEventData, async (req, res,
       endDate,
       venueId,
       groupId
-    });
-  } catch (err) {
-    if (err) {
-      const newError = new Error('Failed: This event already exists');
-      newError.status = 409;
-      return next(newError);
-    };
+    }
+  });
+
+  if (eventExists) {
+    const newError = new Error('Failed: This event already exists');
+    newError.status = 409;
+    return next(newError);
   };
+
+
+  await Event.create({
+    name,
+    description,
+    type,
+    capacity,
+    price,
+    startDate,
+    endDate,
+    venueId,
+    groupId
+  });
 
 
   // find if successful
@@ -475,8 +489,8 @@ router.post('/', requireAuth, validateGroupData, async (req, res, next) => {
   const { name, about, type, private, city, state } = req.body;
   const organizerId = req.user.id;
 
-  try {
-    await Group.create({
+  const groupExists = await Group.findOne({
+    where: {
       name,
       about,
       type,
@@ -484,15 +498,26 @@ router.post('/', requireAuth, validateGroupData, async (req, res, next) => {
       city,
       state,
       organizerId
-    });
-  } catch (err) {
-    if (err instanceof ValidationError) {
-      const newError = new Error('Failed: This group already exists');
-      newError.status = 409;
-      return next(newError);
     }
+  });
+
+
+  // create a group if it doesnt already exist
+  if (groupExists) {
+    const newError = new Error('Failed: This group already exists');
+    newError.status = 409;
+    return next(newError);
   };
 
+  await Group.create({
+    name,
+    about,
+    type,
+    private,
+    city,
+    state,
+    organizerId
+  });
 
   const newGroup = await Group.scope('allDetails').findOne({
     where: {
