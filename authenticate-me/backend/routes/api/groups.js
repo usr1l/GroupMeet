@@ -710,6 +710,33 @@ router.get('/:groupId', requireAuth, async (req, res) => {
 });
 
 
+// delete a group
+router.delete('/:groupId', requireAuth, async (req, res, next) => {
+
+  const { groupId } = req.params;
+  const userId = req.user.id;
+
+  const groupExists = await Group.findByPk(groupId);
+  if (!groupExists) {
+    return groupDoesNotExist(next);
+  };
+
+  if (userId !== groupExists.organizerId) {
+    const err = new Error('Group must belong to current user');
+    err.status = 403;
+    return next(err);
+  };
+
+  // return res.json(groupExists)
+
+  await groupExists.destroy();
+
+  res.message = "Succesfully deleted";
+  res.status = 200;
+  return res.json({ message: res.message, statusCode: res.status });
+});
+
+
 // get all groups
 router.get('/', async (_req, res) => {
   // find all and include GroupImages table

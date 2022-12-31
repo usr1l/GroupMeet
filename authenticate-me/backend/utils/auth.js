@@ -89,7 +89,7 @@ async function checkCohost(userId, organizerId, groupId) {
   if (organizerBool || cohosts.length) {
     return true;
   } else {
-    const err = new Error('Must be a co-host or organizer of this group');
+    const err = new Error('Must be a co-host or the organizer of this group to perform this action');
     err.status = 403;
     err.title = 'Forbidden';
     return err;

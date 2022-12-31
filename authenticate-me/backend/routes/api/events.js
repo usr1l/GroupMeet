@@ -7,7 +7,6 @@ const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 const { inputToDate, toJSONDisplay, getDisplayDate, checkUserId } = require('../../utils/helpers');
 const { venueDoesNotExist } = require('./venues');
-const attendance = require('../../db/models/attendance');
 const { validateAttendanceData } = require('./attendances');
 
 

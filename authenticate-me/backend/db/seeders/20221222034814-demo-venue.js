@@ -24,7 +24,7 @@ module.exports = {
         state: 'NY',
         lat: 130,
         lng: -130,
-        groupId: 1,
+        groupId: 2,
       },
       {
         address: '175 Demo St.',
@@ -32,7 +32,7 @@ module.exports = {
         state: 'NY',
         lat: 140,
         lng: -140,
-        groupId: 2,
+        groupId: 3,
       },
     ])
   },

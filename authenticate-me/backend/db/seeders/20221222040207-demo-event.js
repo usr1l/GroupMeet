@@ -20,7 +20,7 @@ module.exports = {
         price: 50,
         startDate: '2023-10-21 20:00:00',
         endDate: '2023-10-25 20:00:00',
-        venueId: 2,
+        venueId: 1,
         groupId: 1
       },
       {
@@ -31,8 +31,8 @@ module.exports = {
         price: null,
         startDate: '2023-01-03 20:00:00',
         endDate: '2023-01-04 20:00:00',
-        venueId: 1,
-        groupId: 3
+        venueId: 2,
+        groupId: 2
       },
       {
         name: 'Event3',
@@ -42,8 +42,8 @@ module.exports = {
         price: 20,
         startDate: '2023-07-08 20:00:00',
         endDate: '2023-09-09 20:00:00',
-        venueId: 2,
-        groupId: 2
+        venueId: 3,
+        groupId: 3
       },
     ])
   },
