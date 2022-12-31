@@ -5,10 +5,11 @@ const { Op, ValidationError } = require('sequelize');
 const { requireAuth, checkAuth, checkCohost } = require('../../utils/auth');
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
-const { validateVenueData } = require('./venues.js');
+const { validateVenueData } = require('./venues');
 const { validateEventData, getEvents } = require('./events');
 const { inputToDate, getDisplayDate, toJSONDisplay } = require('../../utils/helpers')
 const { venueDoesNotExist } = require('./venues');
+const { validateMembershipData } = require('./memberships')
 
 
 const validateGroupData = [
@@ -93,20 +94,89 @@ function membershipDoesNotExist(next) {
 }
 
 
-// request a change to a membership status by groupId
-router.put('/:groupId/membership', requireAuth, async (req, res, next) => {
+// get all members of a group specified by its id
+router.get('/:groupId/members', async (req, res, next) => {
   const { groupId } = req.params;
+  // if no user is logged in
+  if (!req.user) {
+    const members = await User.findAll({
+      attributes: {
+        exclude: ['username']
+      },
+      include: {
+        model: Membership,
+        where: {
+          groupId,
+          status: { [Op.in]: ['member', 'co-host'] }
+        },
+        attributes: ['status']
+      }
+    });
+    return res.json(members);
+  };
+
+  // if user is logged in
   const userId = req.user.id;
-
-  const reqUserId = req.body.userId;
-  const reqStatus = req.body.status;
-
   const groupExists = await Group.findByPk(groupId);
 
   if (!groupExists) {
     return groupDoesNotExist(next);
   };
 
+  const cohostBool = await checkCohost(userId, groupExists.organizerId, groupId);
+
+  if (cohostBool === true) {
+    const members = await User.findAll({
+      attributes: {
+        exclude: ['username']
+      },
+      include: {
+        model: Membership,
+        where: {
+          groupId
+        },
+        attributes: ['status']
+      }
+    });
+
+    return res.json(members);
+
+  } else if (cohostBool instanceof Error) {
+    const members = await User.findAll({
+      attributes: {
+        exclude: ['username']
+      },
+      include: {
+        model: Membership,
+        where: {
+          groupId,
+          status: { [Op.in]: ['member', 'co-host'] }
+        },
+        attributes: ['status']
+      }
+    });
+
+    return res.json(members);
+  };
+});
+
+
+// request a change to a membership status by groupId
+router.put('/:groupId/membership', requireAuth, validateMembershipData, async (req, res, next) => {
+  const { groupId } = req.params;
+  const userId = req.user.id;
+
+  const reqUserId = req.body.userId;
+  const reqStatus = req.body.status;
+
+  // check to see if group exists
+  const groupExists = await Group.findByPk(groupId);
+
+  if (!groupExists) {
+    return groupDoesNotExist(next);
+  };
+
+  // check to see if membership already exists
   const membershipExists = await Membership.findOne({
     where: {
       userId: reqUserId,
@@ -118,7 +188,45 @@ router.put('/:groupId/membership', requireAuth, async (req, res, next) => {
     return membershipDoesNotExist(next);
   };
 
-  return res.json({ userId, reqUserId, reqStatus })
+  //check the desired status change
+  if (reqStatus === 'member') {
+    const cohostBool = await checkCohost(userId, groupExists.organizerId, groupId);
+    if (cohostBool instanceof Error) {
+      return next(cohostBool);
+    };
+  };
+
+  if (reqStatus === 'co-host') {
+    const checkAuthBool = checkAuth(userId, groupExists.organizerId);
+    if (checkAuthBool instanceof Error) {
+      return next(checkAuthBool)
+    };
+  };
+
+  // if status before and after change is the same, throw error
+  const { status } = membershipExists;
+  if (reqStatus === status) {
+    const err = new Error(`User is already a ${status}`);
+    err.status = 400;
+    return next(err);
+  };
+
+  // update membership
+  await membershipExists.update({
+    status: reqStatus
+  });
+
+  const updatedMembership = await Membership.findOne({
+    attributes: {
+      include: ['id']
+    },
+    where: {
+      userId: reqUserId,
+      groupId
+    }
+  });
+
+  return res.json(updatedMembership)
 });
 
 
@@ -221,7 +329,6 @@ router.post('/:groupId/events', requireAuth, validateEventData, async (req, res,
   if (cohostBool instanceof Error) {
     return next(cohostBool);
   };
-
 
   const {
     name,

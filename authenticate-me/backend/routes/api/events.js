@@ -7,6 +7,8 @@ const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 const { inputToDate, toJSONDisplay, getDisplayDate } = require('../../utils/helpers');
 const { venueDoesNotExist } = require('./venues');
+const attendance = require('../../db/models/attendance');
+const { validateAttendanceData } = require('./attendances');
 
 
 const validateEventData = [
@@ -128,6 +130,185 @@ function eventDoesNotExist(next) {
   err.status = 404;
   return next(err);
 };
+
+
+// throw attendance does not exist error
+function attendanceDoesNotExist(next) {
+  const err = new Error('Attendance between the user and the event does not exist');
+  err.status = 404;
+  return next(err);
+};
+
+
+// get all attendees of an event by eventId
+eventsRouter.get('/:eventId/attendees', async (req, res, next) => {
+  const { eventId } = req.params;
+  // if no user logged in
+  if (!req.user) {
+    const attendees = await User.findAll({
+      attributes: {
+        exclude: ['username']
+      },
+      include: {
+        model: Attendance,
+        where: {
+          eventId,
+          status: { [Op.in]: ['member', 'waitlist', 'attending'] }
+        },
+        attributes: ['status']
+      }
+    });
+    return res.json({ "Attendances": attendees });
+  };
+
+
+  // if user logged in
+  const userId = req.user.id;
+  const eventExists = await Event.findByPk(eventId);
+
+  if (!eventExists) {
+    return eventDoesNotExist(next);
+  };
+
+  const group = await Group.findByPk(eventExists.groupId);
+
+  const cohostBool = await checkCohost(userId, group.organizerId, group.id)
+
+  if (cohostBool === true) {
+    const attendees = await Attendance.findAll({
+      attributes: {
+        exclude: ['username']
+      },
+      include: {
+        model: Attendance,
+        where: {
+          eventId
+        },
+        attributes: ['status']
+      }
+    });
+
+    return res.json({ "Attendances": attendees });
+
+  } else if (cohostBool instanceof Error) {
+    const attendees = await User.findAll({
+      attributes: {
+        exclude: ['username']
+      },
+      include: {
+        model: Attendance,
+        where: {
+          eventId,
+          status: { [Op.in]: ['member', 'waitlist', 'attending'] }
+        },
+        attributes: ['status']
+      }
+    });
+
+    return res.json({ "Attendances": attendees });
+
+  };
+});
+
+
+// request to change the status of an attendance for an event by eventId
+eventsRouter.put('/:eventId/attendance', requireAuth, validateAttendanceData, async (req, res, next) => {
+  const { eventId } = req.params;
+  const userId = req.user.id;
+
+  const reqUserId = req.body.userId;
+  const reqStatus = req.body.status;
+
+  const eventExists = await Event.findByPk(eventId);
+
+  if (!eventExists) {
+    return eventDoesNotExist(next);
+  };
+
+  const group = await Group.findByPk(eventExists.groupId);
+  const cohostBool = await checkCohost(userId, group.organizerId, group.id);
+
+  if (cohostBool instanceof Error) {
+    return next(cohostBool);
+  };
+
+  const attendanceExists = await Attendance.findOne({
+    where: {
+      userId: reqUserId,
+      eventId
+    }
+  });
+
+  if (!attendanceExists) {
+    return attendanceDoesNotExist(next);
+  };
+
+  await attendanceExists.update({
+    status: reqStatus
+  });
+
+  const updatedAttendance = await Attendance.findOne({
+    attributes: {
+      include: ['id']
+    },
+    where: {
+      userId: reqUserId,
+      eventId
+    }
+  });
+
+  return res.json(updatedAttendance);
+
+});
+
+
+// request to attend an event by eventId
+eventsRouter.post('/:eventId/attendance', requireAuth, async (req, res, next) => {
+  const { eventId } = req.params;
+  const userId = req.user.id;
+
+  const eventExists = await Event.findByPk(eventId);
+
+  if (!eventExists) {
+    return eventDoesNotExist(next);
+  };
+
+  const attendanceExists = await Attendance.findOne({
+    where: {
+      userId,
+      eventId
+    }
+  });
+
+  if (attendanceExists) {
+    const { status } = attendanceExists;
+    if (['pending', 'waitlist'].includes(status)) {
+      const err = new Error('Attendance has already been requested');
+      err.status = 400;
+      return next(err);
+    } else if (['member', 'attending'].includes(status)) {
+      const err = new Error('User is already an attendee of the event');
+      err.status = 400;
+      return next(err);
+    };
+  };
+
+  await Attendance.create({
+    eventId,
+    userId,
+    status: 'pending'
+  });
+
+  const newAttendance = await Attendance.findOne({
+    where: {
+      eventId,
+      userId,
+      status: 'pending'
+    }
+  });
+
+  return res.json(newAttendance);
+});
 
 
 // add an image to an event based on the event's id
