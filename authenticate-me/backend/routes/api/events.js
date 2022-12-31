@@ -142,7 +142,14 @@ function attendanceDoesNotExist(next) {
 
 // get all attendees of an event by eventId
 eventsRouter.get('/:eventId/attendees', async (req, res, next) => {
+  // check if event exists
   const { eventId } = req.params;
+  const eventExists = await Event.findByPk(eventId);
+
+  if (!eventExists) {
+    return eventDoesNotExist(next);
+  };
+
   // if no user logged in
   if (!req.user) {
     const attendees = await User.findAll({
@@ -161,14 +168,9 @@ eventsRouter.get('/:eventId/attendees', async (req, res, next) => {
     return res.json({ "Attendances": attendees });
   };
 
-
   // if user logged in
   const userId = req.user.id;
-  const eventExists = await Event.findByPk(eventId);
 
-  if (!eventExists) {
-    return eventDoesNotExist(next);
-  };
 
   const group = await Group.findByPk(eventExists.groupId);
 

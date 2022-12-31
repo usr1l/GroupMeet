@@ -96,7 +96,14 @@ function membershipDoesNotExist(next) {
 
 // get all members of a group specified by its id
 router.get('/:groupId/members', async (req, res, next) => {
+  // check if group exists
   const { groupId } = req.params;
+  const groupExists = await Group.findByPk(groupId);
+
+  if (!groupExists) {
+    return groupDoesNotExist(next);
+  };
+
   // if no user is logged in
   if (!req.user) {
     const members = await User.findAll({
@@ -117,11 +124,6 @@ router.get('/:groupId/members', async (req, res, next) => {
 
   // if user is logged in
   const userId = req.user.id;
-  const groupExists = await Group.findByPk(groupId);
-
-  if (!groupExists) {
-    return groupDoesNotExist(next);
-  };
 
   const cohostBool = await checkCohost(userId, groupExists.organizerId, groupId);
 
