@@ -127,9 +127,9 @@ router.post('/:groupId/membership', requireAuth, async (req, res, next) => {
   const { groupId } = req.params;
   const userId = req.user.id;
 
-  const group = await Group.findByPk(groupId);
+  const groupExists = await Group.findByPk(groupId);
 
-  if (!group) {
+  if (!groupExists) {
     return groupDoesNotExist(next);
   };
 
@@ -177,9 +177,9 @@ router.get('/:groupId/events', async (req, res, next) => {
   let { groupId } = req.params;
   groupId = parseInt(groupId);
 
-  const group = await Group.findByPk(groupId);
+  const groupExists = await Group.findByPk(groupId);
 
-  if (!group) {
+  if (!groupExists) {
     return groupDoesNotExist(next);
   };
 
@@ -200,7 +200,6 @@ router.get('/:groupId/events', async (req, res, next) => {
 
   return res.json({ "Events": eventsArr });
 
-
 });
 
 
@@ -210,15 +209,15 @@ router.post('/:groupId/events', requireAuth, validateEventData, async (req, res,
   const userId = req.user.id;
   const { groupId } = req.params;
 
-  const group = await Group.findByPk(groupId);
+  const groupExists = await Group.findByPk(groupId);
 
   // check if group exists
-  if (!group) {
+  if (!groupExists) {
     return groupDoesNotExist(next);
   };
 
   // check for user auth
-  const cohostBool = await checkCohost(userId, group.organizerId, groupId);
+  const cohostBool = await checkCohost(userId, groupExists.organizerId, groupId);
   if (cohostBool instanceof Error) {
     return next(cohostBool);
   };
@@ -237,8 +236,8 @@ router.post('/:groupId/events', requireAuth, validateEventData, async (req, res,
 
   // check if venue exists
   if (venueId) {
-    const venue = await Venue.findByPk(venueId);
-    if (!venue) {
+    const venueExists = await Venue.findByPk(venueId);
+    if (!venueExists) {
       return venueDoesNotExist(next);
     };
   };
@@ -306,13 +305,13 @@ router.get('/:groupId/venues', requireAuth, async (req, res, next) => {
   let { groupId } = req.params;
   groupId = parseInt(groupId);
 
-  const group = await Group.findByPk(groupId);
+  const groupExists = await Group.findByPk(groupId);
 
-  if (!group) {
+  if (!groupExists) {
     return groupDoesNotExist(next)
   };
 
-  const cohostBool = await checkCohost(userId, group.organizerId, groupId);
+  const cohostBool = await checkCohost(userId, groupExists.organizerId, groupId);
 
   if (cohostBool instanceof Error) {
     return next(cohostBool);
@@ -335,13 +334,13 @@ router.post('/:groupId/venues', requireAuth, validateVenueData, async (req, res,
   let { groupId } = req.params;
   groupId = parseInt(groupId);
 
-  const group = await Group.findByPk(groupId);
+  const groupExists = await Group.findByPk(groupId);
 
-  if (!group) {
+  if (!groupExists) {
     return groupDoesNotExist(next)
   };
 
-  const cohostBool = await checkCohost(userId, group.organizerId, groupId);
+  const cohostBool = await checkCohost(userId, groupExists.organizerId, groupId);
 
   if (cohostBool instanceof Error) {
     return next(cohostBool);
@@ -369,13 +368,13 @@ router.post('/:groupId/images', requireAuth, async (req, res, next) => {
   const userId = req.user.id;
 
   // if group does not exist throw error
-  let group = await Group.findByPk(groupId)
-  if (!group) {
+  let groupExists = await Group.findByPk(groupId)
+  if (!groupExists) {
     return groupDoesNotExist(next);
   };
 
   // only organizer can add an image
-  const { organizerId } = group;
+  const { organizerId } = groupExists;
 
   const checkAuthBool = checkAuth(userId, organizerId);
 
