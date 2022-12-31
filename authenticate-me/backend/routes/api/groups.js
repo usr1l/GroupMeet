@@ -2,12 +2,12 @@
 const router = require('express').Router();
 const { Group, GroupImage, User, Membership, Venue, Event } = require('../../db/models');
 const { Op, ValidationError } = require('sequelize');
-const { requireAuth, checkAuth, checkCohost } = require('../../utils/auth');
+const { requireAuth, checkAuth, checkCohost, deleteAuth } = require('../../utils/auth');
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 const { validateVenueData } = require('./venues');
 const { validateEventData, getEvents } = require('./events');
-const { inputToDate, getDisplayDate, toJSONDisplay } = require('../../utils/helpers')
+const { inputToDate, getDisplayDate, toJSONDisplay, checkUserId } = require('../../utils/helpers')
 const { venueDoesNotExist } = require('./venues');
 const { validateMembershipData } = require('./memberships')
 
@@ -92,6 +92,52 @@ function membershipDoesNotExist(next) {
   err.status = 404;
   return next(err);
 }
+
+
+
+// delete a membership
+router.delete('/:groupId/membership', requireAuth, async (req, res, next) => {
+  const { groupId } = req.params;
+  const groupExists = await Group.findByPk(groupId);
+
+  if (!groupExists) {
+    return groupDoesNotExist(next);
+  };
+
+  const reqUserId = req.body.userId;
+  const userExists = await checkUserId(reqUserId);
+
+  if (userExists instanceof Error) {
+    return next(userExists);
+  };
+
+  const userId = req.user.id;
+  const deletePermission = await deleteAuth(userId, groupExists.organizerId, groupExists.id, reqUserId);
+
+  if (deletePermission instanceof Error) {
+    return next(deletePermission);
+  };
+
+  const deleteMembership = await Membership.findOne({
+    where: {
+      groupId,
+      userId: reqUserId
+    }
+  });
+
+  if (!deleteMembership) {
+    const err = new Error('Membership does not exist for this User');
+    err.status = 404;
+    return next(err);
+  };
+
+  await deleteMembership.destroy();
+
+  res.message = "Succesfully deleted";
+  res.status = 200;
+  return res.json({ message: res.message, statusCode: res.status });
+});
+
 
 
 // get all members of a group specified by its id

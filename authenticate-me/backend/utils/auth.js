@@ -115,5 +115,20 @@ async function checkAttendance(userId, eventId) {
 };
 
 
+// check for deletion auth
+async function deleteAuth(userId, groupOrganizerId, groupId, reqUserId) {
+  const cohostBool = await checkCohost(userId, groupOrganizerId, groupId);
+  const currUserBool = reqUserId === userId;
 
-module.exports = { setTokenCookie, restoreUser, requireAuth, checkAuth, checkCohost, checkAttendance };
+  if ((cohostBool instanceof Error) && (!currUserBool)) {
+    const err = new Error('Deletion failed: Only the User or group organizer may perform this action');
+    err.status = 403;
+    return err;
+  };
+
+  return true;
+};
+
+
+
+module.exports = { setTokenCookie, restoreUser, requireAuth, checkAuth, checkCohost, checkAttendance, deleteAuth };

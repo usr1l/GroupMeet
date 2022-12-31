@@ -1,3 +1,5 @@
+const { User } = require('../db/models')
+
 function getDisplayDate(date) {
   const displayDate = date.toISOString().split('');
   displayDate.splice(10, 1, ' ');
@@ -24,12 +26,23 @@ function toJSONDisplay(input, startField, endField) {
   return inputJSON;
 }
 
+async function checkUserId(reqUserId) {
+  const userExists = await User.findByPk(reqUserId);
 
+  if (!userExists) {
+    const err = new Error('This user does not exist');
+    err.status = 404;
+    return err;
+  };
+
+  return true;
+};
 
 
 
 module.exports = {
   inputToDate,
   getDisplayDate,
-  toJSONDisplay
+  toJSONDisplay,
+  checkUserId
 }

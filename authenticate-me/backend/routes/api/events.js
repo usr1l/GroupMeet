@@ -2,10 +2,10 @@
 const eventsRouter = require('express').Router();
 const { Group, GroupImage, User, Membership, Venue, Event, EventImage, Attendance } = require('../../db/models');
 const { Op, Validator } = require('sequelize');
-const { requireAuth, checkAuth, checkCohost, checkAttendance } = require('../../utils/auth');
+const { requireAuth, checkAuth, checkCohost, checkAttendance, deleteAuth } = require('../../utils/auth');
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
-const { inputToDate, toJSONDisplay, getDisplayDate } = require('../../utils/helpers');
+const { inputToDate, toJSONDisplay, getDisplayDate, checkUserId } = require('../../utils/helpers');
 const { venueDoesNotExist } = require('./venues');
 const attendance = require('../../db/models/attendance');
 const { validateAttendanceData } = require('./attendances');
@@ -154,25 +154,20 @@ eventsRouter.delete('/:eventId/attendance', requireAuth, async (req, res, next) 
   const reqUserId = req.body.userId;
 
   // check if the request userId belongs to existing user
-  const userExists = await User.findByPk(reqUserId);
+  const userExists = await checkUserId(reqUserId);
 
-  if (!userExists) {
-    const err = new Error('This user does not exist');
-    err.status = 404;
-    return next(err);
+  if (userExists instanceof Error) {
+    return next(userExists);
   };
 
   // check if current user is making deletion, or if USER is organizer or cohost
   const userId = req.user.id;
   const group = await Group.findByPk(eventExists.groupId);
-  const cohostBool = await checkCohost(userId, group.organizerId, group.id)
-  const currUserBool = reqUserId === userId;
 
-  // if current user is not an organizer, cohost, or the userId being deleted
-  if ((cohostBool instanceof Error) && (!currUserBool)) {
-    const err = new Error('Only the User or organizer may delete an Attendance');
-    err.status = 403;
-    return next(err);
+  const deletePermission = await deleteAuth(userId, group.organizerId, group.id, reqUserId);
+
+  if (deletePermission instanceof Error) {
+    next(deletePermission);
   };
 
   const deleteAttendance = await Attendance.findOne({
