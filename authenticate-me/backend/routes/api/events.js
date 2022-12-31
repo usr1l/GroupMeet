@@ -8,6 +8,8 @@ const { handleValidationErrors } = require('../../utils/validation');
 const { inputToDate, toJSONDisplay, getDisplayDate, checkUserId } = require('../../utils/helpers');
 const { venueDoesNotExist } = require('./venues');
 const { validateAttendanceData } = require('./attendances');
+const { Sequelize } = require('sequelize')
+
 
 
 const validateEventData = [
@@ -563,7 +565,7 @@ eventsRouter.get('/:eventId', async (req, res, next) => {
   eventJSON.EventImages = eventImages;
   eventJSON.numAttending = numAttending;
 
-  return res.json({ "Event": eventJSON });
+  return res.json({ "Event": eventJSON, startDate });
 });
 
 
@@ -596,19 +598,73 @@ eventsRouter.delete('/:eventId', requireAuth, async (req, res, next) => {
 
 // get all events
 eventsRouter.get('/', async (req, res, next) => {
+
+  let { name, type, page, size, startDate } = req.query;
+  const errors = {};
+  const where = {};
+
+  const pagination = {};
+
+  page = page === undefined ? 1 : parseInt(page);
+  size = size === undefined ? 20 : parseInt(size);
+
+  page = page > 10 ? 10 : page;
+  page = page < 1 ? errors.page = 'Page must be greater than or equal to 1' : page;
+
+  size = size > 20 ? 20 : size;
+  size = size < 1 ? errors.size = 'Size must be greater than or equal to 1' : size;
+
+  pagination.limit = size;
+  pagination.offset = size * (page - 1);
+
+  if (name) {
+    if (isNaN(name)) {
+      where.name = name;
+      console.log(name)
+    } else {
+      errors.name = 'Name must be a string';
+    }
+  };
+
+  if (type) {
+    if (['Online', 'In person'].includes(type)) {
+      where.type = type;
+    } else {
+      errors.type = 'Type must be \'Online\' or \'In person\'';
+    }
+  };
+
+  if (startDate) {
+    if (Validator.isISO8601(startDate) && startDate.length === 19) {
+      startDate = startDate.split(' ').join('T').concat('.000Z');
+      where.startDate = `${startDate}`;
+    } else {
+      errors.startDate = 'Start date must be a valid datetime, format must be YYYY-MM-DD hh:mm:ss'
+    }
+  };
+
+  if (Object.keys(errors).length > 0) {
+    const err = new Error('Validation error')
+    err.status = 400;
+    err.errors = errors;
+    return next(err);
+  };
+
   const events = await Event.findAll({
+    where,
     attributes: {
       exclude: ['price', 'capacity', 'description']
     },
     include: {
       model: Group,
       attributes: ['id', 'name', 'city', 'state']
-    }
+    },
+    ...pagination
   });
 
   const eventsArr = await getEvents(events);
 
-  return res.json({ "Events": eventsArr });
+  return res.json({ "Events": eventsArr, where });
 });
 
 

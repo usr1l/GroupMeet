@@ -12,7 +12,7 @@ function inputToDate(date) {
   const parts = date.split(' ');
   const dateParts = parts[0].split('-');
   const timeParts = parts[1].split(':');
-  const newDate = new Date(dateParts[0], dateParts[1], dateParts[2], timeParts[0], timeParts[1], timeParts[2]);
+  const newDate = new Date(dateParts[0], dateParts[1] - 1, dateParts[2], timeParts[0], timeParts[1], timeParts[2]);
 
   return newDate;
 };
