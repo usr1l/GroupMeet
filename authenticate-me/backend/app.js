@@ -47,6 +47,7 @@ app.use(
 // routes router
 app.use(routes);
 
+
 // Catch unhandled requests and forward to error handler.
 app.use((_req, _res, next) => {
   const err = new Error("The requested resource couldn't be found.");
@@ -62,6 +63,7 @@ app.use((err, _req, _res, next) => {
   if (err instanceof ValidationError) {
     err.errors = err.errors.map((e) => e.message);
     err.title = 'Validation error';
+    // err.status = err.status ? err.status : 403;
   }
   next(err);
 });
@@ -71,8 +73,9 @@ app.use((err, _req, res, _next) => {
   res.status(err.status || 500);
   console.error(err);
   res.json({
-    title: err.title || 'Server Error',
+    // title: err.title || 'Server Error',
     message: err.message,
+    statusCode: err.status,
     errors: err.errors,
     stack: isProduction ? null : err.stack
   });

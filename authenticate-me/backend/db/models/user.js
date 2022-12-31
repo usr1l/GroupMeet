@@ -47,18 +47,15 @@ module.exports = (sequelize, DataTypes) => {
 
     static associate(models) {
       // define association here
-      User.hasMany(models.Group, { foreignKey: 'organizerId' });
-      User.belongsToMany(models.Group,
-        {
-          through: models.Attendance,
-          foreignKey: 'userId',
-          otherKey: 'groupId'
-        });
-      User.belongsToMany(models.Group, {
-        through: models.Membership,
+      User.hasMany(models.Group, { foreignKey: 'organizerId', onDelete: 'CASCADE', hooks: true });
+      User.belongsToMany(models.Event, {
+        through: models.Attendance,
         foreignKey: 'userId',
-        otherKey: 'groupId'
+        otherKey: 'eventId'
       });
+      User.hasMany(models.Membership, { foreignKey: 'userId', onDelete: 'CASCADE', hooks: true });
+      User.hasMany(models.Attendance, { foreignKey: 'userId', onDelete: 'CASCADE', hooks: true });
+      User.hasMany(models.Group, { foreignKey: 'organizerId', onDelete: 'CASCADE', hooks: true });
     };
   }
   User.init({
@@ -113,6 +110,11 @@ module.exports = (sequelize, DataTypes) => {
       },
       loginUser: {
         attributes: {}
+      },
+      nameOnly: {
+        attributes: {
+          exclude: ['username', 'email', 'createdAt', 'updatedAt', 'hashedPassword']
+        }
       }
     },
   });

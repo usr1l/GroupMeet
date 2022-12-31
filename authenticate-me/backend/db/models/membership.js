@@ -20,9 +20,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.ENUM,
       allowNull: false,
       values: ['co-host', 'pending', 'member'],
-      // validate: {
-      //   isIn: [['co-host', 'pending', 'member']]
-      // }
     },
     userId: {
       type: DataTypes.INTEGER,
@@ -35,6 +32,11 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Membership',
+    defaultScope: {
+      attributes: {
+        exclude: ['createdAt', 'updatedAt']
+      }
+    }
   });
   return Membership;
 };

@@ -18,9 +18,9 @@ module.exports = {
         type: 'In person',
         capacity: 30,
         price: 50,
-        startDate: '2023-10-21',
-        endDate: '2023-10-25',
-        venueId: 2,
+        startDate: '2023-10-21 20:00:00',
+        endDate: '2023-10-25 20:00:00',
+        venueId: 1,
         groupId: 1
       },
       {
@@ -29,10 +29,10 @@ module.exports = {
         type: 'Online',
         capacity: 40,
         price: null,
-        startDate: '2023-01-03',
-        endDate: '2023-01-04',
-        venueId: 1,
-        groupId: 1
+        startDate: '2023-01-03 20:00:00',
+        endDate: '2023-01-04 20:00:00',
+        venueId: 2,
+        groupId: 2
       },
       {
         name: 'Event3',
@@ -40,19 +40,16 @@ module.exports = {
         type: 'In person',
         capacity: 30,
         price: 20,
-        startDate: '2023-07-08',
-        endDate: '2023-09-09',
-        venueId: 2,
-        groupId: 1
+        startDate: '2023-07-08 20:00:00',
+        endDate: '2023-09-09 20:00:00',
+        venueId: 3,
+        groupId: 3
       },
     ])
   },
 
   async down(queryInterface, Sequelize) {
     options.tableName = 'Events';
-    const Op = Sequelize.Op;
-    await queryInterface.bulkDelete(options, {
-      name: { [Op.in]: ['Event1', 'Event2', 'Event3'] }
-    })
+    await queryInterface.bulkDelete(options)
   }
 };

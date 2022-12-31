@@ -13,17 +13,17 @@ module.exports = {
     await queryInterface.bulkInsert(options, [
       {
         url: 'img1.url',
-        preview: true,
+        preview: false,
         groupId: 1
       },
       {
         url: 'img2.url',
-        preview: false,
+        preview: true,
         groupId: 2
       },
       {
         url: 'img3.url',
-        preview: false,
+        preview: true,
         groupId: 3
       },
     ])

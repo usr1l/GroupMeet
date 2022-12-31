@@ -1,7 +1,8 @@
 // backend/utils/auth.js
 const jwt = require('jsonwebtoken');
 const { jwtConfig } = require('../config');
-const { User } = require('../db/models');
+const { User, Membership, EventImage, Attendance } = require('../db/models');
+const { Op } = require('sequelize');
 
 const { secret, expiresIn } = jwtConfig;
 
@@ -62,4 +63,72 @@ const requireAuth = function (req, _res, next) {
   return next(err);
 };
 
-module.exports = { setTokenCookie, restoreUser, requireAuth };
+// check for organizer
+function checkAuth(userId, otherId) {
+  if (parseInt(userId) !== parseInt(otherId)) {
+    const err = new Error('You are not the organizer of this group');
+    err.status = 403;
+    err.title = 'Forbidden';
+    return err;
+  }
+  return true;
+};
+
+// check for cohost and organizer
+async function checkCohost(userId, organizerId, groupId) {
+  const organizerBool = parseInt(organizerId) === parseInt(userId);
+
+  const cohosts = await Membership.findAll(({
+    where: {
+      userId,
+      groupId,
+      status: 'co-host'
+    }
+  }));
+
+  if (organizerBool || cohosts.length) {
+    return true;
+  } else {
+    const err = new Error('Must be a co-host or the organizer of this group to perform this action');
+    err.status = 403;
+    err.title = 'Forbidden';
+    return err;
+  }
+};
+
+
+// check for attendee
+async function checkAttendance(userId, eventId) {
+  const attendance = await Attendance.findAll({
+    where: {
+      userId,
+      eventId,
+      status: { [Op.in]: ['attending', 'member'] }
+    }
+  });
+
+  if (!attendance.length) {
+    return false;
+  } else {
+    return true;
+  };
+};
+
+
+// check for deletion auth
+async function deleteAuth(userId, groupOrganizerId, groupId, reqUserId) {
+  const cohostBool = await checkCohost(userId, groupOrganizerId, groupId);
+  const currUserBool = reqUserId === userId;
+
+  if ((cohostBool instanceof Error) && (!currUserBool)) {
+    const err = new Error('Deletion failed: Only the User or group organizer may perform this action');
+    err.status = 403;
+    return err;
+  };
+
+  return true;
+};
+
+
+
+module.exports = { setTokenCookie, restoreUser, requireAuth, checkAuth, checkCohost, checkAttendance, deleteAuth };

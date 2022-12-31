@@ -1,7 +1,7 @@
 'use strict';
 
 const {
-  Model
+  Model, Validator
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Event extends Model {
@@ -14,13 +14,8 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Event.belongsTo(models.Group, { foreignKey: 'groupId' });
       Event.belongsTo(models.Venue, { foreignKey: 'venueId' });
-      Event.belongsToMany(models.User,
-        {
-          through: models.Attendance,
-          foreignKey: 'eventId',
-          otherKey: 'userId'
-        });
-      Event.hasMany(models.EventImage, { foreignKey: 'eventId' });
+      Event.hasMany(models.Attendance, { foreignKey: 'eventId', onDelete: 'CASCADE', hooks: true })
+      Event.hasMany(models.EventImage, { foreignKey: 'eventId', onDelete: 'CASCADE', hooks: true });
     }
   }
   Event.init({
@@ -30,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         longerThanFiveChars(input) {
           if (input.length < 5) {
-            throw new Error('Name must be at least 5 characters')
+            throw new Error('Name must be at least 5 characters');
           }
         }
       }
@@ -54,12 +49,12 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER
     },
     price: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.DECIMAL,
       validate: {
         isNumeric: true,
         greaterThanZero(input) {
           if (input < 0) {
-            throw new Error('Price is invalid')
+            throw new Error('Price is invalid');
           }
         }
       }
@@ -68,9 +63,22 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE,
       allowNull: false,
       validate: {
-        isAfter: {
-          args: new Date(),
-          msg: 'Start date must be in the future'
+        isProperFormat(input) {
+          if (!Validator.isISO8601(input.toISOString())) {
+            throw new Error('Date format must be YYYY-MM-DD hh:mm:ss');
+          };
+        },
+        isProperLength(input) {
+          const { getDisplayDate } = require('../../utils/helpers');
+          const inputISO = getDisplayDate(input);
+          if (inputISO.length !== 19) {
+            throw new Error('Date format must be YYYY-MM-DD hh:mm:ss');
+          };
+        },
+        checkStartDate(input) {
+          if (input < new Date()) {
+            throw new Error('Start date must be in the future');
+          };
         }
       }
     },
@@ -78,9 +86,22 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE,
       allowNull: false,
       validate: {
-        isAfter: {
-          args: this.startDate,
-          msg: 'End date is less than start date'
+        isProperFormat(input) {
+          if (!Validator.isISO8601(input.toISOString())) {
+            throw new Error('Date format must be YYYY-MM-DD hh:mm:ss');
+          };
+        },
+        isProperLength(input) {
+          const { getDisplayDate } = require('../../utils/helpers');
+          const inputISO = getDisplayDate(input);
+          if (inputISO.length !== 19) {
+            throw new Error('Date format must be YYYY-MM-DD hh:mm:ss');
+          };
+        },
+        checkEndDate(input) {
+          if (input < this.startDate) {
+            throw new Error('End date is less than start date');
+          }
         }
       }
     },
@@ -88,9 +109,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       validate: {
         checkForVenue(input) {
+          const { Venue } = require('../models');
           const venue = Venue.findByPk(input);
           if (!venue) {
-            throw new Error('Venue does not exist')
+            throw new Error('Venue does not exist');
           }
         }
       }
@@ -102,6 +124,11 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Event',
+    defaultScope: {
+      attributes: {
+        exclude: ['createdAt', 'updatedAt']
+      }
+    }
   });
   return Event;
 };
