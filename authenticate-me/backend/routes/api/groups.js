@@ -727,8 +727,6 @@ router.delete('/:groupId', requireAuth, async (req, res, next) => {
     return next(err);
   };
 
-  // return res.json(groupExists)
-
   await groupExists.destroy();
 
   res.message = "Succesfully deleted";

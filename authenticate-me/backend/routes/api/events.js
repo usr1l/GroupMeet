@@ -226,7 +226,7 @@ eventsRouter.get('/:eventId/attendees', async (req, res, next) => {
   const cohostBool = await checkCohost(userId, group.organizerId, group.id)
 
   if (cohostBool === true) {
-    const attendees = await Attendance.findAll({
+    const attendees = await User.findAll({
       attributes: {
         exclude: ['username']
       },
@@ -564,6 +564,33 @@ eventsRouter.get('/:eventId', async (req, res, next) => {
   eventJSON.numAttending = numAttending;
 
   return res.json({ "Event": eventJSON });
+});
+
+
+// delete an event
+eventsRouter.delete('/:eventId', requireAuth, async (req, res, next) => {
+
+  const { eventId } = req.params;
+  const userId = req.user.id;
+
+  const eventExists = await Event.findByPk(eventId);
+  if (!eventExists) {
+    return eventDoesNotExist(next);
+  };
+
+  const group = await Group.findByPk(eventExists.groupId)
+
+  if (userId !== group.organizerId) {
+    const err = new Error('Group must belong to current user');
+    err.status = 403;
+    return next(err);
+  };
+
+  await eventExists.destroy();
+
+  res.message = "Succesfully deleted";
+  res.status = 200;
+  return res.json({ message: res.message, statusCode: res.status });
 });
 
 
