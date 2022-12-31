@@ -50,6 +50,7 @@ module.exports = {
 
   async down(queryInterface, Sequelize) {
     options.tableName = 'Events';
+    const { Op } = require('sequelize');
     return queryInterface.bulkDelete(options, {
       name: { [Op.in]: ['Event1', 'Event2', 'Event3'] }
     }, {});
