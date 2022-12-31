@@ -214,7 +214,7 @@ eventsRouter.put('/:eventId', requireAuth, async (req, res, next) => {
   const cohostBool = await checkCohost(userId, group.organizerId, groupId);
 
   if (cohostBool instanceof Error) {
-    next(cohostBool);
+    return next(cohostBool);
   };
 
   const errors = {};
@@ -224,7 +224,7 @@ eventsRouter.put('/:eventId', requireAuth, async (req, res, next) => {
   if (venueId) {
     const venue = await Venue.findByPk(venueId);
     if (!venue) {
-      venueDoesNotExist(next);
+      return venueDoesNotExist(next);
     };
   };
 
@@ -296,6 +296,42 @@ eventsRouter.put('/:eventId', requireAuth, async (req, res, next) => {
   const updatedEventJSON = toJSONDisplay(updatedEvent, 'startDate', 'endDate');
 
   return res.json(updatedEventJSON);
+});
+
+
+// get event by eventId
+eventsRouter.get('/:eventId', async (req, res, next) => {
+  const { eventId } = req.params;
+
+  const event = await Event.findByPk(eventId);
+
+  if (!event) {
+    return eventDoesNotExist(next);
+  };
+
+  const group = await event.getGroup({
+    attributes: {
+      exclude: ['about', 'type', 'organizerId']
+    }
+  });
+
+  const venue = await event.getVenue({
+    attributes: {
+      exclude: ['groupId']
+    }
+  });
+
+  const eventImages = await event.getEventImages();
+
+  const numAttending = await getNumAttendees(eventId);
+
+  const eventJSON = toJSONDisplay(event, 'startDate', 'endDate');
+  eventJSON.Group = group;
+  eventJSON.Venue = venue;
+  eventJSON.EventImages = eventImages;
+  eventJSON.numAttending = numAttending;
+
+  return res.json({ "Event": eventJSON });
 });
 
 

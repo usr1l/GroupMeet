@@ -85,37 +85,89 @@ function groupDoesNotExist(next) {
 };
 
 
-// get all groups joined or organized by current user
-router.get('/current', requireAuth, async (req, res) => {
-  const { id } = req.user;
+// throw membership does not exist error
+function membershipDoesNotExist(next) {
+  const err = new Error('Membership between the user and the group does not exist')
+  err.status = 404;
+  return next(err);
+}
 
-  // use id to get where memberships exist
-  const memberships = await Membership.findAll({
+
+// request a change to a membership status by groupId
+router.put('/:groupId/membership', requireAuth, async (req, res, next) => {
+  const { groupId } = req.params;
+  const userId = req.user.id;
+
+  const reqUserId = req.body.userId;
+  const reqStatus = req.body.status;
+
+  const groupExists = await Group.findByPk(groupId);
+
+  if (!groupExists) {
+    return groupDoesNotExist(next);
+  };
+
+  const membershipExists = await Membership.findOne({
     where: {
-      userId: id,
-      status: { [Op.in]: ['member', 'co-host'] }
+      userId: reqUserId,
+      groupId
     }
   });
 
-  // get groupIds from memberships entries and display groups
-  const groupsId = memberships.map(membership => {
-    const membershipJSON = membership.toJSON();
-    return membershipJSON.groupId;
-  });
+  if (!membershipExists) {
+    return membershipDoesNotExist(next);
+  };
 
-  const groups = await Group.scope('allDetails').findAll({
+  return res.json({ userId, reqUserId, reqStatus })
+});
+
+
+// request a membership for a group based on groupId
+router.post('/:groupId/membership', requireAuth, async (req, res, next) => {
+  const { groupId } = req.params;
+  const userId = req.user.id;
+
+  const group = await Group.findByPk(groupId);
+
+  if (!group) {
+    return groupDoesNotExist(next);
+  };
+
+  const membershipExists = await Membership.findOne({
     where: {
-      id: { [Op.in]: [...groupsId] }
-    },
-    include: {
-      model: GroupImage,
+      userId,
+      groupId
     }
   });
 
-  const Groups = await getGroups(groups);
+  if (membershipExists) {
+    const { status } = membershipExists;
+    if (status === 'pending') {
+      const err = new Error('Membership has already been requested')
+      err.status = 400;
+      return next(err);
+    } else if (['co-host', 'member'].includes(status)) {
+      const err = new Error('User is already a member of this group')
+      err.status = 400;
+      return next(err);
+    };
+  };
 
-  // displays same as res from get all
-  return res.json({ Groups });
+  await Membership.create({
+    groupId,
+    userId,
+    status: 'pending'
+  })
+
+  const newMembership = await Membership.findOne({
+    where: {
+      groupId,
+      userId,
+      status: 'pending'
+    }
+  })
+
+  return res.json(newMembership);
 });
 
 
@@ -371,6 +423,40 @@ router.post('/:groupId/images', requireAuth, async (req, res, next) => {
 });
 
 
+// get all groups joined or organized by current user
+router.get('/current', requireAuth, async (req, res) => {
+  const { id } = req.user;
+
+  // use id to get where memberships exist
+  const memberships = await Membership.findAll({
+    where: {
+      userId: id,
+      status: { [Op.in]: ['member', 'co-host'] }
+    }
+  });
+
+  // get groupIds from memberships entries and display groups
+  const groupsId = memberships.map(membership => {
+    const membershipJSON = membership.toJSON();
+    return membershipJSON.groupId;
+  });
+
+  const groups = await Group.scope('allDetails').findAll({
+    where: {
+      id: { [Op.in]: [...groupsId] }
+    },
+    include: {
+      model: GroupImage,
+    }
+  });
+
+  const Groups = await getGroups(groups);
+
+  // displays same as res from get all
+  return res.json({ Groups });
+});
+
+
 // edit a group by id
 router.put('/:groupId', requireAuth, async (req, res, next) => {
 
@@ -429,12 +515,12 @@ router.put('/:groupId', requireAuth, async (req, res, next) => {
     "private": private ? private : group.private,
     "city": city ? city : group.city,
     "state": state ? state : group.state,
-    "updatedAt": getDisplayDate(new Date()),
+    "updatedAt": getDisplayDate(new Date())
   });
 
   const updatedGroup = await Group.scope('allDetails').findByPk(groupId);
 
-  const updatedGroupJSON = toJSONDisplay(updatedGroup, 'createdAt', 'updatedAt')
+  const updatedGroupJSON = toJSONDisplay(updatedGroup, 'createdAt', 'updatedAt');
 
   return res.json(updatedGroupJSON);
 });
