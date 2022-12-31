@@ -140,6 +140,63 @@ function attendanceDoesNotExist(next) {
 };
 
 
+
+// delete an attendance by userId
+eventsRouter.delete('/:eventId/attendance', requireAuth, async (req, res, next) => {
+  // check if event exists
+  const { eventId } = req.params;
+  const eventExists = await Event.findByPk(eventId);
+
+  if (!eventExists) {
+    return eventDoesNotExist(next);
+  };
+
+  const reqUserId = req.body.userId;
+
+  // check if the request userId belongs to existing user
+  const userExists = await User.findByPk(reqUserId);
+
+  if (!userExists) {
+    const err = new Error('This user does not exist');
+    err.status = 404;
+    return next(err);
+  };
+
+  // check if current user is making deletion, or if USER is organizer or cohost
+  const userId = req.user.id;
+  const group = await Group.findByPk(eventExists.groupId);
+  const cohostBool = await checkCohost(userId, group.organizerId, group.id)
+  const currUserBool = reqUserId === userId;
+
+  // if current user is not an organizer, cohost, or the userId being deleted
+  if ((cohostBool instanceof Error) && (!currUserBool)) {
+    const err = new Error('Only the User or organizer may delete an Attendance');
+    err.status = 403;
+    return next(err);
+  };
+
+  const deleteAttendance = await Attendance.findOne({
+    where: {
+      eventId,
+      userId: reqUserId
+    }
+  });
+
+  if (!deleteAttendance) {
+    const err = new Error('Attendance does not exist for this User');
+    err.status = 404;
+    return next(err);
+  };
+
+  await deleteAttendance.destroy();
+
+  res.message = "Succesfully deleted";
+  res.status = 200;
+  return res.json({ message: res.message, statusCode: res.status });
+});
+
+
+
 // get all attendees of an event by eventId
 eventsRouter.get('/:eventId/attendees', async (req, res, next) => {
   // check if event exists
@@ -170,8 +227,6 @@ eventsRouter.get('/:eventId/attendees', async (req, res, next) => {
 
   // if user logged in
   const userId = req.user.id;
-
-
   const group = await Group.findByPk(eventExists.groupId);
 
   const cohostBool = await checkCohost(userId, group.organizerId, group.id)
