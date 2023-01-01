@@ -565,7 +565,7 @@ eventsRouter.get('/:eventId', async (req, res, next) => {
   eventJSON.EventImages = eventImages;
   eventJSON.numAttending = numAttending;
 
-  return res.json({ "Event": eventJSON, startDate });
+  return res.json({ "Event": eventJSON });
 });
 
 
@@ -620,7 +620,6 @@ eventsRouter.get('/', async (req, res, next) => {
   if (name) {
     if (isNaN(name)) {
       where.name = name;
-      console.log(name)
     } else {
       errors.name = 'Name must be a string';
     }
@@ -631,7 +630,7 @@ eventsRouter.get('/', async (req, res, next) => {
       where.type = type;
     } else {
       errors.type = 'Type must be \'Online\' or \'In person\'';
-    }
+    };
   };
 
   if (startDate) {
@@ -640,7 +639,7 @@ eventsRouter.get('/', async (req, res, next) => {
       where.startDate = `${startDate}`;
     } else {
       errors.startDate = 'Start date must be a valid datetime, format must be YYYY-MM-DD hh:mm:ss'
-    }
+    };
   };
 
   if (Object.keys(errors).length > 0) {
@@ -664,7 +663,7 @@ eventsRouter.get('/', async (req, res, next) => {
 
   const eventsArr = await getEvents(events);
 
-  return res.json({ "Events": eventsArr, where });
+  return res.json({ "Events": eventsArr });
 });
 
 

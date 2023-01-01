@@ -1,4 +1,4 @@
-const { User } = require('../db/models')
+const { User } = require('../db/models');
 
 function getDisplayDate(date) {
   const displayDate = date.toISOString().split('');
@@ -24,7 +24,7 @@ function toJSONDisplay(input, startField, endField) {
   inputJSON[`${endField}`] = getDisplayDate(inputJSON[`${endField}`]);
 
   return inputJSON;
-}
+};
 
 async function checkUserId(reqUserId) {
   const userExists = await User.findByPk(reqUserId);

@@ -9,7 +9,7 @@ const { validateVenueData } = require('./venues');
 const { validateEventData, getEvents } = require('./events');
 const { inputToDate, getDisplayDate, toJSONDisplay, checkUserId } = require('../../utils/helpers')
 const { venueDoesNotExist } = require('./venues');
-const { validateMembershipData } = require('./memberships')
+const { validateMembershipData, validateMembershipDataDelete } = require('./memberships')
 
 
 const validateGroupData = [
@@ -96,7 +96,7 @@ function membershipDoesNotExist(next) {
 
 
 // delete a membership
-router.delete('/:groupId/membership', requireAuth, async (req, res, next) => {
+router.delete('/:groupId/membership', requireAuth, validateMembershipDataDelete, async (req, res, next) => {
   const { groupId } = req.params;
   const groupExists = await Group.findByPk(groupId);
 
@@ -104,7 +104,7 @@ router.delete('/:groupId/membership', requireAuth, async (req, res, next) => {
     return groupDoesNotExist(next);
   };
 
-  const reqUserId = req.body.userId;
+  const reqUserId = req.body.memberId;
   const userExists = await checkUserId(reqUserId);
 
   if (userExists instanceof Error) {
@@ -214,7 +214,7 @@ router.put('/:groupId/membership', requireAuth, validateMembershipData, async (r
   const { groupId } = req.params;
   const userId = req.user.id;
 
-  const reqUserId = req.body.userId;
+  const reqUserId = req.body.memberId;
   const reqStatus = req.body.status;
 
   // check to see if group exists
@@ -274,7 +274,12 @@ router.put('/:groupId/membership', requireAuth, validateMembershipData, async (r
     }
   });
 
-  return res.json(updatedMembership)
+  let updatedMembershipJSON = updatedMembership.toJSON();
+
+  updatedMembershipJSON.memberId = updatedMembership.userId;
+  delete updatedMembershipJSON.userId;
+
+  return res.json(updatedMembershipJSON);
 });
 
 
@@ -509,7 +514,7 @@ router.post('/:groupId/venues', requireAuth, validateVenueData, async (req, res,
     where: {
       address, city, state, lat, lng, groupId
     }
-  })
+  });
 
   return res.json(newVenue);
 
