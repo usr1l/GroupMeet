@@ -24,7 +24,7 @@ function toJSONDisplay(input, startField, endField) {
   inputJSON[`${endField}`] = getDisplayDate(inputJSON[`${endField}`]);
 
   return inputJSON;
-}
+};
 
 async function checkUserId(reqUserId) {
   const userExists = await User.findByPk(reqUserId);
