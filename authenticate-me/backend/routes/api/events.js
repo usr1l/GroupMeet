@@ -232,6 +232,7 @@ eventsRouter.get('/:eventId/attendees', async (req, res, next) => {
       attributes: {
         exclude: ['username']
       },
+      order: [['firstName'], ['lastName']],
       include: {
         model: Attendance,
         where: {
@@ -248,6 +249,7 @@ eventsRouter.get('/:eventId/attendees', async (req, res, next) => {
       attributes: {
         exclude: ['username']
       },
+      order: [['firstName'], ['lastName']],
       include: {
         model: Attendance,
         where: {
@@ -654,6 +656,7 @@ eventsRouter.get('/', async (req, res, next) => {
     attributes: {
       exclude: ['price', 'capacity', 'description']
     },
+    order: [['name'], ['type']],
     include: {
       model: Group,
       attributes: ['id', 'name', 'city', 'state']
