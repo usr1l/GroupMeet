@@ -156,6 +156,7 @@ router.get('/:groupId/members', async (req, res, next) => {
       attributes: {
         exclude: ['username']
       },
+      order: [['firstName'], ['lastName']],
       include: {
         model: Membership,
         where: {
@@ -184,7 +185,8 @@ router.get('/:groupId/members', async (req, res, next) => {
           groupId
         },
         attributes: ['status']
-      }
+      },
+      order: [['firstName'], ['lastName']]
     });
 
     return res.json(members);
@@ -201,7 +203,8 @@ router.get('/:groupId/members', async (req, res, next) => {
           status: { [Op.in]: ['member', 'co-host'] }
         },
         attributes: ['status']
-      }
+      },
+      order: [['firstName'], ['lastName']]
     });
 
     return res.json(members);
@@ -351,6 +354,7 @@ router.get('/:groupId/events', async (req, res, next) => {
     where: {
       groupId
     },
+    order: [['name'], ['type']],
     include: {
       model: Group,
       attributes: ['id', 'name', 'city', 'state']
@@ -480,7 +484,8 @@ router.get('/:groupId/venues', requireAuth, async (req, res, next) => {
   const venues = await Venue.findAll({
     where: {
       groupId
-    }
+    },
+    order: [['state'], ['city'], ['address']]
   });
 
   return res.json({ Venues: venues });
@@ -606,7 +611,8 @@ router.get('/current', requireAuth, async (req, res) => {
     },
     include: {
       model: GroupImage,
-    }
+    },
+    order: [['name'], ['type']]
   });
 
   const Groups = await getGroups(groups);
@@ -746,7 +752,8 @@ router.get('/', async (_req, res) => {
   const groups = await Group.scope('allDetails').findAll({
     include: {
       model: GroupImage,
-    }
+    },
+    order: [['name'], ['type']]
   });
   const groupsArr = await getGroups(groups);
   return res.json({ "Groups": groupsArr });
