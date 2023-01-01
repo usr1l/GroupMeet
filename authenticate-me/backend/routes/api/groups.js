@@ -499,18 +499,32 @@ router.post('/:groupId/venues', requireAuth, validateVenueData, async (req, res,
   let { groupId } = req.params;
   groupId = parseInt(groupId);
 
+  // check if the group exists
   const groupExists = await Group.findByPk(groupId);
-
   if (!groupExists) {
     return groupDoesNotExist(next)
   };
 
+  // check for cohost or organizer role
   const cohostBool = await checkCohost(userId, groupExists.organizerId, groupId);
-
   if (cohostBool instanceof Error) {
     return next(cohostBool);
   };
+
+  // look for this venue for this group
   const { address, city, state, lat, lng } = req.body;
+  const venueExists = await Venue.findOne({
+    where: {
+      address, city, state, lat, lng, groupId
+    }
+  });
+
+  if (venueExists) {
+    const err = new Error('Failed: This venue already exists for this group');
+    err.status = 409;
+    return next(err);
+  };
+
   await Venue.create({
     address, city, state, lat, lng, groupId
   });
