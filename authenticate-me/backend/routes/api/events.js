@@ -620,7 +620,6 @@ eventsRouter.get('/', async (req, res, next) => {
   if (name) {
     if (isNaN(name)) {
       where.name = name;
-      console.log(name)
     } else {
       errors.name = 'Name must be a string';
     }

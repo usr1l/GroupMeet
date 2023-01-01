@@ -1,4 +1,4 @@
-const { User } = require('../db/models')
+const { User } = require('../db/models');
 
 function getDisplayDate(date) {
   const displayDate = date.toISOString().split('');

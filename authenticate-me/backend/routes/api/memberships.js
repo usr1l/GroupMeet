@@ -4,14 +4,14 @@ const { User } = require('../../db/models');
 
 
 const validateMembershipData = [
-  check('userId')
+  check('memberId')
     .exists({ checkFalsy: true })
-    .withMessage('userId is required'),
-  check('userId')
+    .withMessage('memberId is required'),
+  check('memberId')
     .custom(async (userId) => {
       const userExists = await User.findByPk(userId);
       if (!userExists) {
-        return Promise.reject('userId')
+        return Promise.reject('memberId')
       };
       return true;
     })
@@ -29,4 +29,11 @@ const validateMembershipData = [
   handleValidationErrors
 ];
 
-module.exports = { validateMembershipData }
+const validateMembershipDataDelete = [
+  check('memberId')
+    .exists({ checkFalsy: true })
+    .withMessage('memberId is required'),
+  handleValidationErrors
+]
+
+module.exports = { validateMembershipData, validateMembershipDataDelete }
