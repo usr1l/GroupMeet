@@ -31,7 +31,6 @@ export const thunkLogin = (user) => async (dispatch) => {
   });
 
   const data = await response.json();
-  console.log('LOGGED IN USER FROM THUNK ', data)
   dispatch(actionLogin(data.user));
   return response;
 };
@@ -81,7 +80,6 @@ const sessionReducer = (state = initialState, action) => {
     case LOGIN_USER:
       newState = Object.assign({}, state);
       newState.user = action.payload;
-      console.log('LOGGED IN USER FROM REDUCER ', newState)
       return newState;
     case LOGOUT_USER:
       newState = Object.assign({}, state);
