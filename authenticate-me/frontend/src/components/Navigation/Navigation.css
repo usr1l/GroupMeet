@@ -1,3 +1,42 @@
+* {
+  width: block;
+  margin: 0;
+  padding: 0;
+}
+
 .hidden {
   display: none;
+}
+
+nav {
+  display: block;
+  /* border-bottom: 1px slategray inset; */
+}
+
+#site-logo {
+  height: 50px;
+  cursor: pointer;
+}
+
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  padding: 0px;
+  box-sizing: border-box;
+  margin: 0px 10px;
+  border: 0;
+}
+
+
+.nav-buttons-wrapper {
+  display: flex;
+  align-items: center;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  width: 200px;
+  justify-content: space-around;
+
 }
