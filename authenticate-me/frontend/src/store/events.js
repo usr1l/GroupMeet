@@ -1,11 +1,11 @@
-import React from "react";
 
 const initialState = {};
 
 const eventReducer = (state = initialState, action) => {
-  return (
-    <div>Event Reducer</div>
-  );
+  switch (action.type) {
+    default:
+      return state;
+  }
 };
 
 export default eventReducer;

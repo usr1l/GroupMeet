@@ -1,11 +1,9 @@
 import React from "react";
 
-const NotificationButton = (user) => {
+const NotificationButton = () => {
 
   return (
-    <button>
-      <i className="fa-regular fa-bell"></i>
-    </button>
+    <i className="fa-regular fa-bell menu-item"></i>
   )
 }
 

@@ -17,26 +17,22 @@ function Navigation({ isLoaded }) {
   return (
     <nav>
       <div className='navbar'>
-        <div>
-          <NavLink exact to="/">
-            <SiteLogo />
-          </NavLink>
-        </div>
+        <SiteLogo key='nav-1' />
         <ul className='nav-buttons-wrapper'>
           {isLoaded && (
             <>
-              <li id='messages-button' className={'nav-button' + `${hide}`}>
+              <li key='nav-2' className={'nav-button'.concat(hide)}>
                 <NavLink to='/messages'>
-                  <MessagesButton user={sessionUser} />
+                  <MessagesButton id='messages-button' user={sessionUser} />
                 </NavLink>
               </li>
-              <li id='notifications-button' className={'nav-button' + `${hide}`}>
+              <li key='nav-3' className={'nav-button'.concat(hide)}>
                 <NavLink to='/notifications'>
-                  <NotificationButton user={sessionUser} />
+                  <NotificationButton id='notifications-button' />
                 </NavLink>
               </li>
-              <li id='profile-button' className='nav-button'>
-                <ProfileButton user={sessionUser} />
+              <li key='nav-4' className='nav-button'>
+                <ProfileButton id='profile-button' user={sessionUser} />
               </li>
             </>
           )}

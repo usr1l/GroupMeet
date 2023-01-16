@@ -1,11 +1,9 @@
 import React from "react";
 
-const MessagesButton = (user) => {
+const MessagesButton = () => {
   return (
     <>
-      <button>
-        <i className="fa-regular fa-comment"></i>
-      </button >
+      <i className="fa-regular fa-comment menu-item"></i>
       {/* <DropdownMenu user={user} /> */}
     </>
   )

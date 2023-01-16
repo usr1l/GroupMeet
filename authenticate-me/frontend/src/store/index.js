@@ -3,7 +3,6 @@ import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import eventReducer from './events';
 import groupReducer from './groups';
-import notificationReducer from '../components/Notifications';
 
 import sessionReducer from './session';
 
