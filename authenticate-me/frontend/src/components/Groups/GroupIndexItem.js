@@ -4,7 +4,8 @@ import React from 'react';
 // import { actionDeleteBooks } from '../store/bookReducer';
 
 
-const GroupIndexItem = ({ book }) => {
+
+const GroupIndexItem = ({ group }) => {
 
   // const dispatch = useDispatch();
 

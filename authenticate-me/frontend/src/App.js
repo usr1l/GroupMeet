@@ -33,27 +33,17 @@ function App() {
           <FeaturesBar />
           <Switch>
             <Route exact path={'/'} component={HomePage} />
-            <Route path={'/events'}>
-              <Switch>
-                <Route exact patch={'/'} component={AllEventsPage} />
-                <Route path={'/new'} component={CreateEventForm}></Route>
-                <Route path={'/:eventId'} component={SingleEventPage}></Route>
-                <Route path={'/:eventId/edit'} component={EditEventPage}></Route>
-              </Switch>
-            </Route>
-            <Route path={'/groups'}>
-              <Switch>
-                <Route exact patch={'/'} component={AllGroupsPage} />
-                <Route path={'/new'} component={CreateGroupForm}></Route>
-                <Route path={'/:groupId'} component={SingleGroupPage}></Route>
-                <Route path={'/:groupId/edit'} component={EditGroupPage}></Route>
-              </Switch>
-            </Route>
+            <Route exact path={'/events'} component={AllEventsPage} />
+            <Route path={'/events/:eventId/edit'} component={EditEventPage} />
+            <Route path={'/events/:eventId'} component={SingleEventPage} />
+            <Route path={'/events/new'} component={CreateEventForm} />
+            <Route exact path={'/groups'} component={AllGroupsPage} />
+            <Route path={'/groups/new'} component={CreateGroupForm} />
+            <Route path={'/groups/:groupId/edit'} component={EditGroupPage} />
+            <Route path={'/groups/:groupId'} component={SingleGroupPage} />
             <Route path={'/notifications'} component={NotificationPage} />
             <Route path={'/messages'} component={MessagesPage} />
-            <Route>
-              <NotFoundPage />
-            </Route>
+            <Route component={NotFoundPage} />
           </Switch>
         </>
       )}

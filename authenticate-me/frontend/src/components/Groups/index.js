@@ -1,18 +1,29 @@
-import React from "react";
-import { useDispatch } from "react-redux";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { thunkLoadGroups } from "../../store/groups";
+import GroupIndexCard from "./GroupIndexCard";
+import './GroupsPage.css'
 
 const AllGroupsPage = () => {
-
-
   const dispatch = useDispatch();
 
-  dispatch(thunkLoadGroups())
+  const groupsObj = useSelector(state => state.groups.groups);
+  const groups = Object.values(groupsObj);
 
-
+  useEffect(() => {
+    dispatch(thunkLoadGroups());
+  }, [ dispatch ]);
 
   return (
-    <div>Group Page</div>
+    <section>
+      <ul>
+        {
+          groups.map((group) => (
+            <GroupIndexCard group={group} />
+          ))
+        }
+      </ul>
+    </section>
   );
 };
 

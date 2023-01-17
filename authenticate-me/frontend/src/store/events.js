@@ -1,10 +1,17 @@
-
+import { csrfFetch } from "./csrf";
+import normalizeFn from "../components/HelperFns/NormalizeFn";
+import objDeepCopyFn from "../components/HelperFns/ObjDeepCopyFn";
 
 const LOAD_EVENTS = 'events/LOAD';
 const DELETE_EVENT = 'events/DELETE';
 const CREATE_EVENT = 'events/CREATE';
 const UPDATE_EVENT = 'events/EDIT';
 
+export const thunkLoadEvents = () => async (dispatch) => {
+  const response = await csrfFetch('/api/events/');
+  const data = await response.json();
+  dispatch(actionLoadEvents(data));
+};
 
 export const actionLoadEvents = (events) => {
   return {
@@ -35,14 +42,15 @@ export const actionCreateEvent = (event) => {
 };
 
 
-const initialState = {};
+const initialState = { events: {}, isLoading: true };
 
 const eventReducer = (state = initialState, action) => {
-  const updatedState = { ...state };
 
   switch (action.type) {
     case LOAD_EVENTS:
-      return state;
+      const events = normalizeFn(action.payload.Events);
+      const eventsCopy = objDeepCopyFn(events)
+      return { ...state, events: eventsCopy, isLoading: false };
     case CREATE_EVENT:
       return state;
     case DELETE_EVENT:

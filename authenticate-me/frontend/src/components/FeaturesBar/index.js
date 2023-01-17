@@ -11,9 +11,9 @@ const FeaturesBar = () => {
       setSelectedFeaturesBarItem(`${currId}`)
   };
 
-  useEffect(() => {
+  // useEffect(() => {
 
-  }, [ selectedFeaturesBarItem ])
+  // }, [ selectedFeaturesBarItem ])
 
   return (
     <div className='features-bar'>

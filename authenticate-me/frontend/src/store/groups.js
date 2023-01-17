@@ -1,10 +1,5 @@
 import { csrfFetch } from "./csrf";
-
-const normalizeFn = ([ data ]) => {
-  const normalizeData = {};
-  data.forEach((val) => normalizeData[ val.id ] = val);
-  return normalizeData;
-};
+import normalizeFn from "../components/HelperFns/NormalizeFn";
 
 const LOAD_GROUPS = 'groups/LOAD';
 const DELETE_GROUP = 'groups/DELETE';
@@ -48,23 +43,19 @@ export const actionCreateGroup = (group) => {
 const initialState = { groups: {}, isLoading: true };
 
 
-
-
 const groupReducer = (state = initialState, action) => {
-  const updatedState = { ...state }
-
   switch (action.type) {
     case LOAD_GROUPS:
-      console.log('GROUPS', action.payload);
-      return state;
+      const groups = normalizeFn(action.payload.Groups);
+      return { ...state, groups: groups, isLoading: false };
     case CREATE_GROUP:
-      return state;
+      return initialState;
     case DELETE_GROUP:
-      return state;
+      return initialState;
     case UPDATE_GROUP:
-      return state;
+      return initialState;
     default:
-      return state;
+      return initialState;
   };
 };
 
