@@ -11,6 +11,12 @@ import NotFoundPage from "./components/NotFoundPage";
 import HomePage from "./components/HomePage";
 import MessagesPage from "./components/Messages";
 import FeaturesBar from "./components/FeaturesBar";
+import CreateEventForm from './components/Events/CreateEventForm';
+import CreateGroupForm from './components/Groups/CreateGroupForm';
+import EditEventPage from "./components/Events/EditEvent";
+import EditGroupPage from "./components/Groups/EditGroup";
+import SingleEventPage from "./components/Events/ShowSingleEvent";
+import SingleGroupPage from "./components/Groups/ShowSingleGroup";
 
 function App() {
   const dispatch = useDispatch();
@@ -28,18 +34,20 @@ function App() {
           <Switch>
             <Route exact path={'/'} component={HomePage} />
             <Route path={'/events'}>
-              <Route exact patch={'/'} component={AllEventsPage} />
-              <Route path={'/new'}></Route>
-              <Route path={'/:eventId/edit'}></Route>
-              <Route path={'/:eventId/delete'}></Route>
-              <Route path={'/:eventId'}></Route>
+              <Switch>
+                <Route exact patch={'/'} component={AllEventsPage} />
+                <Route path={'/new'} component={CreateEventForm}></Route>
+                <Route path={'/:eventId'} component={SingleEventPage}></Route>
+                <Route path={'/:eventId/edit'} component={EditEventPage}></Route>
+              </Switch>
             </Route>
             <Route path={'/groups'}>
-              <Route exact patch={'/'} component={AllGroupsPage} />
-              <Route path={'/new'}></Route>
-              <Route path={'/:groupId/edit'}></Route>
-              {/* <Route path={'/:groupId/delete'}></Route> */}
-              <Route path={'/:groupId'}></Route>
+              <Switch>
+                <Route exact patch={'/'} component={AllGroupsPage} />
+                <Route path={'/new'} component={CreateGroupForm}></Route>
+                <Route path={'/:groupId'} component={SingleGroupPage}></Route>
+                <Route path={'/:groupId/edit'} component={EditGroupPage}></Route>
+              </Switch>
             </Route>
             <Route path={'/notifications'} component={NotificationPage} />
             <Route path={'/messages'} component={MessagesPage} />
