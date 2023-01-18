@@ -11,10 +11,6 @@ const FeaturesBar = () => {
       setSelectedFeaturesBarItem(`${currId}`)
   };
 
-  // useEffect(() => {
-
-  // }, [ selectedFeaturesBarItem ])
-
   return (
     <div className='features-bar'>
       <NavLink to='/events'>

@@ -1,6 +1,6 @@
 import React from "react"
 
-const SingleEventPage = () => {
+const SingleEventPage = ({ event }) => {
   return (
     <div>SingleEventPage</div>
   )

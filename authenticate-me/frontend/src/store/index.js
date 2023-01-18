@@ -1,10 +1,10 @@
 // frontend/src/store/index.js
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
+import sessionReducer from './session';
 import eventReducer from './events';
 import groupReducer from './groups';
 
-import sessionReducer from './session';
 
 const rootReducer = combineReducers({
   session: sessionReducer,

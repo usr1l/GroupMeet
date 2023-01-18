@@ -3,9 +3,11 @@ import normalizeFn from "../components/HelperFns/NormalizeFn";
 import objDeepCopyFn from "../components/HelperFns/ObjDeepCopyFn";
 
 const LOAD_EVENTS = 'events/LOAD';
+const LOAD_EVENT = 'event/LOAD';
 const DELETE_EVENT = 'events/DELETE';
 const CREATE_EVENT = 'events/CREATE';
 const UPDATE_EVENT = 'events/EDIT';
+
 
 export const thunkLoadEvents = () => async (dispatch) => {
   const response = await csrfFetch('/api/events/');
@@ -20,6 +22,13 @@ export const actionLoadEvents = (events) => {
   };
 };
 
+export const actionLoadEvent = (event) => {
+  return {
+    type: LOAD_EVENT,
+    payload: event
+  };
+};
+
 export const actionDeleteEvent = (id) => {
   return {
     type: DELETE_EVENT,
@@ -27,10 +36,10 @@ export const actionDeleteEvent = (id) => {
   };
 };
 
-export const actionUpdateEvent = (id) => {
+export const actionUpdateEvent = (event) => {
   return {
     type: CREATE_EVENT,
-    payload: id
+    payload: event
   };
 };
 

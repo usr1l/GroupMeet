@@ -5,6 +5,7 @@ const LOAD_GROUPS = 'groups/LOAD';
 const DELETE_GROUP = 'groups/DELETE';
 const CREATE_GROUP = 'groups/CREATE';
 const UPDATE_GROUP = 'groups/EDIT';
+const LOAD_GROUP = 'groups/LOAD';
 
 export const thunkLoadGroups = () => async (dispatch) => {
   const response = await csrfFetch('/api/groups/');
@@ -26,16 +27,23 @@ export const actionDeleteGroup = (id) => {
   };
 };
 
-export const actionUpdateGroup = (id) => {
+export const actionUpdateGroup = (group) => {
   return {
     type: CREATE_GROUP,
-    payload: id
+    payload: group
   };
 };
 
 export const actionCreateGroup = (group) => {
   return {
     type: UPDATE_GROUP,
+    payload: group
+  };
+};
+
+export const actionLoadGroup = (group) => {
+  return {
+    type: LOAD_GROUP,
     payload: group
   };
 };

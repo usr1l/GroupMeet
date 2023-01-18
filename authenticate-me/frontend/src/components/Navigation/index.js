@@ -1,18 +1,25 @@
 // frontend/src/components/Navigation/index.js
-import React from 'react';
+import React, { useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import ProfileButton from './ProfileButton';
 import './Navigation.css';
 import SiteLogo from './SiteLogo';
 import NotificationButton from './NotificationButton';
 import MessagesButton from './MessagesButton';
+import { thunkLoadGroups } from '../../store/groups';
+import { thunkLoadEvents } from '../../store/events';
 
 function Navigation({ isLoaded }) {
   let hide = '';
   const sessionUser = useSelector(state => state.session.user);
   if (!sessionUser) hide = ' hidden';
 
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(thunkLoadEvents()).then(() => dispatch(thunkLoadGroups()));
+  }, [ dispatch ]);
 
   return (
     <nav>
