@@ -1,13 +1,57 @@
 import React from "react";
-import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { useParams, Link } from "react-router-dom";
+import { thunkDeleteGroup } from "../../store/groups";
+import { useHistory } from "react-router-dom";
+import errorPageHandler from "../ErrorPage";
 
-const SingleGroupPage = () => {
-  const group = useSelector(state => state.groups);
-  console.log(group, useParams());
+const SingleGroupPage = ({ groupData }) => {
+  const history = useHistory();
+  const { user } = useSelector(state => state.session);
+
+  const groupState = useSelector(state => state.groups);
+  const { groupId } = useParams();
+
+  if (groupState.status === true) return (<div>Loading...</div>)
+
+  const group = useSelector(state => state.groups.groups[ groupId ]);
+
+  if (!group) return (<div>Not Found</div>);
+
+  let { name, about, type, city, state, organizerId } = group;
+  // can still use group.private
+
+  const dispatch = useDispatch();
+  const handleDelete = async (e) => {
+    e.preventDefault();
+    const data = await dispatch(thunkDeleteGroup({ user, groupId }));
+
+    if (data.ok === true) {
+      history.push(`/groups`);
+    };
+
+    if (data.ok === false) {
+      errorPageHandler(data);
+    };
+  };
+
   return (
-    <div>SingleGroupPage</div>
+    <>
+      <div>SingleGroupPage</div>
+      <ul>
+        <li>{name}</li>
+        <li>{about}</li>
+        <li>{type}</li>
+        <li>{city}</li>
+        <li>{state}</li>
+        <li>{organizerId}</li>
+      </ul>
+      <Link to={`/groups/${groupId}`}>Edit</Link>
+      <button onClick={handleDelete}>Delete</button>
+    </>
   )
 }
+
+
 
 export default SingleGroupPage;

@@ -17,11 +17,16 @@ import EditEventPage from "./components/Events/EditEvent";
 import EditGroupPage from "./components/Groups/EditGroup";
 import SingleEventPage from "./components/Events/ShowSingleEvent";
 import SingleGroupPage from "./components/Groups/ShowSingleGroup";
+import { thunkLoadEvents } from "./store/events";
+import { thunkLoadGroups } from "./store/groups";
+
 
 function App() {
   const dispatch = useDispatch();
   const [ isLoaded, setIsLoaded ] = useState(false);
   useEffect(() => {
+    dispatch(thunkLoadGroups());
+    dispatch(thunkLoadEvents());
     dispatch(sessionActions.thunkRestoreUser()).then(() => setIsLoaded(true));
   }, [ dispatch ]);
 

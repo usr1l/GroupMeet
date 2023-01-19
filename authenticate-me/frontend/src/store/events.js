@@ -2,8 +2,8 @@ import { csrfFetch } from "./csrf";
 import normalizeFn from "../components/HelperFns/NormalizeFn";
 import objDeepCopyFn from "../components/HelperFns/ObjDeepCopyFn";
 
+
 const LOAD_EVENTS = 'events/LOAD';
-const LOAD_EVENT = 'event/LOAD';
 const DELETE_EVENT = 'events/DELETE';
 const CREATE_EVENT = 'events/CREATE';
 const UPDATE_EVENT = 'events/EDIT';
@@ -11,21 +11,40 @@ const UPDATE_EVENT = 'events/EDIT';
 
 export const thunkLoadEvents = () => async (dispatch) => {
   const response = await csrfFetch('/api/events/');
-  const data = await response.json();
-  dispatch(actionLoadEvents(data));
+
+  if (response.ok) {
+
+    const data = await response.json();
+    dispatch(actionLoadEvents(data));
+    return data;
+  }
 };
+
+export const thunkDeleteEvent = ({ user, eventId }) => async (dispatch) => {
+  const response = await csrfFetch(`/api/events/${eventId}`, {
+    method: 'DELETE',
+    body: JSON.stringify({
+      user
+    })
+  })
+    .catch(err => err);
+
+  if (response.ok) {
+    dispatch(actionDeleteEvent(eventId));
+  };
+
+  return response
+};
+
+export const thunkCreateEvent = ({}) => async (dispatch) => {
+
+}
+
 
 export const actionLoadEvents = (events) => {
   return {
     type: LOAD_EVENTS,
     payload: events
-  };
-};
-
-export const actionLoadEvent = (event) => {
-  return {
-    type: LOAD_EVENT,
-    payload: event
   };
 };
 
@@ -38,7 +57,7 @@ export const actionDeleteEvent = (id) => {
 
 export const actionUpdateEvent = (event) => {
   return {
-    type: CREATE_EVENT,
+    type: UPDATE_EVENT,
     payload: event
   };
 };
@@ -61,13 +80,16 @@ const eventReducer = (state = initialState, action) => {
       const eventsCopy = objDeepCopyFn(events)
       return { ...state, events: eventsCopy, isLoading: false };
     case CREATE_EVENT:
-      return state;
+      return { ...state };
     case DELETE_EVENT:
-      return state;
+      const id = action.payload;
+      const updatedState = { ...state };
+      delete updatedState[ 'events' ][ id ];
+      return updatedState;
     case UPDATE_EVENT:
-      return state;
+      return { ...state };
     default:
-      return state;
+      return { ...state };
   };
 };
 

@@ -1,6 +1,5 @@
 import React from "react";
 import { useSelector } from "react-redux";
-// import { thunkLoadEvents } from "../../store/events";
 import EventIndexCard from "./EventIndexCard";
 import './EventsPage.css';
 
