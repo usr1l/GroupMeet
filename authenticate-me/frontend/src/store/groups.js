@@ -25,13 +25,42 @@ export const thunkDeleteGroup = ({ user, groupId }) => async (dispatch) => {
     })
   })
     .catch(err => err);
-  console.log('this')
+
   if (response.ok) {
     dispatch(actionDeleteGroup(groupId));
     dispatch(thunkLoadEvents());
   };
 
   return response;
+}
+
+export const thunkCreateGroup = (groupInfo) => async (dispatch) => {
+  const { name, about, type, isPrivate, city, state, organizerId } = groupInfo
+  const response = await csrfFetch(`/api/groups`, {
+    method: 'POST',
+    body: JSON.stringify({
+      name,
+      about,
+      type,
+      private: isPrivate,
+      city,
+      state,
+      organizerId
+    })
+  })
+    .catch(err => err)
+
+  let data;
+
+  if (response.ok) {
+    data = await response.json();
+
+    dispatch(actionCreateGroup(data));
+    dispatch(thunkLoadGroups());
+  }
+
+  return data;
+
 }
 
 export const actionLoadGroups = (groups) => {
@@ -50,14 +79,14 @@ export const actionDeleteGroup = (id) => {
 
 export const actionUpdateGroup = (group) => {
   return {
-    type: CREATE_GROUP,
+    type: UPDATE_GROUP,
     payload: group
   };
 };
 
 export const actionCreateGroup = (group) => {
   return {
-    type: UPDATE_GROUP,
+    type: CREATE_GROUP,
     payload: group
   };
 };
@@ -66,15 +95,17 @@ const initialState = { groups: {}, isLoading: true };
 
 
 const groupReducer = (state = initialState, action) => {
+  const updatedState = { ...state };
   switch (action.type) {
     case LOAD_GROUPS:
       const groups = normalizeFn(action.payload.Groups);
       return { ...state, groups: groups, isLoading: false };
     case CREATE_GROUP:
-      return { ...state };
+      const newGroupId = action.payload.id
+      updatedState[ 'groups' ][ newGroupId ] = action.payload;
+      return updatedState;
     case DELETE_GROUP:
       const id = action.payload;
-      const updatedState = { ...state };
       delete updatedState[ 'groups' ][ id ];
       return updatedState;
     case UPDATE_GROUP:

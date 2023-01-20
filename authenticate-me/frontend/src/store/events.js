@@ -36,9 +36,16 @@ export const thunkDeleteEvent = ({ user, eventId }) => async (dispatch) => {
   return response
 };
 
-export const thunkCreateEvent = ({}) => async (dispatch) => {
+export const thunkCreateEvent = (eventInfo) => async (dispatch) => {
+  // console.log(eventInfo, 'EVENTINFO')
+  // const response = await csrfFetch(`/api/events`, {
+  //   method: 'POST',
+  //   body: JSON.stringify({ eventInfo })
+  // })
+  //   .catch(err => err)
 
-}
+  // console.log(response)
+};
 
 
 export const actionLoadEvents = (events) => {
@@ -61,6 +68,7 @@ export const actionUpdateEvent = (event) => {
     payload: event
   };
 };
+
 
 export const actionCreateEvent = (event) => {
   return {

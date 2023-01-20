@@ -10,6 +10,7 @@ function GroupIndexCard({ group }) {
     <li key={`${name}-${id}`}>
       <NavLink to={`/groups/${id}`} className='group-index-cards-click'>
         <ul>
+          <h1>{name}</h1>
           <li>About: {about}</li>
           <li>Location: {state}</li>
           <li>Type: {type}</li>

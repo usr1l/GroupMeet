@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
+import { thunkCreateEvent } from "../../store/events";
 
 const CreateEventForm = () => {
   const states = [ "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY" ];
@@ -12,7 +13,7 @@ const CreateEventForm = () => {
   const [ isPrivate, setIsPrivate ] = useState('private');
   const [ city, setCity ] = useState("");
   const [ state, setState ] = useState("");
-  // const [ errors, setErrors ] = useState([]);
+  const [ errors, setErrors ] = useState([]);
 
 
   const validate = () => {
@@ -26,13 +27,26 @@ const CreateEventForm = () => {
 
     if (!city || !state) validationErrors.push('Please provide the location for this event')
     return validationErrors;
-  }
+  };
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    const errors = validate();
+    const validationErrors = validate();
 
-  }
+    // if (validationErrors.length > 0) return setErrors(validationErrors);
+
+    const eventInfo = {
+      name,
+      about,
+      type,
+      isPrivate,
+      city,
+      state
+    };
+    console.log(eventInfo)
+    const data = dispatch(thunkCreateEvent(eventInfo));
+
+  };
 
 
   return (
@@ -119,12 +133,12 @@ const CreateEventForm = () => {
         <div className='form-row' name='private-radio-buttons'>
           <input type="radio" value="private"
             name="isPrivate" id='isPrivate-yes-button'
-            checked={isPrivate === "Private" ? "checked" : ""}
+            checked={isPrivate === "private" ? "checked" : ""}
             onChange={(e) => setIsPrivate(e.target.value)}
           /> Private
           <input type="radio" value="public"
             name="isPrivate" id='isPrivate-no-button'
-            checked={isPrivate === "Public" ? "checked" : ""}
+            checked={isPrivate === "public" ? "checked" : ""}
             onChange={(e) => setIsPrivate(e.target.value)}
           /> Public
           <br />
