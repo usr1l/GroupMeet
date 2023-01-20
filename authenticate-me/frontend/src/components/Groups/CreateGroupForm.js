@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { thunkCreateGroup } from "../../store/groups";
+import { useHistory } from "react-router-dom";
 
 const CreateGroupForm = () => {
   const states = [ "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY" ];
+  const history = useHistory();
   const sessionUserId = useSelector(state => state.session.user.id);
-  const groupsObj = useSelector(state => state.groups.groups)
-  const groups = Object.values(groupsObj)
+  // const groupsObj = useSelector(state => state.groups.groups)
+  // const groups = Object.values(groupsObj)
 
   const dispatch = useDispatch();
 
@@ -29,21 +31,24 @@ const CreateGroupForm = () => {
 
     if (!city || !state) validationErrors.push('Please provide the location for this group')
 
-    for (const group of groups) {
-      console.log(
-        group.name == name,
-        group.about === about,
-        group.type === type,
-        group.private === (isPrivate === 'private' ? true : false),
-        group.city === city,
-        group.state === state
-      )
-    }
+    // for (const group of groups) {
+    //   if (
+    //     group.name == name &&
+    //     group.about === about &&
+    //     group.type === type &&
+    //     group.private === (isPrivate === 'private' ? true : false) &&
+    //     group.city === city &&
+    //     group.state === state &&
+    //     group.organizerId === sessionUserId
+    //   ) {
+    //     validationErrors.push('This group already exists')
+    //   }
+    // }
 
     return validationErrors;
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
 
     const validationErrors = validate();
@@ -60,8 +65,14 @@ const CreateGroupForm = () => {
       organizerId: sessionUserId
     };
 
-    const data = dispatch(thunkCreateGroup(groupInfo));
+    const data = await dispatch(thunkCreateGroup(groupInfo))
 
+    if (data.statusCode === 409) {
+      setErrors([ data.message ]);
+      return errors;
+    }
+    history.push(`/groups/${data.id}`);
+    return;
   };
 
 
@@ -70,7 +81,6 @@ const CreateGroupForm = () => {
       <h2>CREATE A GROUP</h2>
       {!!errors.length && (
         <div>
-          The following errors were found:
           <ul>
             {errors.map((error) => (
               <li key={error}>{error}</li>

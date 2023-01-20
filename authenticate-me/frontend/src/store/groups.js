@@ -50,17 +50,14 @@ export const thunkCreateGroup = (groupInfo) => async (dispatch) => {
   })
     .catch(err => err)
 
-  let data;
+  const data = await response.json();
 
   if (response.ok) {
-    data = await response.json();
-
     dispatch(actionCreateGroup(data));
     dispatch(thunkLoadGroups());
   }
 
   return data;
-
 }
 
 export const actionLoadGroups = (groups) => {

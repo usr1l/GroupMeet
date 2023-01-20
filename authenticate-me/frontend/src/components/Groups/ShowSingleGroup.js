@@ -33,13 +33,15 @@ const SingleGroupPage = ({ groupData }) => {
     if (data.ok === false) {
       errorPageHandler(data);
     };
+
+    return;
   };
 
   return (
     <>
       <div>SingleGroupPage</div>
       <ul>
-        <li>{name}</li>
+        <h2>{name}</h2>
         <li>{about}</li>
         <li>{type}</li>
         <li>{city}</li>
