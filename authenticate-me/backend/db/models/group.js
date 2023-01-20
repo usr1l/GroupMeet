@@ -9,7 +9,6 @@ module.exports = (sequelize, DataTypes) => {
   class Group extends Model {
 
     static associate(models) {
-      // define association here
       Group.hasMany(models.Venue, { foreignKey: 'groupId', onDelete: 'CASCADE', hooks: true })
       Group.belongsTo(models.User, { foreignKey: 'organizerId' });
       Group.hasMany(models.Event, { foreignKey: 'groupId', onDelete: 'CASCADE', hooks: true })
@@ -22,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        len: [0, 60]
+        len: [ 0, 60 ]
       }
     },
     about: {
@@ -38,11 +37,11 @@ module.exports = (sequelize, DataTypes) => {
     },
     type: {
       type: DataTypes.ENUM,
-      values: ['In person', 'Online'],
+      values: [ 'In person', 'Online' ],
       allowNull: false,
       validate: {
         isIn: {
-          args: [['In person', 'Online']],
+          args: [ [ 'In person', 'Online' ] ],
           msg: 'Type must be Online or In Person'
         }
       }
@@ -67,7 +66,7 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'Group',
     defaultScope: {
       attributes: {
-        exclude: ['createdAt', 'updatedAt']
+        exclude: [ 'createdAt', 'updatedAt' ]
       }
     },
     scopes: {

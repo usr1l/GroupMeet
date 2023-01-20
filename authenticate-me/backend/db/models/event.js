@@ -36,11 +36,11 @@ module.exports = (sequelize, DataTypes) => {
     },
     type: {
       type: DataTypes.ENUM,
-      values: ['In person', 'Online'],
+      values: [ 'In person', 'Online' ],
       allowNull: false,
       validate: {
         isIn: {
-          args: [['In person', 'Online']],
+          args: [ [ 'In person', 'Online' ] ],
           msg: 'Type must be Online or In Person'
         }
       }
@@ -126,7 +126,7 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'Event',
     defaultScope: {
       attributes: {
-        exclude: ['createdAt', 'updatedAt']
+        exclude: [ 'createdAt', 'updatedAt' ]
       }
     }
   });

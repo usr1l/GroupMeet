@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { thunkCreateGroup } from "../../store/groups";
 import { useHistory } from "react-router-dom";
+import { csrfFetch } from "../../store/csrf";
 
 const CreateGroupForm = () => {
   const states = [ "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY" ];
@@ -16,6 +17,7 @@ const CreateGroupForm = () => {
   const [ isPrivate, setIsPrivate ] = useState('private');
   const [ city, setCity ] = useState("");
   const [ state, setState ] = useState("");
+  const [ previewImage, setPreviewImage ] = useState(null);
   const [ errors, setErrors ] = useState([]);
 
 
@@ -32,12 +34,13 @@ const CreateGroupForm = () => {
     return validationErrors;
   };
 
+
   const onSubmit = async (e) => {
     e.preventDefault();
 
     const validationErrors = validate();
 
-    if (validationErrors.length > 0) return setErrors(validationErrors);
+    // if (validationErrors.length > 0) return setErrors(validationErrors);
 
     const groupInfo = {
       name,
@@ -49,13 +52,23 @@ const CreateGroupForm = () => {
       organizerId: sessionUserId
     };
 
-    const data = await dispatch(thunkCreateGroup(groupInfo))
+    // const data = await dispatch(thunkCreateGroup(groupInfo));
 
-    if (data.statusCode === 409) {
-      setErrors([ data.message ]);
-      return errors;
-    }
-    history.push(`/groups/${data.id}`);
+    // if (data.statusCode === 409) {
+    //   setErrors([ data.message ]);
+    //   return errors;
+    // };
+
+    // await csrfFetch(`/api/groups/${data.id}/images`, {
+    //   method: 'POST',
+    //   body: JSON.stringify({
+    //     url: previewImage,
+    //     preview: true,
+    //     groupId: data.id
+    //   })
+    // });
+
+    // history.push(`/groups/${data.id}`);
     return;
   };
 
@@ -150,6 +163,18 @@ const CreateGroupForm = () => {
             }
             checked={checked === '' ? '' : "checked"}
           /> Sign up for our email list? */}
+        </div>
+        <div>
+          <label htmlFor="group-profile-img">Group Image: </label>
+          <input
+            name="group-profile-img"
+            type='file'
+            value={previewImage}
+            onChange={(e) => {
+              console.log(e.target.files[ 0 ])
+              setPreviewImage(e.target.files[ 0 ])
+            }}
+          />
         </div>
         <button>Submit</button>
       </form>

@@ -13,7 +13,6 @@ export const thunkLoadEvents = () => async (dispatch) => {
   const response = await csrfFetch('/api/events/');
 
   if (response.ok) {
-
     const data = await response.json();
     dispatch(actionLoadEvents(data));
     return data;

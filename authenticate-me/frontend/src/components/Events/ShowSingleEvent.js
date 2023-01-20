@@ -21,6 +21,9 @@ const SingleEventPage = ({ eventData }) => {
 
   let { name, startDate, type, groupId, Venue } = event;
 
+  const { organizerId } = useSelector(state => state.groups.groups[ groupId ]);
+  const organizerBool = organizerId === user.id;
+
   const dispatch = useDispatch();
   const handleDelete = async (e) => {
     e.preventDefault();
@@ -44,8 +47,12 @@ const SingleEventPage = ({ eventData }) => {
         <li>{groupId}</li>
         <li>{Venue.state}</li>
       </ul>
-      <Link to={`/events/${eventId}`}>Edit</Link>
-      <button onClick={handleDelete}>Delete</button>
+      {organizerBool && (
+        <>
+          <Link to={`/events/${eventId}/edit`}>Edit</Link>
+          <button onClick={handleDelete}>Delete</button>
+        </>
+      )}
     </>
   )
 }

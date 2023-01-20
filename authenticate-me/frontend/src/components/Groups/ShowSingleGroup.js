@@ -15,10 +15,11 @@ const SingleGroupPage = ({ groupData }) => {
   if (groupState.status === true) return (<div>Loading...</div>)
 
   const group = useSelector(state => state.groups.groups[ groupId ]);
-
   if (!group) return (<div>Not Found</div>);
 
   let { name, about, type, city, state, organizerId } = group;
+
+  const organizerBool = organizerId === user.id;
   // can still use group.private
 
   const dispatch = useDispatch();
@@ -48,8 +49,13 @@ const SingleGroupPage = ({ groupData }) => {
         <li>{state}</li>
         <li>{organizerId}</li>
       </ul>
-      <Link to={`/groups/${groupId}`}>Edit</Link>
-      <button onClick={handleDelete}>Delete</button>
+      {organizerBool && (
+        <>
+          <Link to={`/groups/${groupId}/edit`}>Edit</Link>
+          <button onClick={handleDelete}>Delete</button>
+          <Link to={`/groups/${groupId}/events/new`}>Create An Event</Link>
+        </>
+      )}
     </>
   )
 }

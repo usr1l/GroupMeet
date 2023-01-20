@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { thunkCreateEvent } from "../../store/events";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const CreateEventForm = () => {
   const history = useHistory();
   const sessionUserId = useSelector(state => state.session.user.id);
+  const { groupId } = useParams();
 
   const dispatch = useDispatch();
 
@@ -14,8 +15,12 @@ const CreateEventForm = () => {
   const [ description, setDescription ] = useState("");
   const [ type, setType ] = useState("");
   const [ startDate, setStartDate ] = useState('private');
+  const [ startTime, setStartTime ] = useState('private');
   const [ endDate, setEndDate ] = useState("");
-  const [ capacity, setState ] = useState("");
+  const [ endTime, setEndTime ] = useState("");
+  const [ time, setTime ] = useState("");
+  const [ capacity, setCapacity ] = useState('');
+  const [ price, setPrice ] = useState('');
   const [ errors, setErrors ] = useState([]);
 
 
@@ -23,9 +28,13 @@ const CreateEventForm = () => {
     const validationErrors = [];
 
     if (!name || (name.length < 5)) validationErrors.push('Please provide a name at least 5 characters long');
-    if ((!description)) validationErrors.push('A description is required')
+    if ((!description)) validationErrors.push('A description is required');
+    if (!type) validationErrors.push('Please specify the type');
 
-    if (!type) validationErrors.push('Please specify the type')
+    if (!startTime || !(startDate)) validationErrors.push('Start date must be in the future');
+    if (!endDate || !(endTime)) validationErrors.push('Please specify the type');
+    if (!type) validationErrors.push('Please specify the type');
+
 
     return validationErrors;
   };
@@ -56,7 +65,7 @@ const CreateEventForm = () => {
       <form onSubmit={onSubmit}>
         <div>
           <input
-            id="name"
+            id="eventName"
             type="text"
             onChange={(e) => setName(e.target.value)}
             value={name}
@@ -66,7 +75,7 @@ const CreateEventForm = () => {
         <div>
           <label htmlFor="type">Type: </label>
           <select
-            name="type"
+            name="Type"
             onChange={(e) => setType(e.target.value)}
             value={type}
           >
@@ -77,7 +86,54 @@ const CreateEventForm = () => {
             <option value='Online'>Online</option>
           </select>
         </div>
-
+        <div>
+          <label htmlFor="price">Price: </label>
+          <input
+            type="number"
+            name="price"
+            value={price}
+            placeholder='0.00'
+            onChange={(e) => setPrice(e.target.value)}
+          />
+        </div>
+        <div>
+          <label htmlFor="capacity">Capacity: </label>
+          <input
+            type="number"
+            name="capactiy"
+            value={capacity}
+            onChange={(e) => setCapacity(e.target.value)} />
+        </div>
+        <div>
+          <label htmlFor="startDate-Time">Start Date: </label>
+          <input
+            name='startDate-Time'
+            type='date'
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+          />
+          <input
+            name="startDate-Time"
+            type='time'
+            value={startTime}
+            onChange={(e) => setStartTime(e.target.value + ':00')}
+          />
+        </div>
+        <div>
+          <label htmlFor="endDate-Time">End Date: </label>
+          <input
+            name="endDate-Time"
+            type='date'
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+          />
+          <input
+            name="endDate-Time"
+            type='time'
+            value={endTime}
+            onChange={(e) => setEndTime(e.target.value + ':00')}
+          />
+        </div>
         <div>
           <textarea
             id="description"
@@ -86,7 +142,6 @@ const CreateEventForm = () => {
             value={description}
             placeholder='What is your event about'
           />
-
         </div>
         <button>Submit</button>
       </form>
