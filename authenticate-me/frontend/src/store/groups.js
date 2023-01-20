@@ -98,7 +98,7 @@ const groupReducer = (state = initialState, action) => {
       const groups = normalizeFn(action.payload.Groups);
       return { ...state, groups: groups, isLoading: false };
     case CREATE_GROUP:
-      const newGroupId = action.payload.id
+      const newGroupId = action.payload.id;
       updatedState[ 'groups' ][ newGroupId ] = action.payload;
       return updatedState;
     case DELETE_GROUP:
@@ -108,7 +108,7 @@ const groupReducer = (state = initialState, action) => {
     case UPDATE_GROUP:
       return { ...state };
     default:
-      return { ...state };
+      return updatedState;
   };
 };
 

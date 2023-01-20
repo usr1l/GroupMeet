@@ -81,6 +81,7 @@ export const actionCreateEvent = (event) => {
 const initialState = { events: {}, isLoading: true };
 
 const eventReducer = (state = initialState, action) => {
+  const updatedState = { ...state };
 
   switch (action.type) {
     case LOAD_EVENTS:
@@ -88,16 +89,18 @@ const eventReducer = (state = initialState, action) => {
       const eventsCopy = objDeepCopyFn(events)
       return { ...state, events: eventsCopy, isLoading: false };
     case CREATE_EVENT:
-      return { ...state };
+      const newEventId = action.payload.id;
+      const newEvent = objDeepCopyFn(action.payload)
+      updatedState[ 'events' ][ newEventId ] = newEvent;
+      return updatedState;
     case DELETE_EVENT:
       const id = action.payload;
-      const updatedState = { ...state };
       delete updatedState[ 'events' ][ id ];
       return updatedState;
     case UPDATE_EVENT:
       return { ...state };
     default:
-      return { ...state };
+      return updatedState;
   };
 };
 

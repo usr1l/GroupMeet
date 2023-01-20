@@ -7,8 +7,6 @@ const CreateGroupForm = () => {
   const states = [ "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY" ];
   const history = useHistory();
   const sessionUserId = useSelector(state => state.session.user.id);
-  // const groupsObj = useSelector(state => state.groups.groups)
-  // const groups = Object.values(groupsObj)
 
   const dispatch = useDispatch();
 
@@ -30,20 +28,6 @@ const CreateGroupForm = () => {
     if (!type) validationErrors.push('Please specify the type')
 
     if (!city || !state) validationErrors.push('Please provide the location for this group')
-
-    // for (const group of groups) {
-    //   if (
-    //     group.name == name &&
-    //     group.about === about &&
-    //     group.type === type &&
-    //     group.private === (isPrivate === 'private' ? true : false) &&
-    //     group.city === city &&
-    //     group.state === state &&
-    //     group.organizerId === sessionUserId
-    //   ) {
-    //     validationErrors.push('This group already exists')
-    //   }
-    // }
 
     return validationErrors;
   };

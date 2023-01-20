@@ -39,12 +39,12 @@ function App() {
           <Switch>
             <Route exact path={'/'} component={HomePage} />
             <Route exact path={'/events'} component={AllEventsPage} />
-            <Route path={'/events/new'} component={CreateEventForm} />
-            <Route path={'/events/:eventId/edit'} component={EditEventPage} />
+            <Route exact path={'/events/:eventId/edit'} component={EditEventPage} />
             <Route path={'/events/:eventId'} component={SingleEventPage} />
             <Route exact path={'/groups'} component={AllGroupsPage} />
+            <Route exact path={'/groups/:groupId/events'} component={CreateEventForm} />
             <Route path={'/groups/new'} component={CreateGroupForm} />
-            <Route path={'/groups/:groupId/edit'} component={EditGroupPage} />
+            <Route exact path={'/groups/:groupId/edit'} component={EditGroupPage} />
             <Route path={'/groups/:groupId'} component={SingleGroupPage} />
             <Route path={'/notifications'} component={NotificationPage} />
             <Route path={'/messages'} component={MessagesPage} />
