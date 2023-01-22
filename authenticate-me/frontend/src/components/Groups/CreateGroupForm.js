@@ -50,16 +50,11 @@ const CreateGroupForm = () => {
       isPrivate: (isPrivate === 'true' ? true : false),
       city,
       state,
-      organizerId: sessionUserId
+      organizerId: sessionUserId,
+      previewImage
     };
 
-    const imgObj = {
-      url: previewImage,
-      preview: true,
-    }
-
-    // const
-    const data = await dispatch(thunkCreateGroup(groupInfo, imgObj));
+    const data = await dispatch(thunkCreateGroup(groupInfo));
 
     if (data.statusCode === 409) {
       setErrors([ data.message ]);
@@ -167,7 +162,7 @@ const CreateGroupForm = () => {
           <label htmlFor="group-profile-img">Group Image: </label>
           <input
             name="group-profile-img"
-            type='text'
+            type='url'
             value={previewImage}
             onChange={(e) => setPreviewImage(e.target.value)}
           />

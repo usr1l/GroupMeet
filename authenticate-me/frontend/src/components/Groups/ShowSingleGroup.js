@@ -43,7 +43,6 @@ const SingleGroupPage = ({ groupData }) => {
       <div>SingleGroupPage</div>
       <ul>
         <h2>{name}</h2>
-        {console.log(previewImage)}
         <img src={previewImage} alt='group image' ></img>
         <li>{about}</li>
         <li>{type}</li>

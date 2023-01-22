@@ -36,14 +36,39 @@ export const thunkDeleteEvent = ({ user, eventId }) => async (dispatch) => {
 };
 
 export const thunkCreateEvent = (eventInfo) => async (dispatch) => {
-  // console.log(eventInfo, 'EVENTINFO')
-  // const response = await csrfFetch(`/api/events`, {
+  const {
+    name,
+    description,
+    type,
+    price,
+    capacity,
+    startDate,
+    endDate,
+    previewImage,
+    groupId
+  } = eventInfo;
+  console.log(price)
+  // const response = await csrfFetch(`/api/groups/${groupId}/events`, {
   //   method: 'POST',
-  //   body: JSON.stringify({ eventInfo })
+  //   headers: { 'Content-Type': 'application/json' },
+  //   body: JSON.stringify({
+  //     name,
+  //     description,
+  //     type,
+  //     price: ,
+  //     capacity,
+  //     startDate,
+  //     endDate,
+  //     previewImage
+  //   })
   // })
   //   .catch(err => err)
-
-  // console.log(response)
+  // console.log(await response.json(), 'RESPONSE')
+  // if (response.ok) {
+  //   const data = await response.json();
+  //   await dispatch(actionCreateEvent(data));
+  //   return data;
+  // };
 };
 
 
