@@ -776,8 +776,8 @@ router.get('/', async (_req, res) => {
 
 
 // create a group
-router.post('/', requireAuth, validateGroupData, async (req, res, next) => {
-  const { name, about, type, private, city, state } = req.body;
+router.post('/', requireAuth, async (req, res, next) => {
+  const { name, about, type, private, city, state, previewImage } = req.body;
   const organizerId = req.user.id;
 
   const groupExists = await Group.findOne({
@@ -788,7 +788,8 @@ router.post('/', requireAuth, validateGroupData, async (req, res, next) => {
       private,
       city,
       state,
-      organizerId
+      organizerId,
+      // previewImage
     }
   });
 
@@ -807,7 +808,8 @@ router.post('/', requireAuth, validateGroupData, async (req, res, next) => {
     private,
     city,
     state,
-    organizerId
+    organizerId,
+    previewImage
   });
 
   const newGroup = await Group.scope('allDetails').findOne({
@@ -818,8 +820,16 @@ router.post('/', requireAuth, validateGroupData, async (req, res, next) => {
       private,
       city,
       state,
-      organizerId
+      organizerId,
     }
+  });
+
+
+  // add the new img
+  const newImg = await GroupImage.create({
+    url: previewImage,
+    preview: true,
+    groupId: newGroup.id
   });
 
   await Membership.create({

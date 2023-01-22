@@ -12,6 +12,8 @@ export const thunkLoadGroups = () => async (dispatch) => {
 
   if (response.ok) {
     const data = await response.json();
+
+    // const previewImage = await csrfFetch('')
     dispatch(actionLoadGroups(data));
     return data;
   }
@@ -34,10 +36,11 @@ export const thunkDeleteGroup = ({ user, groupId }) => async (dispatch) => {
   return response;
 }
 
-export const thunkCreateGroup = (groupInfo) => async (dispatch) => {
+export const thunkCreateGroup = (groupInfo, imgObj) => async (dispatch) => {
   const { name, about, type, isPrivate, city, state, organizerId } = groupInfo
   const response = await csrfFetch(`/api/groups`, {
     method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       name,
       about,
@@ -45,19 +48,27 @@ export const thunkCreateGroup = (groupInfo) => async (dispatch) => {
       private: isPrivate,
       city,
       state,
-      organizerId
+      organizerId,
+      previewImage: imgObj.url
     })
   })
     .catch(err => err)
 
-  const data = await response.json();
-
   if (response.ok) {
-    dispatch(actionCreateGroup(data));
-    dispatch(thunkLoadGroups());
+    const data = await response.json();
+    const imgResponse = await csrfFetch(`/api/groups/${data.id}/images`, {
+      headers: { 'Content-Type': 'application/json' },
+      method: 'POST',
+      body: JSON.stringify(imgObj)
+    });
+
+    if (imgResponse.ok) {
+      const imgData = await imgResponse.json();
+      await dispatch(actionCreateGroup(data));
+    }
+    return data;
   }
 
-  return data;
 }
 
 export const actionLoadGroups = (groups) => {

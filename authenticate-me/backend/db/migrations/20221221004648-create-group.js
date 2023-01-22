@@ -41,6 +41,9 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
+      previewImage: {
+        type: Sequelize.STRING
+      },
       organizerId: {
         type: Sequelize.INTEGER,
         allowNull: false,

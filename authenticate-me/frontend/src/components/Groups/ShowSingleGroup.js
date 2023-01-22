@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams, Link } from "react-router-dom";
-import { thunkDeleteGroup } from "../../store/groups";
+import { thunkDeleteGroup, thunkLoadGroups } from "../../store/groups";
 import { useHistory } from "react-router-dom";
 import errorPageHandler from "../ErrorPage";
 
@@ -17,7 +17,8 @@ const SingleGroupPage = ({ groupData }) => {
   const group = useSelector(state => state.groups.groups[ groupId ]);
   if (!group) return (<div>Not Found</div>);
 
-  let { name, about, type, city, state, organizerId } = group;
+  let { name, about, type, city, state, organizerId, previewImage } = group;
+  console.log(group)
 
   const organizerBool = organizerId === user.id;
   // can still use group.private
@@ -43,6 +44,8 @@ const SingleGroupPage = ({ groupData }) => {
       <div>SingleGroupPage</div>
       <ul>
         <h2>{name}</h2>
+        {console.log(previewImage)}
+        <img src={previewImage} alt='group image' ></img>
         <li>{about}</li>
         <li>{type}</li>
         <li>{city}</li>

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { thunkCreateGroup } from "../../store/groups";
+import { thunkCreateGroup, thunkLoadGroups } from "../../store/groups";
 import { useHistory } from "react-router-dom";
 import { csrfFetch } from "../../store/csrf";
 
@@ -14,10 +14,10 @@ const CreateGroupForm = () => {
   const [ name, setName ] = useState("");
   const [ about, setAbout ] = useState("");
   const [ type, setType ] = useState("");
-  const [ isPrivate, setIsPrivate ] = useState('private');
+  const [ isPrivate, setIsPrivate ] = useState('true');
   const [ city, setCity ] = useState("");
   const [ state, setState ] = useState("");
-  const [ previewImage, setPreviewImage ] = useState(null);
+  const [ previewImage, setPreviewImage ] = useState("");
   const [ errors, setErrors ] = useState([]);
 
 
@@ -35,40 +35,41 @@ const CreateGroupForm = () => {
   };
 
 
+
   const onSubmit = async (e) => {
     e.preventDefault();
 
     const validationErrors = validate();
 
-    // if (validationErrors.length > 0) return setErrors(validationErrors);
+    if (validationErrors.length > 0) return setErrors(validationErrors);
 
     const groupInfo = {
       name,
       about,
       type,
-      isPrivate: (isPrivate === 'private' ? true : false),
+      isPrivate: (isPrivate === 'true' ? true : false),
       city,
       state,
       organizerId: sessionUserId
     };
 
-    // const data = await dispatch(thunkCreateGroup(groupInfo));
+    console.log(groupInfo)
 
-    // if (data.statusCode === 409) {
-    //   setErrors([ data.message ]);
-    //   return errors;
-    // };
+    const imgObj = {
+      url: previewImage,
+      preview: true,
+    }
 
-    // await csrfFetch(`/api/groups/${data.id}/images`, {
-    //   method: 'POST',
-    //   body: JSON.stringify({
-    //     url: previewImage,
-    //     preview: true,
-    //     groupId: data.id
-    //   })
-    // });
+    // const
+    const data = await dispatch(thunkCreateGroup(groupInfo, imgObj));
 
-    // history.push(`/groups/${data.id}`);
+    if (data.statusCode === 409) {
+      setErrors([ data.message ]);
+      return errors;
+    };
+
+    await thunkLoadGroups();
+    history.push(`/groups/${data.id}`);
     return;
   };
 
@@ -145,14 +146,14 @@ const CreateGroupForm = () => {
         </div>
         {/* <label htmlFor="private-radio-buttons">This event is: </label> */}
         <div className='form-row' name='private-radio-buttons'>
-          <input type="radio" value="private"
+          <input type="radio" value="true"
             name="isPrivate" id='isPrivate-yes-button'
-            checked={isPrivate === "private" ? "checked" : ""}
+            checked={isPrivate === "true" ? "checked" : ""}
             onChange={(e) => setIsPrivate(e.target.value)}
           /> Private
-          <input type="radio" value="public"
+          <input type="radio" value="false"
             name="isPrivate" id='isPrivate-no-button'
-            checked={isPrivate === "public" ? "checked" : ""}
+            checked={isPrivate === "false" ? "checked" : ""}
             onChange={(e) => setIsPrivate(e.target.value)}
           /> Public
           <br />
@@ -168,12 +169,9 @@ const CreateGroupForm = () => {
           <label htmlFor="group-profile-img">Group Image: </label>
           <input
             name="group-profile-img"
-            type='file'
+            type='text'
             value={previewImage}
-            onChange={(e) => {
-              console.log(e.target.files[ 0 ])
-              setPreviewImage(e.target.files[ 0 ])
-            }}
+            onChange={(e) => setPreviewImage(e.target.value)}
           />
         </div>
         <button>Submit</button>
