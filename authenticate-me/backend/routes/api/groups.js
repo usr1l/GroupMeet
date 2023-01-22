@@ -1,6 +1,6 @@
 // backend/routes/api/groups.js
 const router = require('express').Router();
-const { Group, GroupImage, User, Membership, Venue, Event } = require('../../db/models');
+const { Group, GroupImage, User, Membership, Venue, Event, EventImage } = require('../../db/models');
 const { Op, ValidationError } = require('sequelize');
 const { requireAuth, checkAuth, checkCohost, deleteAuth } = require('../../utils/auth');
 const { check } = require('express-validator');
@@ -395,7 +395,8 @@ router.post('/:groupId/events', requireAuth, validateEventData, async (req, res,
     price,
     startDate,
     endDate,
-    venueId
+    venueId,
+    previewImage
   } = req.body;
 
   // check if venue exists
@@ -438,7 +439,8 @@ router.post('/:groupId/events', requireAuth, validateEventData, async (req, res,
     startDate,
     endDate,
     venueId,
-    groupId
+    groupId,
+    previewImage
   });
 
 
@@ -456,6 +458,12 @@ router.post('/:groupId/events', requireAuth, validateEventData, async (req, res,
       groupId
     }
   });
+
+  const newImg = await EventImage.create({
+    url: previewImage,
+    preview: true,
+    eventId: newEvent.id
+  })
 
   const newEventJSON = toJSONDisplay(newEvent, 'startDate', 'endDate')
 
@@ -776,7 +784,7 @@ router.get('/', async (_req, res) => {
 
 
 // create a group
-router.post('/', requireAuth, async (req, res, next) => {
+router.post('/', requireAuth, validateGroupData, async (req, res, next) => {
   const { name, about, type, private, city, state, previewImage } = req.body;
   const organizerId = req.user.id;
 

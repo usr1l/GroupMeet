@@ -56,19 +56,9 @@ export const thunkCreateGroup = (groupInfo, imgObj) => async (dispatch) => {
 
   if (response.ok) {
     const data = await response.json();
-    const imgResponse = await csrfFetch(`/api/groups/${data.id}/images`, {
-      headers: { 'Content-Type': 'application/json' },
-      method: 'POST',
-      body: JSON.stringify(imgObj)
-    });
-
-    if (imgResponse.ok) {
-      const imgData = await imgResponse.json();
-      await dispatch(actionCreateGroup(data));
-    }
+    await dispatch(actionCreateGroup(data));
     return data;
   }
-
 }
 
 export const actionLoadGroups = (groups) => {

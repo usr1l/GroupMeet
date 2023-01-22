@@ -120,6 +120,9 @@ module.exports = (sequelize, DataTypes) => {
     groupId: {
       type: DataTypes.INTEGER,
       allowNull: false
+    },
+    previewImage: {
+      type: DataTypes.STRING
     }
   }, {
     sequelize,

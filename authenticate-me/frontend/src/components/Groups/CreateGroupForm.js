@@ -24,7 +24,7 @@ const CreateGroupForm = () => {
   const validate = () => {
     const validationErrors = [];
 
-    if (!name) validationErrors.push('Please provide a name for your event');
+    if (!name || name.length > 60) validationErrors.push('Please provide a name for your event (60 characters max)');
     if ((!about) || (about.length < 50)) validationErrors.push('About must be at least 50 characters')
 
     if (!type) validationErrors.push('Please specify the type')
@@ -52,8 +52,6 @@ const CreateGroupForm = () => {
       state,
       organizerId: sessionUserId
     };
-
-    console.log(groupInfo)
 
     const imgObj = {
       url: previewImage,

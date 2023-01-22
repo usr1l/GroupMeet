@@ -18,7 +18,6 @@ const SingleGroupPage = ({ groupData }) => {
   if (!group) return (<div>Not Found</div>);
 
   let { name, about, type, city, state, organizerId, previewImage } = group;
-  console.log(group)
 
   const organizerBool = organizerId === user.id;
   // can still use group.private
