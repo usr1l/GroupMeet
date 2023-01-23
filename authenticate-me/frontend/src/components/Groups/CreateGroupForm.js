@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { thunkCreateGroup, thunkLoadGroups } from "../../store/groups";
 import { useHistory } from "react-router-dom";
+import './GroupForm.css'
 
 const CreateGroupForm = () => {
   const states = [ "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY" ];
@@ -67,7 +68,7 @@ const CreateGroupForm = () => {
 
 
   return (
-    <div>
+    <div className="entire-group-form">
       <h2>CREATE A GROUP</h2>
       {!!errors.length && (
         <div>
