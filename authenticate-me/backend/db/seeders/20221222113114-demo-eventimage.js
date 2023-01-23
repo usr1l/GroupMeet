@@ -10,15 +10,10 @@ if (process.env.NODE_ENV === 'production') {
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    options.tableName = 'EventImages';
-    await queryInterface.bulkInsert(options);
+
   },
 
   async down(queryInterface, Sequelize) {
-    options.tableName = 'EventImages';
-    const Op = Sequelize.Op;
-    await queryInterface.bulkDelete(options, {
-      url: { [ Op.in ]: [ 'photo1.url', 'photo2.url', 'photo3.url' ] }
-    })
+
   }
 };
