@@ -67,7 +67,6 @@ export const thunkCreateEvent = (eventInfo) => async (dispatch) => {
   })
     .catch(err => err)
 
-  console.log(response)
   if (response.ok) {
     const data = await response.json();
     await dispatch(actionCreateEvent(data));

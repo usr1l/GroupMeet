@@ -10,8 +10,8 @@ const AllGroupsPage = () => {
   const groups = Object.values(groupsObj);
 
   return (
-    <section>
-      <ul>
+    <section className="events-page">
+      <ul className="events-index-container">
         {
           groups.map((group) => (
             <GroupIndexCard group={group} />

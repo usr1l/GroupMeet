@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { thunkDeleteEvent, thunkLoadSingleEvent } from "../../store/events";
 import { useHistory } from "react-router-dom";
 import errorPageHandler from "../ErrorPage";
+import './SingleEventPage.css';
 
 
 const SingleEventPage = ({ eventData }) => {
@@ -14,8 +15,6 @@ const SingleEventPage = ({ eventData }) => {
     dispatch(thunkLoadSingleEvent(eventId));
   }, [ dispatch, eventId ]);
 
-
-  // const [ currEventId, setCurrEventId ] = useState(eventId);
   const { user } = useSelector(state => state.session);
 
   const eventState = useSelector(state => state.events);
@@ -25,12 +24,9 @@ const SingleEventPage = ({ eventData }) => {
 
   const history = useHistory();
 
-  // check for loading state
-
-  // check for event
   if (!event) return (<div>Not Found</div>);
 
-  const { name, startDate, type, groupId, previewImage } = event;
+  const { name, startDate, type, groupId, previewImage, description } = event;
 
   const group = useSelector(state => state.groups.groups[ groupId ]);
 
@@ -52,20 +48,22 @@ const SingleEventPage = ({ eventData }) => {
 
   return (
     <>
-      <div>SingleEventPage</div>
-      <img src={previewImage} alt='preview' />
-      <ul>
-        <li>{name}</li>
-        <li>{startDate}</li>
-        <li>{type}</li>
-        <li>{groupId}</li>
-      </ul>
-      {organizerBool && (
-        <>
-          <NavLink to={`/events/${eventId}/edit`}>Edit</NavLink>
-          <button onClick={handleDelete}>Delete</button>
-        </>
-      )}
+      <div className="event-page-container">
+        <img src={previewImage} alt='preview' className="event-page-image" />
+        <ul className="event-page-info">
+          <li className="event-page-info-item">{name}</li>
+          <li className="event-page-info-item">{startDate}</li>
+          <li className="event-page-info-item">{type}</li>
+          <li className="event-page-info-item">{groupId}</li>
+          <div className="event-page-info-item">{description}</div>
+        </ul>
+        {organizerBool && (
+          <>
+            <NavLink to={`/events/${eventId}/edit`} className="event-page-edit-btn">Edit</NavLink>
+            <button onClick={handleDelete} className="event-page-delete-btn">Delete</button>
+          </>
+        )}
+      </div>
     </>
   )
 }

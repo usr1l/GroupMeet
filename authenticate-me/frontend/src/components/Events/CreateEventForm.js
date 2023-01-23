@@ -91,7 +91,7 @@ const CreateEventForm = (event) => {
         </div>
       )}
       <form onSubmit={onSubmit}>
-        <div>
+        <div className="group-form-element">
           <input
             id="eventName"
             type="text"
@@ -100,7 +100,7 @@ const CreateEventForm = (event) => {
             placeholder='Name (min 5 characters)'
           />
         </div>
-        <div>
+        <div className="group-form-element">
           <label htmlFor="type">Type: </label>
           <select
             name="Type"
@@ -114,7 +114,7 @@ const CreateEventForm = (event) => {
             <option value='Online'>Online</option>
           </select>
         </div>
-        <div>
+        <div className="group-form-element">
           <label htmlFor="price">Price: </label>
           <input
             type="number"
@@ -124,7 +124,7 @@ const CreateEventForm = (event) => {
             onChange={(e) => setPrice(e.target.value)}
           />
         </div>
-        <div>
+        <div className="group-form-element">
           <label htmlFor="capacity">Capacity: </label>
           <input
             type="number"
@@ -132,7 +132,7 @@ const CreateEventForm = (event) => {
             value={capacity}
             onChange={(e) => setCapacity(e.target.value)} />
         </div>
-        <div>
+        <div className="group-form-element">
           <label htmlFor="startDate-Time">Start Date: </label>
           <input
             name='startDate-Time'
@@ -147,7 +147,7 @@ const CreateEventForm = (event) => {
             onChange={(e) => setStartTime(e.target.value + ':00')}
           />
         </div>
-        <div>
+        <div className="group-form-element">
           <label htmlFor="endDate-Time">End Date: </label>
           <input
             name="endDate-Time"
@@ -162,7 +162,7 @@ const CreateEventForm = (event) => {
             onChange={(e) => setEndTime(e.target.value + ':00')}
           />
         </div>
-        <div>
+        <div className="group-form-element">
           <textarea
             id="description"
             name="description"
@@ -171,7 +171,7 @@ const CreateEventForm = (event) => {
             placeholder='What is your event about'
           />
         </div>
-        <div>
+        <div className="group-form-element">
           <label htmlFor="event-profile-img">Event Image: </label>
           <input
             name="event-profile-img"
@@ -180,7 +180,7 @@ const CreateEventForm = (event) => {
             onChange={(e) => setPreviewImage(e.target.value)}
           />
         </div>
-        <button>Submit</button>
+        <button >Submit</button>
       </form>
     </div>
   );

@@ -10,7 +10,7 @@ const AllEventsPage = () => {
 
   return (
     <section className="events-page">
-      <ul>
+      <ul className="events-index-container">
         {
           events.map((event) => {
             return (
