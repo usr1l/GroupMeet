@@ -17,8 +17,8 @@ module.exports = {
       'price',
       'startDate',
       'endDate',
-      'venueId',
       'groupId'
+      // 'venueId',
     ], { unique: true });
   },
 
@@ -32,8 +32,8 @@ module.exports = {
       'price',
       'startDate',
       'endDate',
-      'venueId',
       'groupId'
+      // 'venueId',
     ]);
   }
 };

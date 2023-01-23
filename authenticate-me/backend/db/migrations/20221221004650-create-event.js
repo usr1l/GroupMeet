@@ -58,6 +58,9 @@ module.exports = {
         onDelete: 'CASCADE',
         hooks: true
       },
+      previewImage: {
+        type: Sequelize.STRING
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

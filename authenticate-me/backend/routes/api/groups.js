@@ -1,6 +1,6 @@
 // backend/routes/api/groups.js
 const router = require('express').Router();
-const { Group, GroupImage, User, Membership, Venue, Event } = require('../../db/models');
+const { Group, GroupImage, User, Membership, Venue, Event, EventImage } = require('../../db/models');
 const { Op, ValidationError } = require('sequelize');
 const { requireAuth, checkAuth, checkCohost, deleteAuth } = require('../../utils/auth');
 const { check } = require('express-validator');
@@ -23,7 +23,7 @@ const validateGroupData = [
     .withMessage('About must be 50 characters or more'),
   check('type')
     .exists({ checkFalsy: true })
-    .isIn(['Online', 'In person'])
+    .isIn([ 'Online', 'In person' ])
     .withMessage('Type must be \'Online\' or \'In person\''),
   check('private')
     .exists({ checkFalsy: true })
@@ -44,7 +44,7 @@ async function getNumMembers(groupId) {
   const numMembers = await Membership.count({
     where: {
       groupId,
-      status: { [Op.in]: ['member', 'co-host'] }
+      status: { [ Op.in ]: [ 'member', 'co-host' ] }
     }
   });
   return numMembers;
@@ -57,8 +57,8 @@ async function getGroups(groups) {
   const groupsArr = groups.map(group => group.toJSON());
   for (let group of groupsArr) {
     // get url of the image, and attach to each json object
-    if (group.GroupImages[0]) {
-      const { url } = group.GroupImages[0];
+    if (group.GroupImages[ 0 ]) {
+      const { url } = group.GroupImages[ 0 ];
       group.previewImage = url;
     };
 
@@ -71,7 +71,6 @@ async function getGroups(groups) {
 
     group.createdAt = getDisplayDate(group.createdAt);
     group.updatedAt = getDisplayDate(group.updatedAt);
-
   };
 
   return groupsArr;
@@ -154,16 +153,16 @@ router.get('/:groupId/members', async (req, res, next) => {
   if (!req.user) {
     const members = await User.findAll({
       attributes: {
-        exclude: ['username']
+        exclude: [ 'username' ]
       },
-      order: [['firstName'], ['lastName']],
+      order: [ [ 'firstName' ], [ 'lastName' ] ],
       include: {
         model: Membership,
         where: {
           groupId,
-          status: { [Op.in]: ['member', 'co-host'] }
+          status: { [ Op.in ]: [ 'member', 'co-host' ] }
         },
-        attributes: ['status']
+        attributes: [ 'status' ]
       }
     });
     return res.json(members);
@@ -177,16 +176,16 @@ router.get('/:groupId/members', async (req, res, next) => {
   if (cohostBool === true) {
     const members = await User.findAll({
       attributes: {
-        exclude: ['username']
+        exclude: [ 'username' ]
       },
       include: {
         model: Membership,
         where: {
           groupId
         },
-        attributes: ['status']
+        attributes: [ 'status' ]
       },
-      order: [['firstName'], ['lastName']]
+      order: [ [ 'firstName' ], [ 'lastName' ] ]
     });
 
     return res.json(members);
@@ -194,17 +193,17 @@ router.get('/:groupId/members', async (req, res, next) => {
   } else if (cohostBool instanceof Error) {
     const members = await User.findAll({
       attributes: {
-        exclude: ['username']
+        exclude: [ 'username' ]
       },
       include: {
         model: Membership,
         where: {
           groupId,
-          status: { [Op.in]: ['member', 'co-host'] }
+          status: { [ Op.in ]: [ 'member', 'co-host' ] }
         },
-        attributes: ['status']
+        attributes: [ 'status' ]
       },
-      order: [['firstName'], ['lastName']]
+      order: [ [ 'firstName' ], [ 'lastName' ] ]
     });
 
     return res.json(members);
@@ -269,7 +268,7 @@ router.put('/:groupId/membership', requireAuth, validateMembershipData, async (r
 
   const updatedMembership = await Membership.findOne({
     attributes: {
-      include: ['id']
+      include: [ 'id' ]
     },
     where: {
       userId: reqUserId,
@@ -310,7 +309,7 @@ router.post('/:groupId/membership', requireAuth, async (req, res, next) => {
       const err = new Error('Membership has already been requested')
       err.status = 400;
       return next(err);
-    } else if (['co-host', 'member'].includes(status)) {
+    } else if ([ 'co-host', 'member' ].includes(status)) {
       const err = new Error('User is already a member of this group')
       err.status = 400;
       return next(err);
@@ -349,15 +348,15 @@ router.get('/:groupId/events', async (req, res, next) => {
 
   const events = await Event.findAll({
     attributes: {
-      exclude: ['price', 'capacity', 'description']
+      exclude: [ 'price', 'capacity', 'description' ]
     },
     where: {
       groupId
     },
-    order: [['name'], ['type']],
+    order: [ [ 'name' ], [ 'type' ] ],
     include: {
       model: Group,
-      attributes: ['id', 'name', 'city', 'state']
+      attributes: [ 'id', 'name', 'city', 'state' ]
     }
   });
 
@@ -395,7 +394,8 @@ router.post('/:groupId/events', requireAuth, validateEventData, async (req, res,
     price,
     startDate,
     endDate,
-    venueId
+    venueId,
+    previewImage
   } = req.body;
 
   // check if venue exists
@@ -417,7 +417,7 @@ router.post('/:groupId/events', requireAuth, validateEventData, async (req, res,
       price,
       startDate,
       endDate,
-      venueId,
+      // venueId,
       groupId
     }
   });
@@ -438,7 +438,8 @@ router.post('/:groupId/events', requireAuth, validateEventData, async (req, res,
     startDate,
     endDate,
     venueId,
-    groupId
+    groupId,
+    previewImage
   });
 
 
@@ -452,10 +453,16 @@ router.post('/:groupId/events', requireAuth, validateEventData, async (req, res,
       price,
       startDate,
       endDate,
-      venueId,
+      // venueId,
       groupId
     }
   });
+
+  const newImg = await EventImage.create({
+    url: previewImage,
+    preview: true,
+    eventId: newEvent.id
+  })
 
   const newEventJSON = toJSONDisplay(newEvent, 'startDate', 'endDate')
 
@@ -485,7 +492,7 @@ router.get('/:groupId/venues', requireAuth, async (req, res, next) => {
     where: {
       groupId
     },
-    order: [['state'], ['city'], ['address']]
+    order: [ [ 'state' ], [ 'city' ], [ 'address' ] ]
   });
 
   return res.json({ Venues: venues });
@@ -567,7 +574,7 @@ router.post('/:groupId/images', requireAuth, async (req, res, next) => {
   if (preview === true) {
     const img = await GroupImage.findOne({
       where: {
-        [Op.and]: [{ groupId }, { preview: true }]
+        [ Op.and ]: [ { groupId }, { preview: true } ]
       }
     })
 
@@ -609,7 +616,7 @@ router.get('/current', requireAuth, async (req, res) => {
   const memberships = await Membership.findAll({
     where: {
       userId: id,
-      status: { [Op.in]: ['member', 'co-host'] }
+      status: { [ Op.in ]: [ 'member', 'co-host' ] }
     }
   });
 
@@ -621,12 +628,12 @@ router.get('/current', requireAuth, async (req, res) => {
 
   const groups = await Group.scope('allDetails').findAll({
     where: {
-      id: { [Op.in]: [...groupsId] }
+      id: { [ Op.in ]: [ ...groupsId ] }
     },
     include: {
       model: GroupImage,
     },
-    order: [['name'], ['type']]
+    order: [ [ 'name' ], [ 'type' ] ]
   });
 
   const Groups = await getGroups(groups);
@@ -669,7 +676,7 @@ router.put('/:groupId', requireAuth, async (req, res, next) => {
   };
 
   if (type) {
-    if (!['Online', 'In person'].includes(type)) {
+    if (![ 'Online', 'In person' ].includes(type)) {
       errors.type = 'Type must be \'Online\' or \'In person\'';
     };
   };
@@ -767,7 +774,7 @@ router.get('/', async (_req, res) => {
     include: {
       model: GroupImage,
     },
-    order: [['name'], ['type']]
+    order: [ [ 'name' ], [ 'type' ] ]
   });
   const groupsArr = await getGroups(groups);
   return res.json({ "Groups": groupsArr });
@@ -777,7 +784,7 @@ router.get('/', async (_req, res) => {
 
 // create a group
 router.post('/', requireAuth, validateGroupData, async (req, res, next) => {
-  const { name, about, type, private, city, state } = req.body;
+  const { name, about, type, private, city, state, previewImage } = req.body;
   const organizerId = req.user.id;
 
   const groupExists = await Group.findOne({
@@ -788,7 +795,8 @@ router.post('/', requireAuth, validateGroupData, async (req, res, next) => {
       private,
       city,
       state,
-      organizerId
+      organizerId,
+      // previewImage
     }
   });
 
@@ -807,7 +815,8 @@ router.post('/', requireAuth, validateGroupData, async (req, res, next) => {
     private,
     city,
     state,
-    organizerId
+    organizerId,
+    previewImage
   });
 
   const newGroup = await Group.scope('allDetails').findOne({
@@ -818,9 +827,19 @@ router.post('/', requireAuth, validateGroupData, async (req, res, next) => {
       private,
       city,
       state,
-      organizerId
+      organizerId,
     }
   });
+
+
+  if (previewImage) {
+    // add the new img
+    await GroupImage.create({
+      url: previewImage,
+      preview: true,
+      groupId: newGroup.id
+    });
+  }
 
   await Membership.create({
     userId: newGroup.organizerId,

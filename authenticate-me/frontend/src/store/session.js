@@ -1,5 +1,3 @@
-// frontend/src/store/session.js
-
 import { csrfFetch } from "./csrf";
 
 
