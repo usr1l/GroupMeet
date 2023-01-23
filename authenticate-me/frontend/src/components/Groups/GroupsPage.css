@@ -1,4 +1,48 @@
 .group-index-cards-click {
   all: unset;
   cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  text-decoration: none;
+}
+
+.group-index-card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background-color: #fff;
+  padding: 20px;
+
+  /* changed border radius to only have a bottom border */
+  border-bottom: 1px solid #ccc;
+  /* added a bottom border */
+  margin-bottom: 20px;
+}
+
+.group-index-card-component {
+
+  text-decoration: none;
+  color: inherit;
+  flex: 1;
+  list-style: none;
+}
+
+.group-index-image {
+  width: 80px;
+  height: 80px;
+
+  margin-right: 20px;
+  object-fit: cover;
+  /* list-style: none; */
+}
+
+.group-index-card-item {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.group-index-card-components-wrapper {
+  display: flex;
+  direction: row;
 }

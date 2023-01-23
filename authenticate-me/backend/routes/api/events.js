@@ -22,7 +22,7 @@ const validateEventData = [
     .withMessage('Description is required'),
   check('type')
     .exists({ checkFalsy: true })
-    .isIn(['Online', 'In person'])
+    .isIn([ 'Online', 'In person' ])
     .withMessage('Type must be \'Online\' or \'In person\''),
   check('capacity')
     .isInt()
@@ -72,7 +72,7 @@ async function getNumAttendees(eventId) {
   const numAttendees = await Attendance.count({
     where: {
       eventId,
-      status: { [Op.in]: ['member', 'attending'] }
+      status: { [ Op.in ]: [ 'member', 'attending' ] }
     }
   });
   return numAttendees;
@@ -89,7 +89,7 @@ async function getEvents(events) {
     event.numAttending = await getNumAttendees(id);
     const venue = await Venue.findOne({
       attributes: {
-        exclude: ['address', 'lng', 'lat', 'groupId']
+        exclude: [ 'address', 'lng', 'lat', 'groupId' ]
       },
       where: {
         id: venueId,
@@ -103,19 +103,21 @@ async function getEvents(events) {
       event.Venue = null;
     }
 
-    const previewImage = await EventImage.findOne({
-      where: {
-        eventId: id,
-        preview: true
-      }
-    });
+    // const previewImage = await EventImage.findOne({
+    //   where: {
+    //     eventId: id,
+    //     preview: true
+    //   }
+    // });
 
-    if (previewImage) {
-      const previewImageJSON = previewImage.toJSON();
-      event.previewImage = previewImageJSON.url;
-    } else {
-      event.previewImage = null;
-    };
+    // if (previewImage) {
+    //   // console.log(previewImage)
+    //   const previewImageJSON = previewImage.toJSON();
+    //   // console.log(previewImageJSON)
+    //   event.previewImage = previewImageJSON.url;
+    // } else {
+    //   event.previewImage = null;
+    // };
 
     event.startDate = getDisplayDate(event.startDate);
     event.endDate = getDisplayDate(event.endDate);
@@ -207,15 +209,15 @@ eventsRouter.get('/:eventId/attendees', async (req, res, next) => {
   if (!req.user) {
     const attendees = await User.findAll({
       attributes: {
-        exclude: ['username']
+        exclude: [ 'username' ]
       },
       include: {
         model: Attendance,
         where: {
           eventId,
-          status: { [Op.in]: ['member', 'waitlist', 'attending'] }
+          status: { [ Op.in ]: [ 'member', 'waitlist', 'attending' ] }
         },
-        attributes: ['status']
+        attributes: [ 'status' ]
       }
     });
     return res.json({ "Attendances": attendees });
@@ -230,15 +232,15 @@ eventsRouter.get('/:eventId/attendees', async (req, res, next) => {
   if (cohostBool === true) {
     const attendees = await User.findAll({
       attributes: {
-        exclude: ['username']
+        exclude: [ 'username' ]
       },
-      order: [['firstName'], ['lastName']],
+      order: [ [ 'firstName' ], [ 'lastName' ] ],
       include: {
         model: Attendance,
         where: {
           eventId
         },
-        attributes: ['status']
+        attributes: [ 'status' ]
       }
     });
 
@@ -247,16 +249,16 @@ eventsRouter.get('/:eventId/attendees', async (req, res, next) => {
   } else if (cohostBool instanceof Error) {
     const attendees = await User.findAll({
       attributes: {
-        exclude: ['username']
+        exclude: [ 'username' ]
       },
-      order: [['firstName'], ['lastName']],
+      order: [ [ 'firstName' ], [ 'lastName' ] ],
       include: {
         model: Attendance,
         where: {
           eventId,
-          status: { [Op.in]: ['member', 'waitlist', 'attending'] }
+          status: { [ Op.in ]: [ 'member', 'waitlist', 'attending' ] }
         },
-        attributes: ['status']
+        attributes: [ 'status' ]
       }
     });
 
@@ -304,7 +306,7 @@ eventsRouter.put('/:eventId/attendance', requireAuth, validateAttendanceData, as
 
   const updatedAttendance = await Attendance.findOne({
     attributes: {
-      include: ['id']
+      include: [ 'id' ]
     },
     where: {
       userId: reqUserId,
@@ -337,11 +339,11 @@ eventsRouter.post('/:eventId/attendance', requireAuth, async (req, res, next) =>
 
   if (attendanceExists) {
     const { status } = attendanceExists;
-    if (['pending', 'waitlist'].includes(status)) {
+    if ([ 'pending', 'waitlist' ].includes(status)) {
       const err = new Error('Attendance has already been requested');
       err.status = 400;
       return next(err);
-    } else if (['member', 'attending'].includes(status)) {
+    } else if ([ 'member', 'attending' ].includes(status)) {
       const err = new Error('User is already an attendee of the event');
       err.status = 400;
       return next(err);
@@ -399,7 +401,7 @@ eventsRouter.post('/:eventId/images', requireAuth, async (req, res, next) => {
   if (preview === true) {
     const img = await EventImage.findOne({
       where: {
-        [Op.and]: [{ eventId }, { preview: true }]
+        [ Op.and ]: [ { eventId }, { preview: true } ]
       }
     });
 
@@ -471,7 +473,7 @@ eventsRouter.put('/:eventId', requireAuth, async (req, res, next) => {
   };
 
   if (type) {
-    if (!['Online', 'In person'].includes(type)) {
+    if (![ 'Online', 'In person' ].includes(type)) {
       errors.type = 'Type must be \'Online\' or \'In person\'';
     };
   };
@@ -547,13 +549,13 @@ eventsRouter.get('/:eventId', async (req, res, next) => {
 
   const group = await event.getGroup({
     attributes: {
-      exclude: ['about', 'type', 'organizerId']
+      exclude: [ 'about', 'type', 'organizerId' ]
     }
   });
 
   const venue = await event.getVenue({
     attributes: {
-      exclude: ['groupId']
+      exclude: [ 'groupId' ]
     }
   });
 
@@ -628,7 +630,7 @@ eventsRouter.get('/', async (req, res, next) => {
   };
 
   if (type) {
-    if (['Online', 'In person'].includes(type)) {
+    if ([ 'Online', 'In person' ].includes(type)) {
       where.type = type;
     } else {
       errors.type = 'Type must be \'Online\' or \'In person\'';
@@ -654,12 +656,12 @@ eventsRouter.get('/', async (req, res, next) => {
   const events = await Event.findAll({
     where,
     attributes: {
-      exclude: ['price', 'capacity', 'description']
+      exclude: [ 'price', 'capacity', 'description' ]
     },
-    order: [['name'], ['type']],
+    order: [ [ 'name' ], [ 'type' ] ],
     include: {
       model: Group,
-      attributes: ['id', 'name', 'city', 'state']
+      attributes: [ 'id', 'name', 'city', 'state' ]
     },
     ...pagination
   });

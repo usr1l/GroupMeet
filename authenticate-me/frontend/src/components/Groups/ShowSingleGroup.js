@@ -4,6 +4,7 @@ import { useParams, NavLink } from "react-router-dom";
 import { thunkDeleteGroup, thunkLoadSingleGroup } from "../../store/groups";
 import { useHistory } from "react-router-dom";
 import errorPageHandler from "../ErrorPage";
+import './SingleGroupPage.css'
 
 const SingleGroupPage = ({ groupData }) => {
   const { groupId } = useParams();
@@ -43,23 +44,24 @@ const SingleGroupPage = ({ groupData }) => {
 
   return (
     <>
-      <div>SingleGroupPage</div>
-      <ul>
-        <h2>{name}</h2>
-        <img src={previewImage} alt='preview' ></img>
-        <li>{about}</li>
-        <li>{type}</li>
-        <li>{city}</li>
-        <li>{state}</li>
-        <li>{organizerId}</li>
-      </ul>
-      {organizerBool && (
-        <>
-          <NavLink to={`/groups/${groupId}/edit`}>Edit</NavLink>
-          <button onClick={handleDelete}>Delete</button>
-          <NavLink to={`/groups/${groupId}/events/new`}>Create An Event</NavLink>
-        </>
-      )}
+      <div className="single-group-page-container" id="single-group-page">
+        <img src={previewImage} alt='preview' className="single-group-page-image"></img>
+        <ul className="single-group-page-info">
+          <h2 className="single-group-page-name">{name}</h2>
+          <li className="single-group-page-about">{about}</li>
+          <li className="single-group-page-type">{type}</li>
+          <li className="single-group-page-location">{city}</li>
+          <li className="single-group-page-location">{state}</li>
+          <li className="single-group-page-organizer">{organizerId}</li>
+        </ul>
+        {organizerBool && (
+          <>
+            <NavLink to={`/groups/${groupId}/edit`} className="single-group-page-edit-btn">Edit</NavLink>
+            <button onClick={handleDelete} className="single-group-page-delete-btn">Delete</button>
+            <NavLink to={`/groups/${groupId}/events/new`} className="single-group-page-create-event-btn">Create An Event</NavLink>
+          </>
+        )}
+      </div>
     </>
   )
 }
