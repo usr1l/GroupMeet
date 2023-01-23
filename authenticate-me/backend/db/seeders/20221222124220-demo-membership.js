@@ -61,6 +61,6 @@ module.exports = {
   async down(queryInterface, Sequelize) {
     options.tableName = 'Memberships';
     const { Op } = require('sequelize');
-    return queryInterface.bulkDelete();
+    return queryInterface.bulkDelete(options);
   }
 };
