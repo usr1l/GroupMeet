@@ -2,3 +2,9 @@
   all: unset;
   cursor: pointer;
 }
+
+.events-page {
+  display: flexbox;
+  flex-direction: column;
+  border: 2;
+}

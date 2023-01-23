@@ -71,7 +71,6 @@ async function getGroups(groups) {
 
     group.createdAt = getDisplayDate(group.createdAt);
     group.updatedAt = getDisplayDate(group.updatedAt);
-
   };
 
   return groupsArr;
@@ -418,7 +417,7 @@ router.post('/:groupId/events', requireAuth, validateEventData, async (req, res,
       price,
       startDate,
       endDate,
-      venueId,
+      // venueId,
       groupId
     }
   });
@@ -454,7 +453,7 @@ router.post('/:groupId/events', requireAuth, validateEventData, async (req, res,
       price,
       startDate,
       endDate,
-      venueId,
+      // venueId,
       groupId
     }
   });
@@ -833,12 +832,14 @@ router.post('/', requireAuth, validateGroupData, async (req, res, next) => {
   });
 
 
-  // add the new img
-  const newImg = await GroupImage.create({
-    url: previewImage,
-    preview: true,
-    groupId: newGroup.id
-  });
+  if (previewImage) {
+    // add the new img
+    await GroupImage.create({
+      url: previewImage,
+      preview: true,
+      groupId: newGroup.id
+    });
+  }
 
   await Membership.create({
     userId: newGroup.organizerId,

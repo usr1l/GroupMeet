@@ -1,28 +1,31 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useParams, Link } from "react-router-dom";
-import { thunkDeleteGroup, thunkLoadGroups } from "../../store/groups";
+import { useParams, NavLink } from "react-router-dom";
+import { thunkDeleteGroup, thunkLoadSingleGroup } from "../../store/groups";
 import { useHistory } from "react-router-dom";
 import errorPageHandler from "../ErrorPage";
 
 const SingleGroupPage = ({ groupData }) => {
-  const history = useHistory();
+  const { groupId } = useParams();
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(thunkLoadSingleGroup(groupId));
+  }, [ dispatch, groupId ])
   const { user } = useSelector(state => state.session);
 
   const groupState = useSelector(state => state.groups);
-  const { groupId } = useParams();
-
   if (groupState.status === true) return (<div>Loading...</div>)
-
   const group = useSelector(state => state.groups.groups[ groupId ]);
   if (!group) return (<div>Not Found</div>);
+
+  const history = useHistory();
 
   let { name, about, type, city, state, organizerId, previewImage } = group;
 
   const organizerBool = organizerId === user.id;
   // can still use group.private
 
-  const dispatch = useDispatch();
   const handleDelete = async (e) => {
     e.preventDefault();
     const data = await dispatch(thunkDeleteGroup({ user, groupId }));
@@ -43,7 +46,7 @@ const SingleGroupPage = ({ groupData }) => {
       <div>SingleGroupPage</div>
       <ul>
         <h2>{name}</h2>
-        <img src={previewImage} alt='group image' ></img>
+        <img src={previewImage} alt='preview' ></img>
         <li>{about}</li>
         <li>{type}</li>
         <li>{city}</li>
@@ -52,9 +55,9 @@ const SingleGroupPage = ({ groupData }) => {
       </ul>
       {organizerBool && (
         <>
-          <Link to={`/groups/${groupId}/edit`}>Edit</Link>
+          <NavLink to={`/groups/${groupId}/edit`}>Edit</NavLink>
           <button onClick={handleDelete}>Delete</button>
-          <Link to={`/groups/${groupId}/events/new`}>Create An Event</Link>
+          <NavLink to={`/groups/${groupId}/events/new`}>Create An Event</NavLink>
         </>
       )}
     </>

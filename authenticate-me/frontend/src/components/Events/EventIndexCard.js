@@ -4,15 +4,16 @@ import './EventsPage.css';
 
 
 function EventIndexCard({ event }) {
-  const { id, name, type, Venue } = event;
+  const { id, name, type, previewImage } = event;
 
   return (
     <li key={`${name}-${id}`}>
       <NavLink to={`/events/${id}`} className='event-index-cards-click'>
+        <img src={previewImage} alt='preview' />
         <ul>
-          <li>{name}</li>
+          <h1>{name}</h1>
           <li>Type: {type}</li>
-          <li>Location: {`${Venue.city}, ${Venue.state}`}</li>
+          {/* <li>Location: {`${Venue.city}, ${Venue.state}`}</li> */}
         </ul>
       </NavLink>
     </li>

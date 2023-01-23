@@ -9,7 +9,7 @@ const AllEventsPage = () => {
   const events = Object.values(eventsObj);
 
   return (
-    <section>
+    <section className="events-page">
       <ul>
         {
           events.map((event) => {

@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { thunkCreateGroup, thunkLoadGroups } from "../../store/groups";
 import { useHistory } from "react-router-dom";
-import { csrfFetch } from "../../store/csrf";
 
 const CreateGroupForm = () => {
   const states = [ "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY" ];
@@ -137,7 +136,6 @@ const CreateGroupForm = () => {
           />
 
         </div>
-        {/* <label htmlFor="private-radio-buttons">This event is: </label> */}
         <div className='form-row' name='private-radio-buttons'>
           <input type="radio" value="true"
             name="isPrivate" id='isPrivate-yes-button'
@@ -150,13 +148,6 @@ const CreateGroupForm = () => {
             onChange={(e) => setIsPrivate(e.target.value)}
           /> Public
           <br />
-          {/* <input type="checkbox" value="yes" id='checked'
-            onChange={({ target: { value, checked } }) => {
-              setChecked((checked ? value : ""))
-            }
-            }
-            checked={checked === '' ? '' : "checked"}
-          /> Sign up for our email list? */}
         </div>
         <div>
           <label htmlFor="group-profile-img">Group Image: </label>

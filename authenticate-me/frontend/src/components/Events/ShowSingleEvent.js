@@ -1,30 +1,43 @@
-import React from "react"
-import { useParams, Link } from "react-router-dom";
+import React, { useEffect, } from "react"
+import { useParams, NavLink } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { thunkDeleteEvent } from "../../store/events";
+import { thunkDeleteEvent, thunkLoadSingleEvent } from "../../store/events";
 import { useHistory } from "react-router-dom";
 import errorPageHandler from "../ErrorPage";
 
+
 const SingleEventPage = ({ eventData }) => {
-  const history = useHistory();
-  // check for loading state
+
+  const { eventId } = useParams();
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(thunkLoadSingleEvent(eventId));
+  }, [ dispatch, eventId ]);
+
+
+  // const [ currEventId, setCurrEventId ] = useState(eventId);
   const { user } = useSelector(state => state.session);
 
   const eventState = useSelector(state => state.events);
-  const { eventId } = useParams();
 
   if (eventState.status === true) return (<div>Loading...</div>);
+  const event = useSelector(state => state.events.event);
+
+  const history = useHistory();
+
+  // check for loading state
 
   // check for event
-  const event = useSelector(state => state.events.events[ eventId ]);
   if (!event) return (<div>Not Found</div>);
 
-  let { name, startDate, type, groupId, Venue } = event;
+  const { name, startDate, type, groupId, previewImage } = event;
 
-  const { organizerId } = useSelector(state => state.groups.groups[ groupId ]);
+  const group = useSelector(state => state.groups.groups[ groupId ]);
+
+  const organizerId = group ? group.organizerId : null;
+
   const organizerBool = organizerId === user.id;
 
-  const dispatch = useDispatch();
   const handleDelete = async (e) => {
     e.preventDefault();
     const data = await dispatch(thunkDeleteEvent({ user, eventId }))
@@ -40,16 +53,16 @@ const SingleEventPage = ({ eventData }) => {
   return (
     <>
       <div>SingleEventPage</div>
+      <img src={previewImage} alt='preview' />
       <ul>
         <li>{name}</li>
         <li>{startDate}</li>
         <li>{type}</li>
         <li>{groupId}</li>
-        <li>{Venue.state}</li>
       </ul>
       {organizerBool && (
         <>
-          <Link to={`/events/${eventId}/edit`}>Edit</Link>
+          <NavLink to={`/events/${eventId}/edit`}>Edit</NavLink>
           <button onClick={handleDelete}>Delete</button>
         </>
       )}

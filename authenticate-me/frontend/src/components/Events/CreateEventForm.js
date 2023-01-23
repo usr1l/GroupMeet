@@ -2,17 +2,16 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { thunkCreateEvent, thunkLoadEvents } from "../../store/events";
 import { useHistory, useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
 import getCurrTime from "../HelperFns/GetCurrTime";
 
-const CreateEventForm = () => {
+const CreateEventForm = (event) => {
   const history = useHistory();
-  const sessionUserId = useSelector(state => state.session.user.id);
+  const dispatch = useDispatch();
+
   const { groupId } = useParams();
 
   const [ currDateTime, currTime, currDate ] = getCurrTime();
 
-  const dispatch = useDispatch();
 
   const [ name, setName ] = useState("");
   const [ description, setDescription ] = useState("");
@@ -21,7 +20,6 @@ const CreateEventForm = () => {
   const [ startTime, setStartTime ] = useState(currTime);
   const [ endDate, setEndDate ] = useState(currDate);
   const [ endTime, setEndTime ] = useState(currTime);
-  // const [ time, setTime ] = useState("");
   const [ capacity, setCapacity ] = useState('');
   const [ price, setPrice ] = useState('');
   const [ previewImage, setPreviewImage ] = useState('')
@@ -37,9 +35,9 @@ const CreateEventForm = () => {
     if (!type) validationErrors.push('Please specify if event is \'In person\' or \'Online\'');
 
     if (`${startDate} ${startTime}` <= currDateTime) validationErrors.push('Please provide a start date, must be in the future');
-    if (!endDate || !endTime || `${endDate} ${endTime}` < startDate) validationErrors.push('Please provide an end date, must be after start date');
+    if (`${endDate} ${endTime}` < startDate) validationErrors.push('Please provide an end date, must be after start date');
     if (!type) validationErrors.push('Please specify the type');
-    if (price && price < 0) validationErrors.push('Invalid Price');
+    if (price && parseFloat(price) < 0) validationErrors.push('Invalid Price');
     if (capacity && capacity < 0) validationErrors.push('Invalid Capacity');
 
 
@@ -57,25 +55,25 @@ const CreateEventForm = () => {
       name,
       description,
       type,
-      price,
+      price: parseFloat(price),
       capacity,
       startDate: `${startDate} ${startTime}`,
       endDate: `${endDate} ${endTime}`,
       previewImage,
-      groupId
+      groupId,
+      venueId: null
     };
 
     const data = await dispatch(thunkCreateEvent(eventInfo));
 
-    // if (data.statusCode === 409) {
-    //   setErrors([ data.message ]);
-    //   return errors;
-    // };
+    if (data.statusCode === 409) {
+      setErrors([ data.message ]);
+      return errors;
+    };
 
-    // await thunkLoadEvents();
+    await thunkLoadEvents();
 
-    // history.push(`/groups/${data.groupId}/events/${data.id}`);
-    // return;
+    history.push(`/events/${data.id}`);
     return;
   };
 
