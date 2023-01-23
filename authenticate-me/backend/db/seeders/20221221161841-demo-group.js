@@ -29,8 +29,6 @@ module.exports = {
   async down(queryInterface, Sequelize) {
     options.tableName = 'Groups';
     const Op = Sequelize.Op;
-    return queryInterface.bulkDelete(options, {
-      name: { [ Op.in ]: [ 'Event on the ocean', 'Event on the beach', 'Event on the beach' ] }
-    }, {});
+    return queryInterface.bulkDelete(options);
   }
 }
