@@ -47,12 +47,10 @@ const SingleGroupPage = ({ groupData }) => {
       <div className="single-group-page-container" id="single-group-page">
         <img src={previewImage} alt='preview' className="single-group-page-image"></img>
         <ul className="single-group-page-info">
-          <h2 className="single-group-page-name">{name}</h2>
-          <li className="single-group-page-about">{about}</li>
-          <li className="single-group-page-type">{type}</li>
-          <li className="single-group-page-location">{city}</li>
-          <li className="single-group-page-location">{state}</li>
-          <li className="single-group-page-organizer">{organizerId}</li>
+          <h2 className="single-group-page-name">Name: {name}</h2>
+          <li className="single-group-page-about">About: {about}</li>
+          <li className="single-group-page-type">Type: {type}</li>
+          <li className="single-group-page-location">Location: {city}, {state}</li>
         </ul>
         {organizerBool && (
           <>

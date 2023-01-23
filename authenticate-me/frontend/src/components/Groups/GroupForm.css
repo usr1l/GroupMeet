@@ -1,0 +1,9 @@
+  .entire-group-form {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    max-width: 800px;
+    align-content: center;
+    align-items: center;
+
+  }
