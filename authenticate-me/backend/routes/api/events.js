@@ -103,21 +103,17 @@ async function getEvents(events) {
       event.Venue = null;
     }
 
-    // const previewImage = await EventImage.findOne({
-    //   where: {
-    //     eventId: id,
-    //     preview: true
-    //   }
-    // });
+    const previewImage = await EventImage.findOne({
+      where: {
+        eventId: id,
+        preview: true
+      }
+    });
 
-    // if (previewImage) {
-    //   // console.log(previewImage)
-    //   const previewImageJSON = previewImage.toJSON();
-    //   // console.log(previewImageJSON)
-    //   event.previewImage = previewImageJSON.url;
-    // } else {
-    //   event.previewImage = null;
-    // };
+    if (previewImage) {
+      const previewImageJSON = previewImage.toJSON();
+      event.previewImage = previewImageJSON.url;
+    };
 
     event.startDate = getDisplayDate(event.startDate);
     event.endDate = getDisplayDate(event.endDate);
@@ -563,11 +559,22 @@ eventsRouter.get('/:eventId', async (req, res, next) => {
 
   const numAttending = await getNumAttendees(eventId);
 
+  const previewImage = await EventImage.findOne({
+    where: {
+      preview: true,
+      eventId
+    }
+  });
+
   const eventJSON = toJSONDisplay(event, 'startDate', 'endDate');
   eventJSON.Group = group;
   eventJSON.Venue = venue;
   eventJSON.EventImages = eventImages;
   eventJSON.numAttending = numAttending;
+
+  if (previewImage) {
+    eventJSON.previewImage = previewImage.url;
+  };
 
   return res.json({ "Event": eventJSON });
 });

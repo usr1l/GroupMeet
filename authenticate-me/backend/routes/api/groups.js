@@ -26,7 +26,7 @@ const validateGroupData = [
     .isIn([ 'Online', 'In person' ])
     .withMessage('Type must be \'Online\' or \'In person\''),
   check('private')
-    .exists({ checkFalsy: true })
+    .exists()
     .isBoolean()
     .withMessage('Private must be a boolean'),
   check('city')
@@ -438,8 +438,7 @@ router.post('/:groupId/events', requireAuth, validateEventData, async (req, res,
     startDate,
     endDate,
     venueId,
-    groupId,
-    previewImage
+    groupId
   });
 
 
@@ -458,11 +457,13 @@ router.post('/:groupId/events', requireAuth, validateEventData, async (req, res,
     }
   });
 
-  const newImg = await EventImage.create({
-    url: previewImage,
-    preview: true,
-    eventId: newEvent.id
-  })
+  if (previewImage) {
+    const newImg = await EventImage.create({
+      url: previewImage,
+      preview: true,
+      eventId: newEvent.id
+    });
+  };
 
   const newEventJSON = toJSONDisplay(newEvent, 'startDate', 'endDate')
 
@@ -712,7 +713,7 @@ router.put('/:groupId', requireAuth, async (req, res, next) => {
 });
 
 // get details of a group by groupid
-router.get('/:groupId', requireAuth, async (req, res) => {
+router.get('/:groupId', async (req, res) => {
   const { groupId } = req.params;
 
   const group = await Group.scope('allDetails').findOne({
@@ -732,11 +733,22 @@ router.get('/:groupId', requireAuth, async (req, res) => {
   const organizer = await User.scope('nameOnly').findByPk(group.organizerId);
   const venues = await group.getVenues();
 
+  const previewImage = await GroupImage.findOne({
+    where: {
+      preview: true,
+      groupId
+    }
+  });
+
   const groupJSON = toJSONDisplay(group, 'createdAt', 'updatedAt');
 
   groupJSON.numMembers = numMembers;
   groupJSON.Organizer = organizer;
   groupJSON.Venues = venues;
+
+  if (previewImage) {
+    groupJSON.previewImage = previewImage.url;
+  };
 
   return res.json(groupJSON);
 });
@@ -795,8 +807,7 @@ router.post('/', requireAuth, validateGroupData, async (req, res, next) => {
       private,
       city,
       state,
-      organizerId,
-      // previewImage
+      organizerId
     }
   });
 
@@ -808,6 +819,7 @@ router.post('/', requireAuth, validateGroupData, async (req, res, next) => {
     return next(newError);
   };
 
+
   await Group.create({
     name,
     about,
@@ -815,8 +827,7 @@ router.post('/', requireAuth, validateGroupData, async (req, res, next) => {
     private,
     city,
     state,
-    organizerId,
-    previewImage
+    organizerId
   });
 
   const newGroup = await Group.scope('allDetails').findOne({
@@ -827,10 +838,9 @@ router.post('/', requireAuth, validateGroupData, async (req, res, next) => {
       private,
       city,
       state,
-      organizerId,
+      organizerId
     }
   });
-
 
   if (previewImage) {
     // add the new img
@@ -839,7 +849,14 @@ router.post('/', requireAuth, validateGroupData, async (req, res, next) => {
       preview: true,
       groupId: newGroup.id
     });
-  }
+  };
+
+  const previewImageExists = await GroupImage.findOne({
+    where: {
+      preview: true,
+      groupId: newGroup.id
+    }
+  });
 
   await Membership.create({
     userId: newGroup.organizerId,
@@ -848,6 +865,10 @@ router.post('/', requireAuth, validateGroupData, async (req, res, next) => {
   });
 
   const newGroupJSON = toJSONDisplay(newGroup, 'createdAt', 'updatedAt');
+
+  if (previewImageExists) {
+    newGroupJSON.previewImage = previewImageExists.url;
+  };
 
   return res.json(newGroupJSON);
 });

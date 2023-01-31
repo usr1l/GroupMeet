@@ -24,7 +24,14 @@ const SingleGroupPage = ({ groupData }) => {
 
   let { name, about, type, city, state, organizerId, previewImage } = group;
 
-  const organizerBool = organizerId === user.id;
+  const organizerFn = () => {
+    if (user) {
+      return organizerId === user.id
+    };
+    return false;
+  }
+
+  const organizerBool = organizerFn(user);
   // can still use group.private
 
   const handleDelete = async (e) => {

@@ -4,7 +4,7 @@
 
 ![meetup-dbdiagram]
 
-[meetup-dbdiagram]: ../assets/meetup_dbdiagram.png
+[meetup-dbdiagram]: ./README/assets/meetup_dbdiagram.png
 
 ## API Documentation
 
@@ -71,7 +71,7 @@ Returns the information about the current user that is logged in.
         "lastName": "Smith",
         "email": "john.smith@gmail.com",
         "username": "JohnSmith"
-      } 
+      }
     }
     ```
 
@@ -109,7 +109,7 @@ information.
         "lastName": "Smith",
         "email": "john.smith@gmail.com",
         "username": "JohnSmith"
-      } 
+      }
     }
     ```
 
@@ -628,7 +628,7 @@ Returns all venues for a group specified by its id
       }
     ]
   }
-  
+
   ```
 
 * Error response: Couldn't find a Group with the specified id

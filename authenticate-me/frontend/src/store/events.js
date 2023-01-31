@@ -15,6 +15,7 @@ export const thunkLoadEvents = () => async (dispatch) => {
 
   if (response.ok) {
     const data = await response.json();
+    console.log("DATA", data)
     dispatch(actionLoadEvents(data));
     return data;
   }
@@ -141,7 +142,7 @@ export const actionCreateEvent = (event) => {
 const initialState = { events: {}, event: {}, isLoading: true };
 
 const eventReducer = (state = initialState, action) => {
-  const updatedState = { ...state, events: { ...state.events, Group: { ...state.events.Group }, Venue: { ...state.events.Venue } }, event: { ...state.event } };
+  const updatedState = { ...state, events: { ...state.events }, event: { ...state.event, Group: { ...state.event.Group }, Venue: { ...state.event.Venue } } };
 
   switch (action.type) {
     case LOAD_EVENTS:
