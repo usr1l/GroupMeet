@@ -1,15 +1,14 @@
 // backend/routes/api/events.js
 const eventsRouter = require('express').Router();
-const { Group, GroupImage, User, Membership, Venue, Event, EventImage, Attendance } = require('../../db/models');
+const { Group, User, Venue, Event, EventImage, Attendance } = require('../../db/models');
 const { Op, Validator } = require('sequelize');
 const { requireAuth, checkAuth, checkCohost, checkAttendance, deleteAuth } = require('../../utils/auth');
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
-const { inputToDate, toJSONDisplay, getDisplayDate, checkUserId } = require('../../utils/helpers');
+const { inputToDate, toJSONDisplay, getDisplayDate, checkUserId, updateEventPreviewImage } = require('../../utils/helpers');
 const { venueDoesNotExist } = require('./venues');
 const { validateAttendanceData } = require('./attendances');
 const { Sequelize } = require('sequelize')
-
 
 
 const validateEventData = [
@@ -25,17 +24,26 @@ const validateEventData = [
     .isIn([ 'Online', 'In person' ])
     .withMessage('Type must be \'Online\' or \'In person\''),
   check('capacity')
-    .isInt()
+    .custom(capacity => {
+      if (((isNaN(capacity)) || capacity < 0) && capacity !== undefined && capacity !== null) {
+        return Promise.reject('capacity')
+      };
+      return true;
+    })
     .withMessage('Capacity must be a positive integer'),
   check('price')
     .custom(price => {
-      const newPrice = parseFloat(price).toFixed(2);
-      const newPriceParsed = parseFloat(newPrice);
-      const bool = newPriceParsed === price;
-      if (!bool) {
-        return Promise.reject('price');
-      };
-      return true;
+      if ((!isNaN(price)) && price > 0) {
+        const newPrice = parseFloat(price).toFixed(2);
+        const newPriceParsed = parseFloat(newPrice);
+        const bool = newPriceParsed === price;
+        if (!bool) {
+          return Promise.reject('price');
+        };
+        return true;
+      } else if (price === undefined || price === null) {
+        return true;
+      }
     })
     .withMessage('Price is invalid'),
   check('startDate')
@@ -103,21 +111,17 @@ async function getEvents(events) {
       event.Venue = null;
     }
 
-    // const previewImage = await EventImage.findOne({
-    //   where: {
-    //     eventId: id,
-    //     preview: true
-    //   }
-    // });
+    const previewImage = await EventImage.findOne({
+      where: {
+        eventId: id,
+        preview: true
+      }
+    });
 
-    // if (previewImage) {
-    //   // console.log(previewImage)
-    //   const previewImageJSON = previewImage.toJSON();
-    //   // console.log(previewImageJSON)
-    //   event.previewImage = previewImageJSON.url;
-    // } else {
-    //   event.previewImage = null;
-    // };
+    if (previewImage) {
+      const previewImageJSON = previewImage.toJSON();
+      event.previewImage = previewImageJSON.url;
+    };
 
     event.startDate = getDisplayDate(event.startDate);
     event.endDate = getDisplayDate(event.endDate);
@@ -141,7 +145,6 @@ function attendanceDoesNotExist(next) {
   err.status = 404;
   return next(err);
 };
-
 
 
 // delete an attendance by userId
@@ -399,21 +402,7 @@ eventsRouter.post('/:eventId/images', requireAuth, async (req, res, next) => {
 
   // change preview img
   if (preview === true) {
-    const img = await EventImage.findOne({
-      where: {
-        [ Op.and ]: [ { eventId }, { preview: true } ]
-      }
-    });
-
-    if (img) {
-      const imgJSON = img.toJSON();
-      const imgId = imgJSON.id
-
-      const currPreviewImg = await EventImage.findByPk(imgId);
-      await currPreviewImg.update({
-        preview: false
-      });
-    };
+    await updateEventPreviewImage(eventId);
   };
 
   // add the new img
@@ -457,7 +446,7 @@ eventsRouter.put('/:eventId', requireAuth, async (req, res, next) => {
 
   const errors = {};
 
-  const { venueId, name, type, capacity, price, description, startDate, endDate } = req.body;
+  const { venueId, name, type, capacity, price, description, startDate, endDate, previewImage } = req.body;
 
   if (venueId) {
     const venue = await Venue.findByPk(venueId);
@@ -523,11 +512,35 @@ eventsRouter.put('/:eventId', requireAuth, async (req, res, next) => {
     "name": name ? name : event.name,
     "description": description ? description : event.description,
     "type": type ? type : event.type,
-    "capacity": capacity ? capacity : group.capacity,
-    "price": price ? price : event.price,
-    "startDate": startDate ? startDate : event.price,
+    "capacity": capacity ? capacity : null,
+    "price": price ? price : null,
+    "startDate": startDate ? startDate : event.startDate,
     "endDate": endDate ? endDate : event.endDate
-  })
+  });
+
+  if (previewImage) {
+    await updateEventPreviewImage(eventId);
+    const img = await EventImage.findOne({
+      where: {
+        url: previewImage
+      }
+    });
+
+    if (img) {
+      const imgJSON = img.toJSON();
+      const imgId = imgJSON.id;
+      const currPreviewImg = await EventImage.findByPk(imgId);
+      await currPreviewImg.update({
+        preview: true
+      })
+    } else {
+      await EventImage.create({
+        url: previewImage,
+        eventId: eventId,
+        preview: true
+      });
+    };
+  };
 
   const updatedEvent = await Event.findByPk(eventId);
 
@@ -563,11 +576,22 @@ eventsRouter.get('/:eventId', async (req, res, next) => {
 
   const numAttending = await getNumAttendees(eventId);
 
+  const previewImage = await EventImage.findOne({
+    where: {
+      preview: true,
+      eventId
+    }
+  });
+
   const eventJSON = toJSONDisplay(event, 'startDate', 'endDate');
   eventJSON.Group = group;
   eventJSON.Venue = venue;
   eventJSON.EventImages = eventImages;
   eventJSON.numAttending = numAttending;
+
+  if (previewImage) {
+    eventJSON.previewImage = previewImage.url;
+  };
 
   return res.json({ "Event": eventJSON });
 });

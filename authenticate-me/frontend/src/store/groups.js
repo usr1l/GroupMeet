@@ -37,20 +37,10 @@ export const thunkDeleteGroup = ({ user, groupId }) => async (dispatch) => {
 }
 
 export const thunkCreateGroup = (groupInfo) => async (dispatch) => {
-  const { name, about, type, isPrivate, city, state, organizerId, previewImage } = groupInfo
   const response = await csrfFetch(`/api/groups`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      name,
-      about,
-      type,
-      private: isPrivate,
-      city,
-      state,
-      organizerId,
-      previewImage
-    })
+    body: JSON.stringify(groupInfo)
   })
     .catch(err => err)
 
@@ -59,6 +49,8 @@ export const thunkCreateGroup = (groupInfo) => async (dispatch) => {
     await dispatch(actionCreateGroup(data));
     return data;
   }
+
+  return response
 }
 
 export const thunkLoadSingleGroup = (groupId) => async (dispatch) => {
@@ -69,7 +61,10 @@ export const thunkLoadSingleGroup = (groupId) => async (dispatch) => {
   if (response.ok) {
     const data = await response.json();
     dispatch(actionLoadSingleGroup(data));
+    return data;
   };
+
+  return response;
 };
 
 export const thunkUpdateGroup = (groupInfo, groupId) => async (dispatch) => {

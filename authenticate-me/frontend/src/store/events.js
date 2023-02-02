@@ -81,12 +81,13 @@ export const thunkLoadSingleEvent = (eventId) => async (dispatch) => {
   if (response.ok) {
     const data = await response.json();
     dispatch(actionLoadSingleEvent(data));
+    return data;
   };
-  return
+
+  return response;
 };
 
 export const thunkUpdateEvent = (eventInfo, eventId) => async (dispatch) => {
-  console.log(eventInfo)
   const response = await csrfFetch(`/api/events/${eventId}`, {
     method: 'PUT',
     headers: { "Content-Type": "application/json" },
@@ -141,7 +142,7 @@ export const actionCreateEvent = (event) => {
 const initialState = { events: {}, event: {}, isLoading: true };
 
 const eventReducer = (state = initialState, action) => {
-  const updatedState = { ...state, events: { ...state.events, Group: { ...state.events.Group }, Venue: { ...state.events.Venue } }, event: { ...state.event } };
+  const updatedState = { ...state, events: { ...state.events }, event: { ...state.event, Group: { ...state.event.Group }, Venue: { ...state.event.Venue } } };
 
   switch (action.type) {
     case LOAD_EVENTS:

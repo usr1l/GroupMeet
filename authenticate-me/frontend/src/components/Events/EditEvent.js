@@ -1,34 +1,50 @@
-import React, { useState } from "react"
-import { useSelector, useDispatch } from "react-redux";
+import React, { useState, useEffect } from "react"
+import { useDispatch } from "react-redux";
 import { useParams, useHistory } from "react-router-dom";
-import { thunkLoadEvents, thunkUpdateEvent } from "../../store/events";
+import { thunkLoadEvents, thunkUpdateEvent, thunkLoadSingleEvent } from "../../store/events";
 import getCurrTime from "../HelperFns/GetCurrTime";
 
 
 const EditEventPage = () => {
-  const event = useSelector(state => state.events.event);
-  const history = useHistory();
-  const dispatch = useDispatch();
   const { eventId } = useParams();
+  const dispatch = useDispatch();
 
-  const [ currDateTime, currTime, currDate ] = getCurrTime();
+  useEffect(() => {
+    dispatch(thunkLoadSingleEvent(eventId))
+      .then((data) => {
+        const { name, type, startDate, endDate, description, price, capacity, previewImage } = data.Event;
+        setName(name);
+        setDescription(description);
+        setType(type);
+        setStartDate(startDate.slice(0, 10));
+        setStartTime(startDate.slice(11));
+        setEndDate(endDate.slice(0, 10));
+        setEndTime(endDate.slice(11));
+        setPrice(price || 0);
+        setCapacity(capacity);
+        setPreviewImage(previewImage || '');
+      });
+  }, []);
 
-  const [ name, setName ] = useState(event.name);
-  const [ description, setDescription ] = useState(event.description);
-  const [ type, setType ] = useState(event.type);
-  const [ startDate, setStartDate ] = useState(currDate);
-  const [ startTime, setStartTime ] = useState(currTime);
-  const [ endDate, setEndDate ] = useState(currDate);
-  const [ endTime, setEndTime ] = useState(currTime);
-  const [ capacity, setCapacity ] = useState(event.capacity);
-  const [ price, setPrice ] = useState(event.price);
+  const history = useHistory();
+
+  const [ name, setName ] = useState('');
+  const [ description, setDescription ] = useState('');
+  const [ type, setType ] = useState('');
+  const [ startDate, setStartDate ] = useState('');
+  const [ startTime, setStartTime ] = useState('');
+  const [ endDate, setEndDate ] = useState('');
+  const [ endTime, setEndTime ] = useState('');
+  const [ capacity, setCapacity ] = useState(null);
+  const [ price, setPrice ] = useState(null);
   const [ errors, setErrors ] = useState([]);
+  const [ previewImage, setPreviewImage ] = useState('');
 
 
   const validate = () => {
     const validationErrors = [];
 
-    const [ currDateTime ] = getCurrTime();
+    const { currDateTime } = getCurrTime();
     if (!name || (name.length < 5)) validationErrors.push('Please provide a name at least 5 characters long');
     if ((!description)) validationErrors.push('A description is required');
     if (!type) validationErrors.push('Please specify if event is \'In person\' or \'Online\'');
@@ -36,8 +52,9 @@ const EditEventPage = () => {
     if (`${startDate} ${startTime}` <= currDateTime) validationErrors.push('Please provide a start date, must be in the future');
     if (`${endDate} ${endTime}` < startDate) validationErrors.push('Please provide an end date, must be after start date');
     if (!type) validationErrors.push('Please specify the type');
-    if (price && parseFloat(price) < 0) validationErrors.push('Invalid Price');
-    if (capacity && capacity < 0) validationErrors.push('Invalid Capacity');
+
+    if ((price && parseFloat(price) < 0) || (!Number.isInteger(100 * parseFloat(price)))) validationErrors.push('Invalid Price');
+    if (capacity && parseFloat(capacity) <= 0) validationErrors.push('Invalid Capacity');
 
 
     return validationErrors;
@@ -56,15 +73,16 @@ const EditEventPage = () => {
       type,
       startDate: `${startDate} ${startTime}`,
       endDate: `${endDate} ${endTime}`,
-      price,
-      capacity
+      price: price ? parseFloat(price) : null,
+      capacity: capacity ? parseFloat(capacity) : null,
+      previewImage
     };
 
     const response = await dispatch(thunkUpdateEvent(eventInfo, eventId));
 
     if (response.ok) {
       await dispatch(thunkLoadEvents());
-      history.push(`/events/${response.id}`);
+      history.push(`/events/${eventId}`);
     };
     return;
   };
@@ -161,6 +179,15 @@ const EditEventPage = () => {
               onChange={(e) => setDescription(e.target.value)}
               value={description}
               placeholder='What is your event about'
+            />
+          </div>
+          <div className="group-form-element">
+            <label htmlFor="event-profile-img">Event Image: </label>
+            <input
+              name="event-profile-img"
+              type='url'
+              value={previewImage}
+              onChange={(e) => setPreviewImage(e.target.value)}
             />
           </div>
           <button>Submit</button>

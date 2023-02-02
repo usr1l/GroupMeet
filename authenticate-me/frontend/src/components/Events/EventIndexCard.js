@@ -14,8 +14,6 @@ function EventIndexCard({ event }) {
           <h1 className='event-index-card-item'>{name}</h1>
           <li className='event-index-card-item'>{startDate}</li>
           <li className='event-index-card-item'>Type: {type}</li>
-          {/* <li>Location: {`${Venue.city}, ${Venue.state}`}</li> */}
-          {/* <li>{description}</li> */}
           <li className='event-index-card-item' id='num-attending'>{numAttending} Attendees</li>
         </ul>
       </NavLink>

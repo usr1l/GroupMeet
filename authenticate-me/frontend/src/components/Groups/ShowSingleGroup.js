@@ -15,16 +15,23 @@ const SingleGroupPage = ({ groupData }) => {
   }, [ dispatch, groupId ])
   const { user } = useSelector(state => state.session);
 
-  const groupState = useSelector(state => state.groups);
-  if (groupState.status === true) return (<div>Loading...</div>)
-  const group = useSelector(state => state.groups.groups[ groupId ]);
-  if (!group) return (<div>Not Found</div>);
+  // const groupState = useSelector(state => state.groups);
+  // if (groupState.status === true) return (<div>Loading...</div>);
+  const group = useSelector(state => state.groups.group);
+  if (Object.keys(group).length < 4) return (<div>Not Found</div>);
 
   const history = useHistory();
 
   let { name, about, type, city, state, organizerId, previewImage } = group;
 
-  const organizerBool = organizerId === user.id;
+  const organizerFn = () => {
+    if (user) {
+      return organizerId === user.id
+    };
+    return false;
+  }
+
+  const organizerBool = organizerFn(user);
   // can still use group.private
 
   const handleDelete = async (e) => {
