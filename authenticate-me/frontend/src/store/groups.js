@@ -1,6 +1,5 @@
 import { csrfFetch } from "./csrf";
 import normalizeFn from "../components/HelperFns/NormalizeFn";
-import { thunkLoadEvents } from "./events";
 import objDeepCopyFn from "../components/HelperFns/ObjDeepCopyFn";
 
 const LOAD_GROUPS = 'groups/LOAD';

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { useDispatch } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
-import { thunkLoadGroups, thunkLoadSingleGroup, thunkUpdateGroup } from "../../store/groups";
+import { thunkLoadSingleGroup, thunkUpdateGroup } from "../../store/groups";
 
 const EditGroupPage = () => {
   const states = [ "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY" ];

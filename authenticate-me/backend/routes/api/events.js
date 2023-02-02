@@ -522,7 +522,8 @@ eventsRouter.put('/:eventId', requireAuth, async (req, res, next) => {
     await updateEventPreviewImage(eventId);
     const img = await EventImage.findOne({
       where: {
-        url: previewImage
+        url: previewImage,
+        eventId: eventId
       }
     });
 

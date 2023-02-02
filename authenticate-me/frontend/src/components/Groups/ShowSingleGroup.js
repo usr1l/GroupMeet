@@ -7,12 +7,14 @@ import errorPageHandler from "../ErrorPage";
 import './SingleGroupPage.css'
 
 const SingleGroupPage = ({ groupData }) => {
-  const { groupId } = useParams();
 
+  const { groupId } = useParams();
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(thunkLoadSingleGroup(groupId));
-  }, [ dispatch, groupId ])
+  }, [ dispatch, groupId ]);
+
   const { user } = useSelector(state => state.session);
 
   // const groupState = useSelector(state => state.groups);
