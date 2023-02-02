@@ -12,7 +12,7 @@ const EditEventPage = () => {
   useEffect(() => {
     dispatch(thunkLoadSingleEvent(eventId))
       .then((data) => {
-        const { name, type, startDate, endDate, description, price, capacity } = data.Event;
+        const { name, type, startDate, endDate, description, price, capacity, previewImage } = data.Event;
         setName(name);
         setDescription(description);
         setType(type);
@@ -20,8 +20,9 @@ const EditEventPage = () => {
         setStartTime(startDate.slice(11));
         setEndDate(endDate.slice(0, 10));
         setEndTime(endDate.slice(11));
-        setPrice(price);
+        setPrice(price || 0);
         setCapacity(capacity);
+        setPreviewImage(previewImage || '');
       });
   }, []);
 
@@ -37,6 +38,7 @@ const EditEventPage = () => {
   const [ capacity, setCapacity ] = useState(null);
   const [ price, setPrice ] = useState(null);
   const [ errors, setErrors ] = useState([]);
+  const [ previewImage, setPreviewImage ] = useState('');
 
 
   const validate = () => {
@@ -72,7 +74,8 @@ const EditEventPage = () => {
       startDate: `${startDate} ${startTime}`,
       endDate: `${endDate} ${endTime}`,
       price: price ? parseFloat(price) : null,
-      capacity: capacity ? parseFloat(capacity) : null
+      capacity: capacity ? parseFloat(capacity) : null,
+      previewImage
     };
 
     const response = await dispatch(thunkUpdateEvent(eventInfo, eventId));
@@ -176,6 +179,15 @@ const EditEventPage = () => {
               onChange={(e) => setDescription(e.target.value)}
               value={description}
               placeholder='What is your event about'
+            />
+          </div>
+          <div className="group-form-element">
+            <label htmlFor="event-profile-img">Event Image: </label>
+            <input
+              name="event-profile-img"
+              type='url'
+              value={previewImage}
+              onChange={(e) => setPreviewImage(e.target.value)}
             />
           </div>
           <button>Submit</button>

@@ -5,7 +5,7 @@ const { Op, Validator } = require('sequelize');
 const { requireAuth, checkAuth, checkCohost, checkAttendance, deleteAuth } = require('../../utils/auth');
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
-const { inputToDate, toJSONDisplay, getDisplayDate, checkUserId } = require('../../utils/helpers');
+const { inputToDate, toJSONDisplay, getDisplayDate, checkUserId, updateEventPreviewImage } = require('../../utils/helpers');
 const { venueDoesNotExist } = require('./venues');
 const { validateAttendanceData } = require('./attendances');
 const { Sequelize } = require('sequelize')
@@ -402,38 +402,7 @@ eventsRouter.post('/:eventId/images', requireAuth, async (req, res, next) => {
 
   // change preview img
   if (preview === true) {
-    const img = await EventImage.findOne({
-      where: {
-        [ Op.and ]: [ { eventId }, { preview: true } ]
-      }
-    });
-
-    if (img) {
-      const imgJSON = img.toJSON();
-      const imgId = imgJSON.id
-
-      const currPreviewImg = await EventImage.findByPk(imgId);
-      await currPreviewImg.update({
-        preview: false
-      });
-    };
-    // async function updatePreviewImage(eventId) {
-    //   const img = await EventImage.findOne({
-    //     where: {
-    //       [ Op.and ]: [ { eventId }, { preview: true } ]
-    //     }
-    //   });
-
-    //   if (img) {
-    //     const imgJSON = img.toJSON();
-    //     const imgId = imgJSON.id
-
-    //     const currPreviewImg = await EventImage.findByPk(imgId);
-    //     await currPreviewImg.update({
-    //       preview: false
-    //     });
-    //   };
-    // }
+    await updateEventPreviewImage(eventId);
   };
 
   // add the new img
@@ -547,15 +516,17 @@ eventsRouter.put('/:eventId', requireAuth, async (req, res, next) => {
     "price": price ? price : null,
     "startDate": startDate ? startDate : event.startDate,
     "endDate": endDate ? endDate : event.endDate
-  })
+  });
 
-  // if (previewImage && previewImage !== event.previewImage) {
-  //   await EventImage.create({
-  //     url: previewImage,
-  //     eventId: eventId,
 
-  //   })
-  // };
+  if (previewImage && previewImage !== event.previewImage) {
+    await updateEventPreviewImage(eventId);
+    await EventImage.create({
+      url: previewImage,
+      eventId: eventId,
+      preview: true
+    });
+  };
 
   const updatedEvent = await Event.findByPk(eventId);
 

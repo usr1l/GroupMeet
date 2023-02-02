@@ -7,7 +7,7 @@ const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 const { validateVenueData } = require('./venues');
 const { validateEventData, getEvents } = require('./events');
-const { inputToDate, getDisplayDate, toJSONDisplay, checkUserId } = require('../../utils/helpers')
+const { inputToDate, getDisplayDate, toJSONDisplay, checkUserId, updateGroupPreviewImage } = require('../../utils/helpers')
 const { venueDoesNotExist } = require('./venues');
 const { validateMembershipData, validateMembershipDataDelete } = require('./memberships');
 
@@ -662,7 +662,7 @@ router.put('/:groupId', requireAuth, async (req, res, next) => {
 
   const errors = {};
 
-  const { name, about, type, isPrivate, city, state } = req.body;
+  const { name, about, type, isPrivate, city, state, previewImage } = req.body;
   let private;
 
   if (name) {
@@ -711,6 +711,13 @@ router.put('/:groupId', requireAuth, async (req, res, next) => {
     "state": state ? state : group.state,
     "updatedAt": getDisplayDate(new Date())
   });
+
+  // if (previewImage && previewImage !== group.previewImage) {
+  //   await updateGroupPreviewImage(groupId);
+
+  // };
+
+  console.log(group.previewImage)
 
   const updatedGroup = await Group.scope('allDetails').findByPk(groupId);
 
