@@ -1,4 +1,4 @@
-import React, { useEffect, useState, } from "react"
+import React, { useEffect } from "react"
 import { useParams, NavLink } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { thunkDeleteEvent, thunkLoadSingleEvent } from "../../store/events";
@@ -13,26 +13,23 @@ const SingleEventPage = ({ eventData }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(thunkLoadSingleEvent(eventId))
-      .then((data) => setPreviewImage(data.Event.previewImage));
+    dispatch(thunkLoadSingleEvent(eventId));
   }, [ dispatch, eventId ]);
 
-
   const { user } = useSelector(state => state.session);
-  // const eventState = useSelector(state => state.events);
+  const eventState = useSelector(state => state.events);
 
-  // if (eventState.status === true) return (<div>Loading...</div>);
+  if (eventState.status === true) return (<div>Loading...</div>);
+
   const event = useSelector(state => state.events.event);
   if (!event) return (<div>Not Found</div>);
-
+  const { name, startDate, type, groupId, description, previewImage } = event;
 
   const history = useHistory();
 
-  const { name, startDate, type, groupId, description } = event;
+
 
   const group = useSelector(state => state.groups.groups[ groupId ]);
-  const [ previewImage, setPreviewImage ] = useState('');
-
   const organizerId = group ? group.organizerId : null;
 
   const organizerFn = () => {

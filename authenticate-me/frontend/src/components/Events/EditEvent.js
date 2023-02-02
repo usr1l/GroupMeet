@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { useDispatch } from "react-redux";
 import { useParams, useHistory } from "react-router-dom";
-import { thunkLoadEvents, thunkUpdateEvent, thunkLoadSingleEvent } from "../../store/events";
+import { thunkUpdateEvent, thunkLoadSingleEvent } from "../../store/events";
 import getCurrTime from "../HelperFns/GetCurrTime";
 
 
