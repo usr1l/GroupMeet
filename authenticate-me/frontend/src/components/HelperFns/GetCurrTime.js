@@ -24,7 +24,7 @@ const getCurrTime = () => {
   const currDate = `${year}-${month}-${day}`;
   const currTime = `${hours}:${minutes}:${seconds}`;
   const currDateTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-  return [ currDateTime, currTime, currDate ];
+  return { currDateTime, currTime, currDate };
 }
 
 export default getCurrTime;

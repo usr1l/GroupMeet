@@ -15,7 +15,6 @@ export const thunkLoadEvents = () => async (dispatch) => {
 
   if (response.ok) {
     const data = await response.json();
-    console.log("DATA", data)
     dispatch(actionLoadEvents(data));
     return data;
   }
@@ -82,12 +81,13 @@ export const thunkLoadSingleEvent = (eventId) => async (dispatch) => {
   if (response.ok) {
     const data = await response.json();
     dispatch(actionLoadSingleEvent(data));
+    return data;
   };
-  return
+
+  return response;
 };
 
 export const thunkUpdateEvent = (eventInfo, eventId) => async (dispatch) => {
-  console.log(eventInfo)
   const response = await csrfFetch(`/api/events/${eventId}`, {
     method: 'PUT',
     headers: { "Content-Type": "application/json" },

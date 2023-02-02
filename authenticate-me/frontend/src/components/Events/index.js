@@ -7,7 +7,6 @@ const AllEventsPage = () => {
 
   const eventsObj = useSelector(state => state.events.events);
   const events = Object.values(eventsObj);
-  console.log(events)
 
   return (
     <section className="events-page">

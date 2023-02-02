@@ -10,7 +10,7 @@ const CreateEventForm = (event) => {
 
   const { groupId } = useParams();
 
-  const [ currDateTime, currTime, currDate ] = getCurrTime();
+  const { currTime, currDate } = getCurrTime();
 
 
   const [ name, setName ] = useState("");
@@ -20,8 +20,8 @@ const CreateEventForm = (event) => {
   const [ startTime, setStartTime ] = useState(currTime);
   const [ endDate, setEndDate ] = useState(currDate);
   const [ endTime, setEndTime ] = useState(currTime);
-  const [ capacity, setCapacity ] = useState('');
-  const [ price, setPrice ] = useState('');
+  const [ capacity, setCapacity ] = useState(null);
+  const [ price, setPrice ] = useState(null);
   const [ previewImage, setPreviewImage ] = useState('')
   const [ errors, setErrors ] = useState([]);
 
@@ -29,7 +29,7 @@ const CreateEventForm = (event) => {
   const validate = () => {
     const validationErrors = [];
 
-    const [ currDateTime ] = getCurrTime();
+    const { currDateTime } = getCurrTime();
     if (!name || (name.length < 5)) validationErrors.push('Please provide a name at least 5 characters long');
     if ((!description)) validationErrors.push('A description is required');
     if (!type) validationErrors.push('Please specify if event is \'In person\' or \'Online\'');
@@ -56,7 +56,7 @@ const CreateEventForm = (event) => {
       description,
       type,
       price: parseFloat(price),
-      capacity,
+      capacity: parseFloat(capacity),
       startDate: `${startDate} ${startTime}`,
       endDate: `${endDate} ${endTime}`,
       previewImage,

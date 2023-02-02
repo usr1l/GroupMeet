@@ -1,39 +1,46 @@
-import React, { useState } from "react"
-import { useSelector, useDispatch } from "react-redux";
+import React, { useEffect, useState } from "react"
+import { useDispatch } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
-import { thunkCreateGroup, thunkLoadGroups, thunkUpdateGroup } from "../../store/groups";
+import { thunkLoadGroups, thunkLoadSingleGroup, thunkUpdateGroup } from "../../store/groups";
 
 const EditGroupPage = () => {
   const states = [ "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY" ];
-  const history = useHistory();
-  const group = useSelector(state => state.groups.group);
   const { groupId } = useParams();
-
   const dispatch = useDispatch();
 
-  const [ name, setName ] = useState(group.name);
-  const [ about, setAbout ] = useState(group.about);
-  const [ type, setType ] = useState(group.type);
-  const [ isPrivate, setIsPrivate ] = useState(`${group.private}`);
-  const [ city, setCity ] = useState(group.city);
-  const [ state, setState ] = useState(group.state);
-  const [ errors, setErrors ] = useState([]);
+  useEffect(() => {
+    dispatch(thunkLoadSingleGroup(groupId))
+      .then((data) => {
+        const { name, about, type, city, state } = data;
+        setName(name);
+        setAbout(about);
+        setType(type);
+        setIsPrivate(data.private === true ? 'true' : 'false');
+        setCity(city);
+        setState(state);
+      });
+  }, []);
 
+  const history = useHistory();
+
+  const [ name, setName ] = useState('');
+  const [ about, setAbout ] = useState('');
+  const [ type, setType ] = useState('');
+  const [ isPrivate, setIsPrivate ] = useState('true');
+  const [ city, setCity ] = useState('');
+  const [ state, setState ] = useState('');
+  const [ errors, setErrors ] = useState([]);
 
   const validate = () => {
     const validationErrors = [];
 
     if (!name || name.length > 60) validationErrors.push('Please provide a name for your event (60 characters max)');
-    if ((!about) || (about.length < 50)) validationErrors.push('About must be at least 50 characters')
-
-    if (!type) validationErrors.push('Please specify the type')
-
-    if (!city || !state) validationErrors.push('Please provide the location for this group')
+    if ((!about) || (about.length < 50)) validationErrors.push('About must be at least 50 characters');
+    if (!type) validationErrors.push('Please specify the type');
+    if (!city || !state) validationErrors.push('Please provide the location for this group');
 
     return validationErrors;
   };
-
-
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -59,7 +66,6 @@ const EditGroupPage = () => {
     }
     return;
   };
-
 
   return (
     <div>

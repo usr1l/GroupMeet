@@ -30,9 +30,8 @@ function App() {
     dispatch(thunkLoadGroups());
     dispatch(sessionActions.thunkRestoreUser()).then(() => setIsLoaded(true));
   }, [ dispatch ]);
+
   const [ isLoaded, setIsLoaded ] = useState(false);
-
-
 
   const sessionUser = useSelector(state => state.session.user)
 

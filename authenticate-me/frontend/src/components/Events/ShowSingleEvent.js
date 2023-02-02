@@ -17,14 +17,14 @@ const SingleEventPage = ({ eventData }) => {
 
 
   const { user } = useSelector(state => state.session);
-  const eventState = useSelector(state => state.events);
+  // const eventState = useSelector(state => state.events);
 
-  if (eventState.status === true) return (<div>Loading...</div>);
+  // if (eventState.status === true) return (<div>Loading...</div>);
   const event = useSelector(state => state.events.event);
+  if (!event) return (<div>Not Found</div>);
+
 
   const history = useHistory();
-
-  if (!event) return (<div>Not Found</div>);
 
   const { name, startDate, type, groupId, previewImage, description } = event;
 

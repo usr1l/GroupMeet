@@ -9,7 +9,7 @@ const { validateVenueData } = require('./venues');
 const { validateEventData, getEvents } = require('./events');
 const { inputToDate, getDisplayDate, toJSONDisplay, checkUserId } = require('../../utils/helpers')
 const { venueDoesNotExist } = require('./venues');
-const { validateMembershipData, validateMembershipDataDelete } = require('./memberships')
+const { validateMembershipData, validateMembershipDataDelete } = require('./memberships');
 
 
 const validateGroupData = [
@@ -25,7 +25,7 @@ const validateGroupData = [
     .exists({ checkFalsy: true })
     .isIn([ 'Online', 'In person' ])
     .withMessage('Type must be \'Online\' or \'In person\''),
-  check('private')
+  check('isPrivate')
     .exists()
     .isBoolean()
     .withMessage('Private must be a boolean'),
@@ -363,7 +363,6 @@ router.get('/:groupId/events', async (req, res, next) => {
   const eventsArr = await getEvents(events);
 
   return res.json({ "Events": eventsArr });
-
 });
 
 
@@ -413,8 +412,8 @@ router.post('/:groupId/events', requireAuth, validateEventData, async (req, res,
       name,
       description,
       type,
-      capacity,
-      price,
+      capacity: capacity ? capacity : null,
+      price: price ? price : null,
       startDate,
       endDate,
       // venueId,
@@ -433,8 +432,8 @@ router.post('/:groupId/events', requireAuth, validateEventData, async (req, res,
     name,
     description,
     type,
-    capacity,
-    price,
+    capacity: capacity ? capacity : null,
+    price: price ? price : null,
     startDate,
     endDate,
     venueId,
@@ -448,8 +447,8 @@ router.post('/:groupId/events', requireAuth, validateEventData, async (req, res,
       name,
       description,
       type,
-      capacity,
-      price,
+      capacity: capacity ? capacity : null,
+      price: price ? price : null,
       startDate,
       endDate,
       // venueId,
@@ -623,6 +622,7 @@ router.get('/current', requireAuth, async (req, res) => {
 
   // get groupIds from memberships entries and display groups
   const groupsId = memberships.map(membership => {
+
     const membershipJSON = membership.toJSON();
     return membershipJSON.groupId;
   });
@@ -662,7 +662,8 @@ router.put('/:groupId', requireAuth, async (req, res, next) => {
 
   const errors = {};
 
-  const { name, about, type, private, city, state } = req.body;
+  const { name, about, type, isPrivate, city, state } = req.body;
+  let private;
 
   if (name) {
     if (name.length > 60) {
@@ -682,11 +683,17 @@ router.put('/:groupId', requireAuth, async (req, res, next) => {
     };
   };
 
-  if (private) {
-    if (typeof private !== 'boolean') {
+  if (isPrivate) {
+    if (typeof isPrivate !== 'boolean') {
       errors.private = 'Private must be a boolean';
     };
   };
+
+  if (isPrivate === true) {
+    private = true;
+  } else if (isPrivate === false) {
+    private = false;
+  } else private = group.private;
 
   if (Object.keys(errors).length > 0) {
     const err = new Error('Validation error');
@@ -699,7 +706,7 @@ router.put('/:groupId', requireAuth, async (req, res, next) => {
     "name": name ? name : group.name,
     "about": about ? about : group.about,
     "type": type ? type : group.type,
-    "private": private ? private : group.private,
+    "private": private,
     "city": city ? city : group.city,
     "state": state ? state : group.state,
     "updatedAt": getDisplayDate(new Date())
@@ -796,7 +803,7 @@ router.get('/', async (_req, res) => {
 
 // create a group
 router.post('/', requireAuth, validateGroupData, async (req, res, next) => {
-  const { name, about, type, private, city, state, previewImage } = req.body;
+  const { name, about, type, isPrivate, city, state, previewImage } = req.body;
   const organizerId = req.user.id;
 
   const groupExists = await Group.findOne({
@@ -804,7 +811,7 @@ router.post('/', requireAuth, validateGroupData, async (req, res, next) => {
       name,
       about,
       type,
-      private,
+      private: isPrivate,
       city,
       state,
       organizerId
@@ -824,7 +831,7 @@ router.post('/', requireAuth, validateGroupData, async (req, res, next) => {
     name,
     about,
     type,
-    private,
+    private: isPrivate,
     city,
     state,
     organizerId
@@ -835,7 +842,7 @@ router.post('/', requireAuth, validateGroupData, async (req, res, next) => {
       name,
       about,
       type,
-      private,
+      private: isPrivate,
       city,
       state,
       organizerId

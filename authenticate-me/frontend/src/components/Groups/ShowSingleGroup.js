@@ -15,10 +15,10 @@ const SingleGroupPage = ({ groupData }) => {
   }, [ dispatch, groupId ])
   const { user } = useSelector(state => state.session);
 
-  const groupState = useSelector(state => state.groups);
-  if (groupState.status === true) return (<div>Loading...</div>)
-  const group = useSelector(state => state.groups.groups[ groupId ]);
-  if (!group) return (<div>Not Found</div>);
+  // const groupState = useSelector(state => state.groups);
+  // if (groupState.status === true) return (<div>Loading...</div>);
+  const group = useSelector(state => state.groups.group);
+  if (Object.keys(group).length < 4) return (<div>Not Found</div>);
 
   const history = useHistory();
 
