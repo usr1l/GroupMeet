@@ -80,7 +80,7 @@ export const thunkLoadSingleEvent = (eventId) => async (dispatch) => {
 
   if (response.ok) {
     const data = await response.json();
-    dispatch(actionLoadSingleEvent(data));
+    await dispatch(actionLoadSingleEvent(data));
     return data;
   };
 
@@ -98,6 +98,7 @@ export const thunkUpdateEvent = (eventInfo, eventId) => async (dispatch) => {
   if (response.ok) {
     const data = await response.json();
     dispatch(actionUpdateEvent(data));
+    dispatch(thunkLoadEvents());
     return response;
   };
 };

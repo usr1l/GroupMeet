@@ -1,4 +1,4 @@
-import React, { useEffect, } from "react"
+import React, { useEffect, useState, } from "react"
 import { useParams, NavLink } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { thunkDeleteEvent, thunkLoadSingleEvent } from "../../store/events";
@@ -11,8 +11,10 @@ const SingleEventPage = ({ eventData }) => {
 
   const { eventId } = useParams();
   const dispatch = useDispatch();
+
   useEffect(() => {
-    dispatch(thunkLoadSingleEvent(eventId));
+    dispatch(thunkLoadSingleEvent(eventId))
+      .then((data) => setPreviewImage(data.Event.previewImage));
   }, [ dispatch, eventId ]);
 
 
@@ -26,9 +28,10 @@ const SingleEventPage = ({ eventData }) => {
 
   const history = useHistory();
 
-  const { name, startDate, type, groupId, previewImage, description } = event;
+  const { name, startDate, type, groupId, description } = event;
 
   const group = useSelector(state => state.groups.groups[ groupId ]);
+  const [ previewImage, setPreviewImage ] = useState('');
 
   const organizerId = group ? group.organizerId : null;
 

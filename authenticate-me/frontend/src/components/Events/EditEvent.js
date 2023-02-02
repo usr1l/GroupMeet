@@ -81,7 +81,6 @@ const EditEventPage = () => {
     const response = await dispatch(thunkUpdateEvent(eventInfo, eventId));
 
     if (response.ok) {
-      await dispatch(thunkLoadEvents());
       history.push(`/events/${eventId}`);
     };
     return;

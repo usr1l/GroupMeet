@@ -716,9 +716,11 @@ router.put('/:groupId', requireAuth, async (req, res, next) => {
     await updateGroupPreviewImage(groupId);
     const img = await GroupImage.findOne({
       where: {
-        url: previewImage
+        url: previewImage,
+        groupId: groupId
       }
     });
+
 
     if (img) {
       const imgJSON = img.toJSON();
@@ -727,6 +729,7 @@ router.put('/:groupId', requireAuth, async (req, res, next) => {
       await currPreviewImg.update({
         preview: true
       })
+
     } else {
       await GroupImage.create({
         url: previewImage,
@@ -816,6 +819,9 @@ router.get('/', async (_req, res) => {
   const groups = await Group.scope('allDetails').findAll({
     include: {
       model: GroupImage,
+      where: {
+        preview: true
+      }
     },
     order: [ [ 'name' ], [ 'type' ] ]
   });
@@ -872,6 +878,7 @@ router.post('/', requireAuth, validateGroupData, async (req, res, next) => {
       organizerId
     }
   });
+
 
   if (previewImage) {
     // add the new img
