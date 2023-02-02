@@ -712,12 +712,29 @@ router.put('/:groupId', requireAuth, async (req, res, next) => {
     "updatedAt": getDisplayDate(new Date())
   });
 
-  // if (previewImage && previewImage !== group.previewImage) {
-  //   await updateGroupPreviewImage(groupId);
+  if (previewImage) {
+    await updateGroupPreviewImage(groupId);
+    const img = await GroupImage.findOne({
+      where: {
+        url: previewImage
+      }
+    });
 
-  // };
-
-  console.log(group.previewImage)
+    if (img) {
+      const imgJSON = img.toJSON();
+      const imgId = imgJSON.id;
+      const currPreviewImg = await GroupImage.findByPk(imgId);
+      await currPreviewImg.update({
+        preview: true
+      })
+    } else {
+      await GroupImage.create({
+        url: previewImage,
+        groupId: groupId,
+        preview: true
+      });
+    };
+  };
 
   const updatedGroup = await Group.scope('allDetails').findByPk(groupId);
 

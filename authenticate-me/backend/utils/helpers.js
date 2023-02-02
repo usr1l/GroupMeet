@@ -39,7 +39,7 @@ async function checkUserId(reqUserId) {
   return true;
 };
 
-async function updateEventPreviewImage(eventId, previewImage) {
+async function updateEventPreviewImage(eventId) {
   const img = await EventImage.findOne({
     where: {
       [ Op.and ]: [ { eventId }, { preview: true } ]
@@ -54,8 +54,6 @@ async function updateEventPreviewImage(eventId, previewImage) {
       preview: false
     });
   };
-
-  return true;
 };
 
 async function updateGroupPreviewImage(groupId) {

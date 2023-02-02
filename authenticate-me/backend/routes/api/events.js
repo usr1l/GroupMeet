@@ -518,14 +518,28 @@ eventsRouter.put('/:eventId', requireAuth, async (req, res, next) => {
     "endDate": endDate ? endDate : event.endDate
   });
 
-
-  if (previewImage && previewImage !== event.previewImage) {
+  if (previewImage) {
     await updateEventPreviewImage(eventId);
-    await EventImage.create({
-      url: previewImage,
-      eventId: eventId,
-      preview: true
+    const img = await EventImage.findOne({
+      where: {
+        url: previewImage
+      }
     });
+
+    if (img) {
+      const imgJSON = img.toJSON();
+      const imgId = imgJSON.id;
+      const currPreviewImg = await EventImage.findByPk(imgId);
+      await currPreviewImg.update({
+        preview: true
+      })
+    } else {
+      await EventImage.create({
+        url: previewImage,
+        eventId: eventId,
+        preview: true
+      });
+    };
   };
 
   const updatedEvent = await Event.findByPk(eventId);

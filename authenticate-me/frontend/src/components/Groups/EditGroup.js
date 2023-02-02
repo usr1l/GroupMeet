@@ -11,13 +11,14 @@ const EditGroupPage = () => {
   useEffect(() => {
     dispatch(thunkLoadSingleGroup(groupId))
       .then((data) => {
-        const { name, about, type, city, state } = data;
+        const { name, about, type, city, state, previewImage } = data;
         setName(name);
         setAbout(about);
         setType(type);
         setIsPrivate(data.private === true ? 'true' : 'false');
         setCity(city);
         setState(state);
+        setPreviewImage(previewImage || '')
       });
   }, []);
 
@@ -30,6 +31,7 @@ const EditGroupPage = () => {
   const [ city, setCity ] = useState('');
   const [ state, setState ] = useState('');
   const [ errors, setErrors ] = useState([]);
+  const [ previewImage, setPreviewImage ] = useState('');
 
   const validate = () => {
     const validationErrors = [];
@@ -55,7 +57,8 @@ const EditGroupPage = () => {
       type,
       isPrivate: (isPrivate === 'true' ? true : false),
       city,
-      state
+      state,
+      previewImage
     };
 
     const response = await dispatch(thunkUpdateGroup(groupInfo, groupId));
@@ -147,6 +150,15 @@ const EditGroupPage = () => {
             checked={isPrivate === "false" ? "checked" : ""}
             onChange={(e) => setIsPrivate(e.target.value)}
           /> Public
+        </div>
+        <div>
+          <label htmlFor="group-profile-img">Group Image: </label>
+          <input
+            name="group-profile-img"
+            type='url'
+            value={previewImage}
+            onChange={(e) => setPreviewImage(e.target.value)}
+          />
         </div>
         <button>Submit</button>
       </form>
