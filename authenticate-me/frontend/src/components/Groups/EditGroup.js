@@ -64,7 +64,6 @@ const EditGroupPage = () => {
     const response = await dispatch(thunkUpdateGroup(groupInfo, groupId));
 
     if (response.ok) {
-      await thunkLoadGroups();
       history.push(`/groups/${groupId}`);
     }
     return;

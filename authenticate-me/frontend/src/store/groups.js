@@ -30,7 +30,6 @@ export const thunkDeleteGroup = ({ user, groupId }) => async (dispatch) => {
 
   if (response.ok) {
     dispatch(actionDeleteGroup(groupId));
-    dispatch(thunkLoadEvents());
   };
 
   return response;
@@ -78,6 +77,7 @@ export const thunkUpdateGroup = (groupInfo, groupId) => async (dispatch) => {
   if (response.ok) {
     const data = await response.json();
     dispatch(actionUpdateGroup(data));
+    dispatch(thunkLoadGroups());
     return response;
   };
 };
