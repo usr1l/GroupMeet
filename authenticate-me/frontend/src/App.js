@@ -10,7 +10,7 @@ import NotificationPage from "./components/Notifications";
 import NotFoundPage from "./components/NotFoundPage";
 import HomePage from "./components/HomePage";
 import MessagesPage from "./components/Messages";
-import FeaturesBar from "./components/FeaturesBar";
+// import FeaturesBar from "./components/FeaturesBar";
 import CreateEventForm from './components/Events/CreateEventForm';
 import CreateGroupForm from './components/Groups/CreateGroupForm';
 import EditEventPage from "./components/Events/EditEvent";
@@ -19,6 +19,7 @@ import SingleEventPage from "./components/Events/ShowSingleEvent";
 import SingleGroupPage from "./components/Groups/ShowSingleGroup";
 import { thunkLoadEvents } from "./store/events";
 import { thunkLoadGroups } from "./store/groups";
+import SplashPage from "./components/SplashPage";
 
 
 function App() {
@@ -33,16 +34,16 @@ function App() {
 
   const [ isLoaded, setIsLoaded ] = useState(false);
 
-  const sessionUser = useSelector(state => state.session.user)
+  const sessionUser = useSelector(state => state.session.user);
 
   return (
     <>
       <Navigation isLoaded={isLoaded} />
       {isLoaded && (
         <>
-          <FeaturesBar />
+          {/* {sessionUser ? <FeaturesBar /> : null} */}
           <Switch>
-            <Route exact path={'/'} component={HomePage} />
+            <Route exact path={'/'} component={sessionUser ? HomePage : SplashPage} />
             {sessionUser && (
               <Route exact path={'/groups/new'} component={CreateGroupForm} />
             )}
@@ -65,6 +66,7 @@ function App() {
           </Switch>
         </>
       )}
+      {/* <footer></footer> */}
     </>
   );
 }

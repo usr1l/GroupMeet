@@ -1,6 +1,7 @@
 // frontend/src/components/Navigation/OpenModalMenuItem.js
 import React from 'react';
 import { useModal } from '../../context/Modal';
+import Button from '../Button';
 
 function OpenModalMenuItem({
   modalComponent, // component to render inside the modal
@@ -17,7 +18,7 @@ function OpenModalMenuItem({
   };
 
   return (
-    <li className='menu-item' onClick={onClick}>{itemText}</li>
+    <Button buttonStyle='btn--menu-item' buttonSize='btn--menu' onClick={onClick}>{itemText}</Button>
   );
 }
 

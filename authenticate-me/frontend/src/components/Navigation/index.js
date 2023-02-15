@@ -1,66 +1,77 @@
 // frontend/src/components/Navigation/index.js
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import ProfileButton from './ProfileButton';
-import './Navigation.css';
 import SiteLogo from './SiteLogo';
 import NotificationButton from './NotificationButton';
 import MessagesButton from './MessagesButton';
-import { thunkLogin } from '../../store/session';
-import { useDispatch } from 'react-redux';
+import './Navigation.css';
 
 
 function Navigation({ isLoaded }) {
+  const [ click, setClick ] = useState(false);
+  const [ button, setButton ] = useState(true);
+
+  const handleClick = () => setClick(!click);
+  const showButton = () => {
+    if (window.innerWidth <= 650) {
+      setButton(false);
+    } else {
+      setButton(true);
+    };
+  };
+
+  useEffect(() => {
+    showButton();
+  }, []);
+
+
+  window.addEventListener('resize', showButton);
+
   let hide = '';
   const sessionUser = useSelector(state => state.session.user);
   if (!sessionUser) hide = ' hidden';
-  const dispatch = useDispatch();
-
-  const demoUser = async () => {
-    const user = {
-      credential: 'Demo-lition',
-      password: 'password'
-    };
-
-    const response = dispatch(thunkLogin(user));
-    return response;
-  }
 
   return (
-    <nav>
-      <div className='navbar'>
-        <SiteLogo key='nav-1' />
-        <ul className='nav-buttons-wrapper'>
-          {isLoaded && (
-            <>{sessionUser && (
-              <li key='nav-2'>
-                <NavLink to='/groups/new'>
-                  Create a Group
+
+    <nav className='navbar'>
+      <div className='navbar-container'>
+        <SiteLogo />
+        <div className='nav-buttons'>
+          {sessionUser && (
+            <>
+              <div key='nav-2' className='nav-item' id='create-group-div'>
+                <NavLink className='navbar-button' id='create-group' to='/groups/new'>
+                  Create Group
                 </NavLink>
-              </li>
-            )}
-              <li key='nav-3' className={'nav-button'.concat(hide)}>
-                <NavLink to='/messages'>
-                  <MessagesButton id='messages-button' user={sessionUser} />
-                </NavLink>
-              </li>
-              <li key='nav-4' className={'nav-button'.concat(hide)}>
-                <NavLink to='/notifications'>
-                  <NotificationButton id='notifications-button' />
-                </NavLink>
-              </li>
-              <li key='nav-5' className='nav-button'>
-                <ProfileButton id='profile-button' user={sessionUser} />
-              </li>
-              {!sessionUser && (
-                <button onClick={demoUser}>Demo-User</button>
-              )}
+              </div>
+              <div id='create-group-break'></div>
             </>
           )}
-        </ul>
+          <ul className='nav-buttons-wrapper'>
+            {isLoaded && (
+              <>
+                {button && (
+                  <>
+                    <li key='nav-3' className={`nav-item`}>
+                      <MessagesButton />
+                    </li>
+                    <li key='nav-4' className={`nav-item`}>
+                      <NotificationButton />
+                    </li>
+                  </>
+                )}
+                <li key='nav-5' className={`nav-item`}>
+                  <ProfileButton user={sessionUser} />
+                </li>
+              </>
+            )}
+          </ul>
+        </div>
       </div>
     </nav>
+
   );
 }
 

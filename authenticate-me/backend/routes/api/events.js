@@ -8,7 +8,7 @@ const { handleValidationErrors } = require('../../utils/validation');
 const { inputToDate, toJSONDisplay, getDisplayDate, checkUserId, updateEventPreviewImage } = require('../../utils/helpers');
 const { venueDoesNotExist } = require('./venues');
 const { validateAttendanceData } = require('./attendances');
-const { Sequelize } = require('sequelize')
+const { Sequelize } = require('sequelize');
 
 
 const validateEventData = [

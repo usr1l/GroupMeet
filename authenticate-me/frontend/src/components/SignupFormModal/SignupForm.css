@@ -1,0 +1,71 @@
+.sign-up {
+  display: flex;
+  flex-direction: column;
+  background: url('../../images/background.png');
+  width: 470px;
+  margin: auto;
+  height: 800px;
+}
+
+#sign-up__title {
+  font-weight: 650;
+  font-size: 20pt;
+  margin: 5px 0;
+}
+
+.sign-up__form {
+  /* border: 1px solid black; */
+  width: 400px;
+  align-self: center;
+  box-sizing: border-box;
+}
+
+.sign-up__error-list {
+  list-style: none;
+  font-size: 10pt;
+  align-content: left;
+  width: 400px;
+  height: 125px;
+  margin: 0;
+}
+
+.sign-up__error {}
+
+.sign-up__label {
+  align-self: start;
+  margin-top: 0;
+  height: 18px;
+  font-size: 11pt;
+  font-weight: 600;
+}
+
+.sign-up__input {
+  box-sizing: border-box;
+  height: 24px;
+  width: 100%;
+  border: 1px solid gray;
+  border-radius: 6px;
+  outline: none;
+  margin: 10px 0;
+  padding: 0;
+}
+
+.fa-solid.fa-xmark {
+  opacity: .4;
+  font-size: 18pt;
+  align-self: end;
+  margin: 15px 20px 5px 20px;
+  cursor: pointer;
+}
+
+img#icon {
+  height: 40px;
+  width: 40px;
+  align-self: center;
+}
+
+p#question {
+  font-size: 10pt;
+  text-align: center;
+  margin: 20px 0px 0px;
+}

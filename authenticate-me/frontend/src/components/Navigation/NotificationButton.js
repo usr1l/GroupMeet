@@ -1,9 +1,13 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
 
 const NotificationButton = () => {
 
   return (
-    <i className="fa-regular fa-bell menu-item"></i>
+    <NavLink to='/notifications' className='navbar-button'>
+      <i className="fa-regular fa-bell" id='notifications-button'></i>
+      Notifications
+    </NavLink>
   )
 }
 
