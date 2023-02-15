@@ -6,6 +6,8 @@ import OpenModalMenuItem from './OpenModalMenuItem';
 import LoginFormModal from '../LoginFormModal';
 import SignupFormModal from '../SignupFormModal';
 import { useHistory } from 'react-router-dom';
+// import '../Button/Button.css';
+// import '../Navigation/Navigation.css'
 
 function ProfileButton({ user }) {
   const history = useHistory();
@@ -45,19 +47,17 @@ function ProfileButton({ user }) {
 
   return (
     <>
-      <i className="fas fa-user-circle menu-item" onClick={openMenu} />
+      <i className="fas fa-user-circle navbar-button" id='profile-button' onClick={openMenu} />
       <ul className={ulClassName} ref={ulRef}>
         {user ? (
-          <>
-            <li className="menu-item">{user.username}</li>
-            <li className="menu-item">{user.firstName} {user.lastName}</li>
-            <li className="menu-item">{user.email}</li>
-            <li>
-              <button className="menu-item" onClick={logout}>Log Out</button>
-            </li>
-          </>
+          <div id='profile-menu'>
+            <li className='modal-menu-item'>{user.username}</li>
+            <li className='modal-menu-item'>{user.firstName} {user.lastName}</li>
+            <li className='modal-menu-item'>{user.email}</li>
+            <button className="btn btn--menu-item btn--menu" onClick={logout}>Log Out</button>
+          </div>
         ) : (
-          <>
+          <div id='profile-menu'>
             <OpenModalMenuItem
               itemText="Log In"
               onItemClick={closeMenu}
@@ -68,7 +68,7 @@ function ProfileButton({ user }) {
               onItemClick={closeMenu}
               modalComponent={<SignupFormModal />}
             />
-          </>
+          </div>
         )}
       </ul>
     </>

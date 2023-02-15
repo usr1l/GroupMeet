@@ -4,7 +4,7 @@ import { useParams, NavLink } from "react-router-dom";
 import { thunkDeleteGroup, thunkLoadSingleGroup } from "../../store/groups";
 import { useHistory } from "react-router-dom";
 import errorPageHandler from "../ErrorPage";
-import './SingleGroupPage.css'
+// import './SingleGroupPage.css'
 
 const SingleGroupPage = ({ groupData }) => {
 

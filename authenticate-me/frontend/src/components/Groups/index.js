@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 // import { thunkLoadGroups } from "../../store/groups";
 import GroupIndexCard from "./GroupIndexCard";
-import './GroupsPage.css'
+// import './GroupsPage.css'
 
 const AllGroupsPage = () => {
 

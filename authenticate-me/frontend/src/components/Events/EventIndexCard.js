@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import './EventsPage.css';
+// import './EventsPage.css';
 
 
 function EventIndexCard({ event }) {

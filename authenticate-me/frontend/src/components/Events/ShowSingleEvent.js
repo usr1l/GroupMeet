@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { thunkDeleteEvent, thunkLoadSingleEvent } from "../../store/events";
 import { useHistory } from "react-router-dom";
 import errorPageHandler from "../ErrorPage";
-import './SingleEventPage.css';
+// import './SingleEventPage.css';
 
 
 const SingleEventPage = ({ eventData }) => {

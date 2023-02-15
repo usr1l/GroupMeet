@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import './GroupsPage.css';
+// import './GroupsPage.css';
 
 
 function GroupIndexCard({ group }) {

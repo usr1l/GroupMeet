@@ -159,7 +159,7 @@ const CreateEventForm = (event) => {
             name="endDate-Time"
             type='time'
             value={endTime}
-            onChange={(e) => setEndTime(e.target.value + ':00')}
+            onChange={(e) => setEndTime(e.target.value)}
           />
         </div>
         <div className="group-form-element">

@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import EventIndexCard from "./EventIndexCard";
-import './EventsPage.css';
+// import './EventsPage.css';
 
 const AllEventsPage = () => {
 

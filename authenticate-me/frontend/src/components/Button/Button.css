@@ -1,0 +1,103 @@
+:root {
+  --primary: white;
+}
+
+.btn {
+  padding: 8px 20px;
+  border-radius: 2px;
+  outline: none;
+  border: none;
+  cursor: pointer;
+}
+
+.btn--primary {
+  background-color: var(--primary);
+  color: #242424;
+  border: 1px solid var(--primary);
+}
+
+.btn--outline {
+  background-color: transparent;
+  color: white;
+  padding: 1px solid var(--primary);
+  transition: all 0.3s ease-out;
+}
+
+.btn--demo {
+  background-color: #008294;
+  border-radius: 8px;
+  color: #fff;
+  fill: #fff;
+  transition: 0.3s;
+}
+
+.btn--wide {
+  border: none;
+  background-color: #f65858;
+  color: white;
+  border-radius: 6px;
+}
+
+.btn--menu-item {
+  background-color: white;
+  border-radius: 6px;
+  font-size: 11pt;
+  text-align: left;
+}
+
+.btn--menu {
+  width: 300px;
+  height: 35px;
+  color: gray;
+  padding: 0 0 0 10px;
+  transition: 0.3s;
+}
+
+.btn--medium {
+  padding: 8px 20px;
+  font-size: 20px;
+}
+
+.btn--large {
+  padding: 12px 26px;
+  font-size: 20px;
+}
+
+
+.btn--modal {
+  width: 400px;
+  height: 30px;
+  margin-top: 20px;
+  font-size: 10pt;
+}
+
+.btn-mobile {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+}
+
+.btn--wide:hover {
+  background-color: #fa8282;
+  transition: 0.3s
+}
+
+.btn--medium:hover,
+.btn--large:hover {
+  background: white;
+  color: #242424;
+  transition: all 0.3s ease-out;
+}
+
+.btn--demo:hover {
+  background-color: transparent;
+  color: #008294;
+  transition: 0.3s;
+}
+
+.btn--menu:hover {
+  color: rgb(190, 195, 201);
+  transition: 0.3s;
+
+}
