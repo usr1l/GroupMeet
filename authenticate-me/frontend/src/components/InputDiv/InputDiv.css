@@ -1,0 +1,21 @@
+.input-div {
+  display: flex;
+  flex-direction: column;
+}
+
+.group-form__label {
+  margin: 4px 0 1px;
+  height: 22px;
+  box-sizing: border-box;
+}
+
+.group-form__block:not(.group-form__private) {
+  display: flex;
+  flex-direction: column;
+
+}
+
+.group-form__block.group-form__private {
+  display: flex;
+  flex-direction: row;
+}

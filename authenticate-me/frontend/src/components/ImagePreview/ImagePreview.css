@@ -1,0 +1,13 @@
+.img-preview-wrapper {
+  display: flex;
+  height: 100%;
+}
+
+
+.img-preview {
+  max-height: 100%;
+  width: auto;
+  display: flex;
+  justify-content: center;
+  border-radius: 4px;
+}

@@ -85,7 +85,7 @@
 
 .btn--medium:hover,
 .btn--large:hover {
-  background: white;
+  background: transparent;
   color: #242424;
   transition: all 0.3s ease-out;
 }

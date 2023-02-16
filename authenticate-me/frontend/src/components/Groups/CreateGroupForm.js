@@ -3,7 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { thunkCreateGroup, thunkLoadGroups } from "../../store/groups";
 import { useHistory } from "react-router-dom";
 import Button from '../Button';
-import './GroupForm.css'
+import InputDiv from "../InputDiv";
+import ImagePreview from "../ImagePreview";
+import './GroupForm.css';
+
+
 
 const CreateGroupForm = () => {
   const states = [ "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY" ];
@@ -78,19 +82,18 @@ const CreateGroupForm = () => {
           ))
         )}
       </ul>
-      <form id="group-form">
-        <div className="group-form__block">
-          <label className="group-form__label" htmlFor="name">Name: </label>
+      <form id="group-form" onSubmit={onSubmit}>
+        <InputDiv divStyle="group-form__block" labelStyle="group-form__label" labelFor="name" label='Name: '>
           <input
             id="name"
             type="text"
             onChange={(e) => setName(e.target.value)}
             value={name}
           />
-        </div>
-        <div className="group-form__block">
-          <label className="group-form__label" htmlFor="type">Type: </label>
+        </InputDiv>
+        <InputDiv divStyle="group-form__block" labelStyle="group-form__label" labelFor="type" label='Type: '>
           <select
+            className="group-form__label"
             name="type"
             onChange={(e) => setType(e.target.value)}
             value={type}
@@ -101,21 +104,19 @@ const CreateGroupForm = () => {
             <option value='In person'>In person</option>
             <option value='Online'>Online</option>
           </select>
-        </div>
-        <div className="group-form__block">
-          <label className="group-form__label" htmlFor="city">City: </label>
+        </InputDiv>
+        <InputDiv divStyle="group-form__block" labelStyle="group-form__label" labelFor="city" label='City: '>
           <input
             id="city"
             type="text"
             onChange={(e) => setCity(e.target.value)}
             value={city}
-            placeholder='City'
           />
-        </div>
-        <div className="group-form__block">
-          <label className="group-form__label" htmlFor="state">State: </label>
+        </InputDiv>
+        <InputDiv divStyle="group-form__block" labelStyle="group-form__label" labelFor="state" label='State: '>
           <select
             name="state"
+            className="group-form__label"
             onChange={(e) => setState(e.target.value)}
             value={state}
           >
@@ -126,21 +127,17 @@ const CreateGroupForm = () => {
               <option value={state}>{state}</option>
             ))}
           </select>
-        </div>
-        <div className="group-form__block">
-          <label className="group-form__label" htmlFor="about">About: </label>
+        </InputDiv>
+        <InputDiv divStyle="group-form__block" labelStyle="group-form__label" labelFor="about" label='About: '>
           <textarea
-            id="about"
+            id="about-input"
             name="about"
             onChange={(e) => setAbout(e.target.value)}
             value={about}
-            placeholder='What is your group about'
           />
-        </div>
-        <br></br>
+        </InputDiv>
         <div className="group-form__block group-form__private">
-          <label className="group-form__label" htmlFor="isPrivate">T: </label>
-          <input type="radio" value="true" className='private-radio-buttons'
+          <input type="radio" value="true" className='private-radio-button'
             name="isPrivate" id='isPrivate-yes-button'
             checked={isPrivate === "true" ? "checked" : ""}
             onChange={(e) => setIsPrivate(e.target.value)}
@@ -151,18 +148,19 @@ const CreateGroupForm = () => {
             onChange={(e) => setIsPrivate(e.target.value)}
           /> Public
         </div>
-        <br />
-        <div className="group-form__block">
-          <label className="group-form__label" htmlFor="group-profile-img">Group Image: </label>
+        <InputDiv divStyle="group-form__block" labelStyle="group-form__label" labelFor="group-profile-image" label='Group Image: '>
           <input
             name="group-profile-img"
             type='url'
             value={previewImage}
             onChange={(e) => setPreviewImage(e.target.value)}
           />
+        </InputDiv>
+        <div id='create-group-button-div'>
+          <ImagePreview imgSrc={previewImage}></ImagePreview>
+          <Button type='submit' buttonStyle='btn--wide'>Create Group</Button>
         </div>
       </form>
-      <Button onClick={onSubmit} buttonStyle='btn--wide'>Create Group</Button>
     </div>
   );
 }
