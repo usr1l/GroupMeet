@@ -41,16 +41,17 @@
 .btn--menu-item {
   background-color: white;
   border-radius: 6px;
-  font-size: 11pt;
+  font-size: 10pt;
   text-align: left;
 }
 
 .btn--menu {
-  width: 300px;
-  height: 35px;
-  color: gray;
+  width: 180px;
+  height: 30px;
+  color: black;
   padding: 0 0 0 10px;
   transition: 0.3s;
+  box-sizing: border-box;
 }
 
 .btn--medium {
@@ -85,7 +86,7 @@
 
 .btn--medium:hover,
 .btn--large:hover {
-  background: white;
+  background: transparent;
   color: #242424;
   transition: all 0.3s ease-out;
 }
@@ -97,7 +98,7 @@
 }
 
 .btn--menu:hover {
-  color: rgb(190, 195, 201);
+  color: #008294;
   transition: 0.3s;
 
 }

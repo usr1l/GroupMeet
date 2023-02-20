@@ -32,7 +32,7 @@ function SignupFormModal() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (password && password === confirmPassword) {
+    if (password === confirmPassword) {
       setErrors([]);
       return dispatch(sessionActions.thunkSignup({ email, username, firstName, lastName, password }))
         .then(closeModal)
