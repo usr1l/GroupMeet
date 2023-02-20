@@ -1,6 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import FeaturesBar from '../FeaturesBar';
+// import { NavLink } from "react-router-dom";
+import FeaturesBar from "../FeaturesBar";
 
 const HomePage = () => {
   const sessionUser = useSelector(state => state.session.user);
@@ -8,7 +9,7 @@ const HomePage = () => {
   return (
     <>
       <FeaturesBar />
-      <div>Welcome, {`${sessionUser.firstName}`} </div>
+
     </>
   )
 };

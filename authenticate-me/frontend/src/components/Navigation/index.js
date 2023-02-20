@@ -30,8 +30,12 @@ function Navigation({ isLoaded }) {
   window.addEventListener('resize', showButton);
 
   let hide = '';
+  let divClassName = 'nav-buttons-wrapper';
   const sessionUser = useSelector(state => state.session.user);
-  if (!sessionUser) hide = ' hidden';
+  if (!sessionUser) {
+    hide = ' hidden';
+    divClassName = 'hide-nav-items';
+  }
 
   return (
 
@@ -49,10 +53,10 @@ function Navigation({ isLoaded }) {
               <div id='create-group-break'></div>
             </>
           )}
-          <ul className='nav-buttons-wrapper'>
+          <ul className={`${divClassName}`}>
             {isLoaded && (
               <>
-                {button && (
+                {sessionUser && button && (
                   <>
                     <li key='nav-3' className={`nav-item`}>
                       <MessagesButton />

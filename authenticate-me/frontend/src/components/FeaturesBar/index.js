@@ -15,20 +15,10 @@ const FeaturesBar = () => {
   return (
     <div className='features-bar'>
       <NavLink to='/events'>
-        <button
-          className="features-bar-button"
-          id='fb-events-button'
-          onClick={handleClick}>
-          Events
-        </button>
+        Events
       </NavLink>
       <NavLink to='/groups'>
-        <button
-          className="features-bar-button"
-          id='fb-groups-button'
-          onClick={handleClick}>
-          Groups
-        </button>
+        Groups
       </NavLink>
     </div>
   )
