@@ -31,11 +31,23 @@
   transition: 0.3s;
 }
 
+.btn--big {
+  background-color: #008294;
+  border-radius: 8px;
+  border: 1px solid #008294;
+  background-color: white;
+  color: #008294;
+  fill: #fff;
+  transition: 0.3s;
+  box-sizing: border-box;
+}
+
 .btn--wide {
   border: none;
   background-color: #f65858;
   color: white;
-  border-radius: 6px;
+  border-radius: 8px;
+  border: 1px solid #f65858;
 }
 
 .btn--menu-item {
@@ -43,6 +55,15 @@
   border-radius: 6px;
   font-size: 10pt;
   text-align: left;
+}
+
+.btn--delete {
+  background-color: #f65858;
+  border-radius: 8px;
+  font-size: 10pt;
+  color: white;
+  border: 1px solid #f65858;
+  transition: 0.3s ease-out;
 }
 
 .btn--menu {
@@ -100,5 +121,18 @@
 .btn--menu:hover {
   color: #008294;
   transition: 0.3s;
+}
 
+.btn--big:hover {
+  background-color: #008294;
+  border-radius: 8px;
+  color: #fff;
+  fill: #fff;
+  transition: 0.3s;
+}
+
+.btn--delete:hover {
+  background-color: #fa8282;
+  transition: 0.3s ease-out;
+  color: white;
 }

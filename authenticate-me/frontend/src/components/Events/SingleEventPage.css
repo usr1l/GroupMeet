@@ -44,7 +44,7 @@ div.event-page-header .icon-description-card-container {
 
 .event-page-icon-card-section {
   position: sticky;
-  top: 120px;
+  top: 110px;
 }
 
 .event-page-details {
@@ -85,7 +85,7 @@ h3 {
 }
 
 section.event-page-icon-card-section>.icon-description-card-container {
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
 
 .event-page-footer {
@@ -125,6 +125,17 @@ section.event-page-icon-card-section>.icon-description-card-container {
 .event-page-footertext {
   font-size: 14pt;
   font-weight: bold;
+}
+
+
+.event-page-footer-buttons {
+  display: flex;
+  flex-direction: row;
+  column-gap: 20px;
+}
+
+#event-edit-navlink {
+  all: unset;
 }
 
 @media screen and (max-width: 1150px) {
