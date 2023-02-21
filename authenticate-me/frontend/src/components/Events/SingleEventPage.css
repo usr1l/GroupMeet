@@ -42,11 +42,12 @@ div.event-page-header .icon-description-card-container {
 
 .event-page-container {
   background: rgba(0, 0, 0, 0.05);
+  position: relative;
 }
 
 .event-page-icon-card-section {
-  position: absolute;
-  right: 80px;
+  position: sticky;
+  top: 120px;
 }
 
 .event-page-details {
@@ -58,12 +59,28 @@ div.event-page-header .icon-description-card-container {
 .event-page-image {
   max-width: 660px;
   height: auto;
-  border: 1px solid black;
 }
 
 .event-page-image-container {
   background-color: white;
   width: 100%;
+  height: auto;
+  margin: 50px 0;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+}
+
+.event-page-content {
+  display: flex;
+  column-gap: 100px;
+  justify-content: center;
+}
+
+.event-page-sticky-div {
+  display: flex;
+  flex-direction: column;
+  margin-top: 40px;
 }
 
 .event-page-footer {
@@ -75,4 +92,8 @@ div.event-page-header .icon-description-card-container {
   height: 90px;
   /* font-size: 16pt; */
   background: white;
+}
+
+.event-page-info-item {
+  margin: 40px 0 100px 0;
 }

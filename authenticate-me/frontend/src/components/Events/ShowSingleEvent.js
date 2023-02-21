@@ -68,31 +68,36 @@ const SingleEventPage = ({ eventData }) => {
           />
         </div>
       </div>
-      <section className="event-page-icon-card-section">
-        <IconDescriptionCard
-          iconClass="fas fa-user-circle"
-          heading={groupName}
-          subHeading={groupType}
-        />
-        <div></div>
-        <div></div>
-      </section>
       <div className="event-page-container">
-        <div className="event-page-details">
-          <section className="event-page-image-container">
-            <img src={previewImage} alt='preview' className="event-page-image" />
-
-          </section>
-          <div className="event-page-info">
-            <h3>Details</h3>
-            <div className="event-page-info-item">{description}</div>
+        <div className="event-page-content">
+          <div className="event-page-details">
+            <section className="event-page-image-container">
+              <img src={previewImage} alt='preview' className="event-page-image" />
+            </section>
+            <div className="event-page-info">
+              <h3>Details</h3>
+              <div className="event-page-info-item">{description}</div>
+            </div>
+          </div>
+          <div className="event-page-sticky-div">
+            <section className="event-page-icon-card-section">
+              <IconDescriptionCard
+                iconClass="fas fa-user-circle"
+                heading={groupName}
+                subHeading={groupType}
+              />
+              <div></div>
+              <div></div>
+            </section>
           </div>
         </div>
         <div className="event-page-footer">
-          <div>
-            {startDate}
-            <br></br>
-            {name}
+          <div className="event-page-footer-container">
+            <div>
+              {startDate}
+              <br></br>
+              {name}
+            </div>
           </div>
           <div>
             {organizerBool && (

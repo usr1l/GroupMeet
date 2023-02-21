@@ -2,14 +2,13 @@
   height: 70px;
   align-items: center;
   font-size: 1.2rem;
-  position: fixed;
+  position: sticky;
   top: 0;
   border-bottom: lightgray 0.5px solid;
   padding: 0px 12px;
   box-sizing: border-box;
   z-index: 1;
   background-color: white;
-  overflow: unset;
   width: 100vw;
 }
 
