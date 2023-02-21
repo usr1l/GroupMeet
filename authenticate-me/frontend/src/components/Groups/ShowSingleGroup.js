@@ -34,6 +34,7 @@ const SingleGroupPage = ({ groupData }) => {
   }
 
   const organizerBool = organizerFn(user);
+
   // can still use group.private
 
   const handleDelete = async (e) => {
@@ -53,10 +54,19 @@ const SingleGroupPage = ({ groupData }) => {
 
   return (
     <>
+      <div className="group-page-header">
+        <h2 className="single-group-page-name">Name: {name}</h2>
+        <div className="group-page-host">
+          <i className="fas fa-user-circle navbar-button" id='profile-button' />
+          <div>
+            <div>Hosted By: </div>
+            <div>{user.firstName} {user.lastName[ 0 ]}.</div>
+          </div>
+        </div>
+      </div>
       <div className="single-group-page-container" id="single-group-page">
         <img src={previewImage} alt='preview' className="single-group-page-image"></img>
         <ul className="single-group-page-info">
-          <h2 className="single-group-page-name">Name: {name}</h2>
           <li className="single-group-page-about">About: {about}</li>
           <li className="single-group-page-type">Type: {type}</li>
           <li className="single-group-page-location">Location: {city}, {state}</li>
@@ -68,6 +78,9 @@ const SingleGroupPage = ({ groupData }) => {
             <NavLink to={`/groups/${groupId}/events/new`} className="single-group-page-create-event-btn">Create An Event</NavLink>
           </>
         )}
+      </div>
+      <div className="group-page-sticky">
+
       </div>
     </>
   )

@@ -1,57 +1,78 @@
-.event-page-container {
+#event-header-background {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  background-color: #f2f2f2;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0px 0px 10px #ccc;
+  position: relative;
+  max-width: 100vw;
+  height: 160px;
+  background: white;
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.25);
+  justify-content: center;
+  align-content: center;
+
+}
+
+.event-page-header {
+  width: 65%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 5px;
+}
+
+.event-page-header>h2 {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 800;
+  padding-left: 24px;
+  min-width: 500px;
+}
+
+.event-page-header {
+  /* mar */
+}
+
+div.event-page-header .icon-description-card {
+  padding: 0 0 0 24px;
+}
+
+div.event-page-header .icon-description-card-container {
+  height: 80px;
+  min-width: 500px;
+}
+
+.event-page-container {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.event-page-icon-card-section {
+  position: absolute;
+  right: 80px;
+}
+
+.event-page-details {
+  width: 700px;
+  height: auto;
+  justify-self: center;
 }
 
 .event-page-image {
-  width: 40%;
-  margin-right: 20px;
-  border-radius: 10px;
+  max-width: 660px;
+  height: auto;
+  border: 1px solid black;
 }
 
-.event-page-info {
-  list-style: none;
-  font-size: 1.2em;
-  font-weight: bold;
-  margin: 0;
-  padding: 0;
-}
-
-.event-page-info-item {
-  margin-bottom: 10px;
-}
-
-.event-page-edit-btn {
-  background-color: #0057e7;
-  color: #fff;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  text-decoration: none;
-  margin-right: 10px;
-  box-shadow: 0px 0px 10px #ccc;
-
-}
-
-.event-page-delete-btn {
-  background-color: #d93025;
-  color: #fff;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  box-shadow: 0px 0px 10px #ccc;
-
-}
-
-.event-page-description {
-  font-size: 1.2em;
-  margin-top: 20px;
-  padding: 10px;
+.event-page-image-container {
   background-color: white;
-  border-radius: 10px;
+  width: 100%;
+}
+
+.event-page-footer {
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  height: 90px;
+  /* font-size: 16pt; */
+  background: white;
 }
