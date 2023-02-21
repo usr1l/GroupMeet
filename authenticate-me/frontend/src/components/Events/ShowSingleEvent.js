@@ -5,6 +5,7 @@ import { thunkDeleteEvent, thunkLoadSingleEvent } from "../../store/events";
 import { useHistory } from "react-router-dom";
 import errorPageHandler from "../ErrorPage";
 import IconDescriptionCard from "../IconDescriptionCard";
+import Button from "../Button";
 import './SingleEventPage.css';
 
 
@@ -86,26 +87,34 @@ const SingleEventPage = ({ eventData }) => {
                 heading={groupName}
                 subHeading={groupType}
               />
-              <div></div>
-              <div></div>
+              <IconDescriptionCard
+                iconClass="fas fa-user-circle"
+                heading={groupName}
+                subHeading={groupType}
+              />
             </section>
           </div>
         </div>
+        <div></div>
         <div className="event-page-footer">
-          <div className="event-page-footer-container">
-            <div>
-              {startDate}
-              <br></br>
-              {name}
+          <div className="event-page-footer-buffer">
+            <div className="event-page-footer-container">
+              <div className="event-page-footertext">
+                {startDate}
+                <br></br>
+                {name}
+              </div>
+              <div>
+                {organizerBool && (
+                  <section>
+                    <Button onClick={(e) => e.preventDefault} >
+                      <NavLink to={`/events/${eventId}/edit`}>Edit</NavLink>
+                    </Button>
+                    <Button onClick={handleDelete}>Delete</Button>
+                  </section>
+                )}
+              </div>
             </div>
-          </div>
-          <div>
-            {organizerBool && (
-              <>
-                <NavLink to={`/events/${eventId}/edit`} className="event-page-edit-btn">Edit</NavLink>
-                <button onClick={handleDelete} className="event-page-delete-btn">Delete</button>
-              </>
-            )}
           </div>
         </div>
       </div>

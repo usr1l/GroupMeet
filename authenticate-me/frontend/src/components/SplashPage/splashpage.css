@@ -9,7 +9,6 @@ body {
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  /* box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, 0.2); */
   position: relative;
 }
 
@@ -26,9 +25,7 @@ h1 {
   flex-direction: column;
   color: rgb(10, 83, 83);
   font-size: 10pt;
-  /* position: relative; */
   max-width: 700px;
-  /* margin: 0px 40px 20px 0px; */
   box-sizing: border-box;
   justify-content: center;
 }
