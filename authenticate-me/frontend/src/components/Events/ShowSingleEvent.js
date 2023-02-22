@@ -25,12 +25,11 @@ const SingleEventPage = ({ eventData }) => {
 
   const event = useSelector(state => state.events.event);
   if (!event) return (<div>Not Found</div>);
-  const { name, startDate, type, groupId, description, previewImage } = event;
+  const { name, startDate, groupId, description, previewImage } = event;
   const groupType = event.Group.private === true ? 'Public group' : 'Private group';
   const groupName = event.Group.name;
 
   const history = useHistory();
-
 
   const group = useSelector(state => state.groups.groups[ groupId ]);
   const organizerId = group ? group.organizerId : null;

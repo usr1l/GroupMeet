@@ -4,7 +4,7 @@ import { useParams, NavLink } from "react-router-dom";
 import { thunkDeleteGroup, thunkLoadSingleGroup } from "../../store/groups";
 import { useHistory } from "react-router-dom";
 import errorPageHandler from "../ErrorPage";
-// import './SingleGroupPage.css'
+import ImagePreview from "../ImagePreview";
 
 const SingleGroupPage = ({ groupData }) => {
 
@@ -17,14 +17,13 @@ const SingleGroupPage = ({ groupData }) => {
 
   const { user } = useSelector(state => state.session);
 
-  // const groupState = useSelector(state => state.groups);
-  // if (groupState.status === true) return (<div>Loading...</div>);
   const group = useSelector(state => state.groups.group);
   if (Object.keys(group).length < 4) return (<div>Not Found</div>);
 
   const history = useHistory();
 
-  let { name, about, type, city, state, organizerId, previewImage } = group;
+  let { name, about, type, city, state, organizerId, previewImage, numMembers } = group;
+  const isPrivate = group.private === true ? 'Private' : 'Public';
 
   const organizerFn = () => {
     if (user) {
@@ -34,8 +33,6 @@ const SingleGroupPage = ({ groupData }) => {
   }
 
   const organizerBool = organizerFn(user);
-
-  // can still use group.private
 
   const handleDelete = async (e) => {
     e.preventDefault();
@@ -54,22 +51,30 @@ const SingleGroupPage = ({ groupData }) => {
 
   return (
     <>
-      <div className="group-page-header">
-        <h2 className="single-group-page-name">Name: {name}</h2>
-        <div className="group-page-host">
-          <i className="fas fa-user-circle navbar-button" id='profile-button' />
+      <div className="group-header-background">
+        <ImagePreview imgSrc={previewImage}></ImagePreview>
+        <div>
+          <h2 className="single-group-page-name">Name: {name}</h2>
           <div>
-            <div>Hosted By: </div>
-            <div>{user.firstName} {user.lastName[ 0 ]}.</div>
+            <div>
+              <text>{city}, {state}</text>
+            </div>
+            <div>
+              <text>{numMembers} Members, {isPrivate} Group</text>
+            </div>
+            <div>
+              <text>Organized by {}</text>
+            </div>
+            <text></text>
           </div>
+          <div></div>
         </div>
       </div>
       <div className="single-group-page-container" id="single-group-page">
-        <img src={previewImage} alt='preview' className="single-group-page-image"></img>
         <ul className="single-group-page-info">
           <li className="single-group-page-about">About: {about}</li>
           <li className="single-group-page-type">Type: {type}</li>
-          <li className="single-group-page-location">Location: {city}, {state}</li>
+
         </ul>
         {organizerBool && (
           <>
@@ -80,7 +85,6 @@ const SingleGroupPage = ({ groupData }) => {
         )}
       </div>
       <div className="group-page-sticky">
-
       </div>
     </>
   )
