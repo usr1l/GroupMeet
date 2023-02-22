@@ -133,7 +133,7 @@ const CreateEventForm = (event) => {
             value={capacity}
             onChange={(e) => setCapacity(e.target.value)} />
         </InputDiv>
-        <InputDiv divStyle="event-form__block" labelStyle="event-form__label" labelFor='startDate-Time' label='Start Date: '>
+        <InputDiv divStyle="date-time__block" labelStyle="event-form__label" labelFor='startDate-Time' label='Start Date: '>
           <input
             name='startDate-Time'
             type='date'
@@ -147,7 +147,7 @@ const CreateEventForm = (event) => {
             onChange={(e) => setStartTime(e.target.value + ':00')}
           />
         </InputDiv>
-        <InputDiv divStyle="event-form__block" labelStyle="event-form__label" labelFor='endDate-Time' label='End Date: '>
+        <InputDiv divStyle="date-time__block" labelStyle="event-form__label" labelFor='endDate-Time' label='End Date: '>
           <input
             name="endDate-Time"
             type='date'
@@ -180,7 +180,7 @@ const CreateEventForm = (event) => {
         </InputDiv>
         <div id='create-event-button-div'>
           <ImagePreview imgSrc={previewImage}></ImagePreview>
-          <Button type='submit' buttonStyle='btn--wide'>Create Event</Button>
+          <Button type='submit' buttonStyle='btn--delete' buttonSize='btn--large'>Create Event</Button>
         </div>
       </form>
     </div >

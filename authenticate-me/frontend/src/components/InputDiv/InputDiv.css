@@ -19,3 +19,29 @@
   display: flex;
   flex-direction: row;
 }
+
+.date-time__block {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin: 5px 0;
+}
+
+.date-time__block>label {
+  width: 100px;
+}
+
+
+.date-time__block>input {
+  height: 29px;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: 'Poppins', sans-serif;
+  border-radius: 6px;
+  transition: 0.5s;
+  border-bottom: 1px solid #f65858;
+  width: 150px;
+}
