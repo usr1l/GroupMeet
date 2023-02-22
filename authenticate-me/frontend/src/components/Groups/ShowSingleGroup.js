@@ -57,15 +57,17 @@ const SingleGroupPage = ({ groupData }) => {
           <h2 className="single-group-page-name">Name: {name}</h2>
           <div>
             <div>
+              <i class="fa-solid fa-location-dot"></i>
               <text>{city}, {state}</text>
             </div>
             <div>
+              <i class="fa-solid fa-user-group"></i>
               <text>{numMembers} Members, {isPrivate} Group</text>
             </div>
             <div>
-              <text>Organized by {}</text>
+              <i class="fa-solid fa-user-large"></i>
+              <text>Organized by User {user.id}</text>
             </div>
-            <text></text>
           </div>
           <div></div>
         </div>

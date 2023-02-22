@@ -122,7 +122,7 @@ form#group-form {
 #create-group-button-div {
   display: flex;
   margin-top: 25px;
-  height: 40px;
+  height: 49px;
   justify-content: space-between;
   width: 100%;
 }
