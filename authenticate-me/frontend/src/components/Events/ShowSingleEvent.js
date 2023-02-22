@@ -62,8 +62,7 @@ const SingleEventPage = ({ eventData }) => {
         <div className="event-page-header">
           <h2>{name}</h2>
           <IconDescriptionCard
-            iconClass="fas fa-user-circle navbar-button"
-            iconId='profile-button'
+            iconClass="fas fa-user-circle"
             heading='Hosted By'
             subHeading={`${user.firstName} ${user.lastName[ 0 ]}.`}
           />
@@ -107,9 +106,9 @@ const SingleEventPage = ({ eventData }) => {
               <div>
                 {organizerBool && (
                   <section className="event-page-footer-buttons">
-                    <Button buttonStyle='btn--big' buttonSize='btn--large' onClick={(e) => e.preventDefault} >
-                      <NavLink to={`/events/${eventId}/edit`} id='event-edit-navlink'>Edit</NavLink>
-                    </Button>
+                    <NavLink to={`/events/${eventId}/edit`} id='event-edit-navlink'>
+                      <Button buttonStyle='btn--big' buttonSize='btn--large' onClick={(e) => e.preventDefault} >Edit</Button>
+                    </NavLink>
                     <Button buttonStyle='btn--delete' buttonSize='btn--large' onClick={handleDelete}>Delete</Button>
                   </section>
                 )}
