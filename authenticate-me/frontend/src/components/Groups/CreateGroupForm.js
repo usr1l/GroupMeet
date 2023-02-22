@@ -158,7 +158,7 @@ const CreateGroupForm = () => {
         </InputDiv>
         <div id='create-group-button-div'>
           <ImagePreview imgSrc={previewImage}></ImagePreview>
-          <Button type='submit' buttonStyle='btn--wide'>Create Group</Button>
+          <Button type='submit' buttonStyle='btn--delete' buttonSize='btn--large'>Create Group</Button>
         </div>
       </form>
     </div>

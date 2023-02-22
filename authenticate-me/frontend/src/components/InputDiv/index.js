@@ -1,8 +1,8 @@
 import React from 'react';
 import './InputDiv.css';
 
-const divSTYLES = [ "group-form__block" ];
-const labelSTYLES = [ "group-form__label" ];
+const divSTYLES = [ "group-form__block", "event-form__block", "date-time__block" ];
+const labelSTYLES = [ "group-form__label", "event-form__label" ];
 const extraSTYLES = [ "group-form__private" ];
 
 const InputDiv = ({
