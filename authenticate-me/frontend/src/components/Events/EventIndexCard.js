@@ -1,6 +1,5 @@
 import React from "react";
-import { NavLink, Link, Route } from "react-router-dom";
-import SingleEventPage from "./ShowSingleEvent";
+import { Link } from "react-router-dom";
 // import './EventsPage.css';
 
 

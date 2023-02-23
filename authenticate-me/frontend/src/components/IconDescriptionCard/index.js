@@ -10,7 +10,7 @@ const IconDescriptionCard = ({
 }) => {
 
   const STYLES = [ '' ];
-  const checkDivStyle = STYLES.includes(style) ? style : STYLES[ 0 ];
+  // const checkDivStyle = STYLES.includes(style) ? style : STYLES[ 0 ];
 
   return (
     <div className="icon-description-card-container">

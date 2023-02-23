@@ -38,24 +38,28 @@ function App() {
   const sessionUser = useSelector(state => state.session.user);
 
   return (
-    <div>
+    <>
       <Navigation isLoaded={isLoaded} />
       {isLoaded && (
-        <Switch>
-          <Route exact path='/' component={sessionUser ? HomePage : SplashPage} />
-          <Route path='/groups/new' component={CreateGroupForm} />
-          <Route path='/messages' component={MessagesPage} />
-          <Route path='/notifications' component={NotificationPage} />
-          {/* <Route path='/groups/:groupId/events/new' component={CreateEventForm} />
+        <>
+          <Switch>
+            <Route exact path={[ '/', '/events', '/groups' ]} component={sessionUser ? HomePage : SplashPage} />
+            <Route exact path='/events' component={AllEventsPage} />
+            <Route exact path='/groups' component={AllGroupsPage} />
+            <Route path='/groups/new' component={CreateGroupForm} />
+            <Route path='/messages' component={MessagesPage} />
+            <Route path='/notifications' component={NotificationPage} />
+            <Route path='/groups/:groupId/events/new' component={CreateEventForm} />
             <Route path='/events/:eventId/edit' component={EditEventPage} />
-            <Route path='/groups/:groupId/edit' component={EditGroupPage} /> */}
-          {/* <Route path='/events/:eventId' component={SingleEventPage} /> */}
-          {/* <Route path='/groups/:groupId' component={SingleGroupPage} /> */}
-          {/* <Route component={NotFoundPage} /> */}
-        </Switch>
+            <Route path='/groups/:groupId/edit' component={EditGroupPage} />
+            <Route path='/events/:eventId' component={SingleEventPage} />
+            <Route path='/groups/:groupId' component={SingleGroupPage} />
+            <Route component={NotFoundPage} />
+          </Switch>
+        </>
       )}
       {/* <footer></footer> */}
-    </div>
+    </>
   );
 }
 
