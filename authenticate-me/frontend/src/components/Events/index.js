@@ -9,7 +9,7 @@ const AllEventsPage = () => {
   const events = Object.values(eventsObj);
 
   return (
-    <section className="events-page">
+    <div className="events-page">
       <ul className="events-index-container">
         {
           events.map((event) => {
@@ -19,7 +19,8 @@ const AllEventsPage = () => {
           })
         }
       </ul>
-    </section >
+
+    </div >
   );
 };
 

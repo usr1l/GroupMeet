@@ -1,8 +1,8 @@
 import React from 'react';
 import './ImagePreview.css';
 
-const wrapperSTYLES = [ '' ];
-const imgSTYLES = [ '' ];
+const wrapperSTYLES = [ '', 'group-page-header-image-container' ];
+const imgSTYLES = [ '', "group-page-header-image" ];
 
 const ImagePreview = ({
   imgWrapperStyle,

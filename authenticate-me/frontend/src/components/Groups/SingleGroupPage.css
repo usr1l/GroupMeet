@@ -1,57 +1,7 @@
-.single-group-page-container {
-  width: 80%;
-  background-color: #f2f2f2;
-  padding: 20px;
-  margin: auto;
-  text-align: center;
-  border-radius: 10px;
-  box-shadow: 0px 0px 10px #ccc;
+.group-header-background {
   display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-.single-group-page-name {
-  font-size: 2em;
-  font-weight: bold;
-  margin-bottom: 20px;
-  text-align: left;
-  width: 60%;
-  margin-left: 20px;
-}
-
-.single-group-page-image {
-  width: 40%;
-  border-radius: 10px;
-  margin-bottom: 20px;
-  box-shadow: 0px 0px 10px #ccc;
-}
-
-.single-group-page-info {
-  list-style: none;
-  font-size: 1.2em;
-  font-weight: bold;
-  margin: 0;
-  padding: 0;
-  text-align: left;
-  width: 100%;
-}
-
-
-.single-group-page-edit-btn,
-.single-group-page-delete-btn {
-  background-color: #4267b2;
-  color: #fff;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  margin-left: 10px;
-}
-
-.single-group-page-edit-btn {
-  margin-right: 10px;
-}
-
-.single-group-page-delete-btn {
-  background-color: #d93025;
+  flex-direction: row;
+  height: auto;
+  justify-content: center;
+  background: white;
 }

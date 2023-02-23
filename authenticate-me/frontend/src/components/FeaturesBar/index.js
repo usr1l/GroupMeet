@@ -4,13 +4,6 @@ import './features-bar.css';
 
 
 const FeaturesBar = () => {
-  const [ selectedFeaturesBarItem, setSelectedFeaturesBarItem ] = useState('fb-events-button');
-
-  function handleClick(e) {
-    const currId = e.target.id;
-    if (e.target.id !== selectedFeaturesBarItem)
-      setSelectedFeaturesBarItem(`${currId}`)
-  };
 
   return (
     <div className='features-bar'>

@@ -5,10 +5,13 @@ import { thunkDeleteGroup, thunkLoadSingleGroup } from "../../store/groups";
 import { useHistory } from "react-router-dom";
 import errorPageHandler from "../ErrorPage";
 import ImagePreview from "../ImagePreview";
+import NotFoundPage from "../NotFoundPage";
+import "./SingleGroupPage.css";
 
 const SingleGroupPage = ({ groupData }) => {
 
   const { groupId } = useParams();
+  if (isNaN(parseInt(groupId))) return (<NotFoundPage />)
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -52,7 +55,7 @@ const SingleGroupPage = ({ groupData }) => {
   return (
     <>
       <div className="group-header-background">
-        <ImagePreview imgSrc={previewImage}></ImagePreview>
+        <ImagePreview imgWrapperStyle="group-page-header-image-container" imgClassName='group-page-header-image' imgSrc={previewImage}></ImagePreview>
         <div>
           <h2 className="single-group-page-name">Name: {name}</h2>
           <div>
@@ -72,6 +75,7 @@ const SingleGroupPage = ({ groupData }) => {
           <div></div>
         </div>
       </div>
+      <nav></nav>
       <div className="single-group-page-container" id="single-group-page">
         <ul className="single-group-page-info">
           <li className="single-group-page-about">About: {about}</li>
