@@ -1,6 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import EventIndexCard from "./EventIndexCard";
+import FeaturesBar from "../FeaturesBar";
 // import './EventsPage.css';
 
 const AllEventsPage = () => {
@@ -10,6 +11,7 @@ const AllEventsPage = () => {
 
   return (
     <div className="events-page">
+      <FeaturesBar />
       <ul className="events-index-container">
         {
           events.map((event) => {

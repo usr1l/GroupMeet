@@ -1,7 +1,8 @@
 import React from "react";
 import { useSelector } from "react-redux";
-// import { thunkLoadGroups } from "../../store/groups";
+import FeaturesBar from "../FeaturesBar";
 import GroupIndexCard from "./GroupIndexCard";
+
 // import './GroupsPage.css'
 
 const AllGroupsPage = () => {
@@ -10,7 +11,8 @@ const AllGroupsPage = () => {
   const groups = Object.values(groupsObj);
 
   return (
-    <section className="events-page">
+    <div className="events-page">
+      <FeaturesBar />
       <ul className="events-index-container">
         {
           groups.map((group) => (
@@ -18,7 +20,7 @@ const AllGroupsPage = () => {
           ))
         }
       </ul>
-    </section>
+    </div>
   );
 };
 

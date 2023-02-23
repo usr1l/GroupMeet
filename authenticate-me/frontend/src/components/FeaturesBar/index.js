@@ -8,10 +8,14 @@ const FeaturesBar = () => {
   return (
     <div className='features-bar'>
       <NavLink to='/events'>
-        Events
+        <div className="features-bar-component">
+          Events
+        </div>
       </NavLink>
       <NavLink to='/groups'>
-        Groups
+        <div className="features-bar-component">
+          Groups
+        </div>
       </NavLink>
     </div>
   )

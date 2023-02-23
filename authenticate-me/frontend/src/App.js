@@ -10,7 +10,6 @@ import NotificationPage from "./components/Notifications";
 import NotFoundPage from "./components/NotFoundPage";
 import HomePage from "./components/HomePage";
 import MessagesPage from "./components/Messages";
-// import FeaturesBar from "./components/FeaturesBar";
 import CreateEventForm from './components/Events/CreateEventForm';
 import CreateGroupForm from './components/Groups/CreateGroupForm';
 import EditEventPage from "./components/Events/EditEvent";
@@ -20,7 +19,6 @@ import SingleGroupPage from "./components/Groups/ShowSingleGroup";
 import { thunkLoadEvents } from "./store/events";
 import { thunkLoadGroups } from "./store/groups";
 import SplashPage from "./components/SplashPage";
-// import FeaturesBar from "./components/FeaturesBar";
 
 
 function App() {
@@ -43,7 +41,7 @@ function App() {
       {isLoaded && (
         <>
           <Switch>
-            <Route exact path={[ '/', '/events', '/groups' ]} component={sessionUser ? HomePage : SplashPage} />
+            <Route exact path='/' component={sessionUser ? HomePage : SplashPage} />
             <Route exact path='/events' component={AllEventsPage} />
             <Route exact path='/groups' component={AllGroupsPage} />
             <Route path='/groups/new' component={CreateGroupForm} />
@@ -58,7 +56,6 @@ function App() {
           </Switch>
         </>
       )}
-      {/* <footer></footer> */}
     </>
   );
 }
