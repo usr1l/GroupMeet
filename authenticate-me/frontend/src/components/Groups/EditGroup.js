@@ -159,7 +159,7 @@ const EditGroupPage = () => {
         </InputDiv>
         <div id='create-group-button-div'>
           <ImagePreview imgSrc={previewImage}></ImagePreview>
-          <Button type='submit' buttonStyle='btn--wide'>Done</Button>
+          <Button type='submit' buttonStyle='btn--wide'>Update</Button>
         </div>
       </form>
     </div>

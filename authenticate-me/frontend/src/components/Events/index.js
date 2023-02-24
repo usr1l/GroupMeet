@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import EventIndexCard from "./EventIndexCard";
 import FeaturesBar from "../FeaturesBar";
-// import './EventsPage.css';
+import './EventsPage.css';
 
 const AllEventsPage = () => {
 
@@ -10,18 +10,19 @@ const AllEventsPage = () => {
   const events = Object.values(eventsObj);
 
   return (
-    <div className="events-page">
+    <div className="events-index-page">
       <FeaturesBar />
-      <ul className="events-index-container">
-        {
-          events.map((event) => {
-            return (
-              <EventIndexCard event={event} />
-            )
-          })
-        }
-      </ul>
-
+      <div className="events-index-page-wrapper">
+        <div className="events-index-container">
+          {
+            events.map((event) => {
+              return (
+                <EventIndexCard event={event} />
+              )
+            })
+          }
+        </div>
+      </div>
     </div >
   );
 };

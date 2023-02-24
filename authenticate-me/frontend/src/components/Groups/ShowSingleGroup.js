@@ -75,7 +75,7 @@ const SingleGroupPage = ({ groupData }) => {
           <div></div>
         </div>
       </div>
-      <nav></nav>
+      {/* <nav></nav> */}
       <div className="single-group-page-container" id="single-group-page">
         <ul className="single-group-page-info">
           <li className="single-group-page-about">About: {about}</li>

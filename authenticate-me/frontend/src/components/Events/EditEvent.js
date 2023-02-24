@@ -187,7 +187,7 @@ const EditEventPage = () => {
         </InputDiv>
         <div id='create-event-button-div'>
           <ImagePreview imgSrc={previewImage}></ImagePreview>
-          <Button type='submit' buttonStyle='btn--delete' buttonSize='btn--large'>Create Event</Button>
+          <Button type='submit' buttonStyle='btn--delete' buttonSize='btn--large'>Update</Button>
         </div>
       </form>
     </div >
