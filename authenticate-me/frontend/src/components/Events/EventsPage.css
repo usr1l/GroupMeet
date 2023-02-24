@@ -35,3 +35,61 @@ a:active {
 #num-attending {
   color: gray;
 }
+
+h2.event-index-card-item {
+  font-size: 1rem;
+  font-weight: 500;
+  margin: 0;
+}
+
+
+div.events-index-container {
+  /* width: 1000px; */
+  display: flex;
+  flex-direction: column;
+  background: white;
+  width: 600px;
+}
+
+div.event-index-cards-click {
+  height: 170px;
+  padding: 10px 0 20px;
+  width: 600px;
+  display: flex;
+  background: white;
+  box-sizing: border-box;
+  border-bottom: 1px solid lightgray;
+}
+
+
+div.event-index-card-component,
+ul.event-index-card-component {
+  padding: 0;
+  margin: 0 0 0 35px;
+
+}
+
+.event-index-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+}
+
+
+.event-index-card,
+h2.event-index-card-item,
+li.event-index-card-item {
+  list-style: none;
+  color: black;
+  width: 400px;
+  line-height: 24px;
+}
+
+
+div.event-index-card-component {
+  display: inherit;
+  justify-content: space-between;
+  flex-direction: row;
+  color: gray
+}

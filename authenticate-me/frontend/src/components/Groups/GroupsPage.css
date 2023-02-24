@@ -1,48 +1,91 @@
-.group-index-cards-click {
-  all: unset;
-  cursor: pointer;
+div.groups-index-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 70px;
+}
+
+div.groups-index-page-wrapper {
+  display: flex;
+  /* justify-content: center; */
+  width: 800px;
+}
+
+li.group-index-card-item {
+  list-style: none;
+  font-size: 1rem;
+  font-weight: 400;
+  color: lightslategray;
+}
+
+#group-index-card-item-about {
+  width: 440px;
+  height: 54px;
+  white-space: pre-wrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 10pt;
+}
+
+#group-index-card-component-bottom {
   display: flex;
   flex-direction: row;
-  text-decoration: none;
+  align-items: center;
+  font-size: 12pt;
+  width: 160px;
+  justify-content: space-between;
+}
+
+i.fa-solid.fa-circle {
+  font-size: 3pt;
+
+}
+
+div.group-index-cards-click {
+  height: 200px;
+  padding: 10px 0 20px;
+  width: 700px;
+  display: flex;
+  background: white;
+  box-sizing: border-box;
+  border-bottom: 1px solid lightgray;
+}
+
+h2.group-index-card-item {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: black;
+  margin: 0;
+}
+
+div.groups-index-container {
+  /* width: 1000px; */
+  display: flex;
+  flex-direction: column;
+  background: white;
+  width: 700px;
 }
 
 .group-index-card {
   display: flex;
-  flex-direction: row;
-  align-items: center;
-  background-color: #fff;
-  padding: 20px;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-left: 30px;
+}
 
-  /* changed border radius to only have a bottom border */
-  border-bottom: 1px solid #ccc;
-  /* added a bottom border */
-  margin-bottom: 20px;
+ul.group-index-card-component {
+  padding: 10px 0 0 0;
+  margin: 0;
 }
 
 .group-index-card-component {
-
-  text-decoration: none;
-  color: inherit;
-  flex: 1;
-  list-style: none;
+  color: gray;
 }
 
-.group-index-image {
-  width: 80px;
-  height: 80px;
+#group-index-card-item-location {
+  color: #877457;
+  font-size: 1rem;
+  font-weight: 500;
+  margin: 0;
 
-  margin-right: 20px;
-  object-fit: cover;
-  /* list-style: none; */
-}
-
-.group-index-card-item {
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 10px;
-}
-
-.group-index-card-components-wrapper {
-  display: flex;
-  direction: row;
 }

@@ -2,8 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import FeaturesBar from "../FeaturesBar";
 import GroupIndexCard from "./GroupIndexCard";
-
-// import './GroupsPage.css'
+import './GroupsPage.css'
 
 const AllGroupsPage = () => {
 
@@ -11,16 +10,18 @@ const AllGroupsPage = () => {
   const groups = Object.values(groupsObj);
 
   return (
-    <div className="events-page">
+    <div className="groups-index-page">
       <FeaturesBar />
-      <ul className="events-index-container">
-        {
-          groups.map((group) => (
-            <GroupIndexCard group={group} />
-          ))
-        }
-      </ul>
-    </div>
+      <div className="groups-index-page-wrapper">
+        <div className="groups-index-container">
+          {
+            groups.map((group) => (
+              <GroupIndexCard group={group} />
+            ))
+          }
+        </div>
+      </div>
+    </div >
   );
 };
 
