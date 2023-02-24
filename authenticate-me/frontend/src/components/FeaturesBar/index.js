@@ -1,25 +1,24 @@
-import React, { useState } from "react";
+import React from "react";
 import { NavLink } from "react-router-dom";
 import './features-bar.css';
 
 
 const FeaturesBar = () => {
-  const [ selectedFeaturesBarItem, setSelectedFeaturesBarItem ] = useState('fb-events-button');
-
-  function handleClick(e) {
-    const currId = e.target.id;
-    if (e.target.id !== selectedFeaturesBarItem)
-      setSelectedFeaturesBarItem(`${currId}`)
-  };
 
   return (
-    <div className='features-bar'>
-      <NavLink to='/events'>
-        Events
-      </NavLink>
-      <NavLink to='/groups'>
-        Groups
-      </NavLink>
+    <div className="features-header">
+      <div className='features-bar'>
+        <NavLink to='/events' className='features-bar-navlink' activeClassName="features-bar-navlink-active events-navlink">
+          <div className="features-bar-component">
+            Events
+          </div>
+        </NavLink>
+        <NavLink to='/groups' className='features-bar-navlink' activeClassName="features-bar-navlink-active groups-navlink">
+          <div className="features-bar-component">
+            Groups
+          </div>
+        </NavLink>
+      </div>
     </div>
   )
 };

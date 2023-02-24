@@ -1,57 +1,95 @@
-.event-index-cards-click {
-  all: unset;
-  cursor: pointer;
+div.events-index-page {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 70px;
+}
+
+div.events-index-page-wrapper {
+  display: flex;
+  /* justify-content: center; */
+  width: 800px;
+}
+
+li.event-index-card-item:not(#event-index-card-item-startDate) {
+  font-size: 1rem;
+  font-weight: 400;
+  color: lightslategray;
+}
+
+a:link,
+a:visited,
+a:hover,
+a:active {
   text-decoration: none;
 }
 
-.event-index-image {
-  width: 100%;
-  border-radius: 10px 10px 0 0;
+#event-index-card-item-startDate {
+  color: #877457;
+  font-size: 1rem;
+  font-weight: 500;
+  margin: 0;
+  padding-top: 10px;
 }
 
-.event-index-card-component {
+#num-attending {
+  color: gray;
+}
+
+h2.event-index-card-item {
+  font-size: 1rem;
+  font-weight: 500;
+  margin: 0;
+}
+
+
+div.events-index-container {
+  /* width: 1000px; */
   display: flex;
   flex-direction: column;
-  justify-content: left;
-  width: 100%;
-  padding: 20px;
+  background: white;
+  width: 600px;
 }
 
-.event-index-card-item {
-  font-size: 18px;
-  margin-bottom: 10px;
-  list-style: none;
-}
-
-.events-index-container {
-  list-style: none;
+div.event-index-cards-click {
+  height: 170px;
+  padding: 10px 0 20px;
+  width: 600px;
   display: flex;
-  flex-direction: column;
-  border: 2px;
-  margin: 20px;
-  max-width: 800px;
-
+  background: white;
+  box-sizing: border-box;
+  border-bottom: 1px solid lightgray;
 }
 
-.event-index-image {
-  height: 200px;
+
+div.event-index-card-component,
+ul.event-index-card-component {
+  padding: 0;
+  margin: 0 0 0 35px;
+
 }
 
 .event-index-card {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  background-color: #fff;
-  padding: 20px;
-  border-bottom: 1px solid #ccc;
-  box-shadow: none;
-  margin: 20px;
+  justify-content: space-between;
+
 }
 
-.events-page {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+
+.event-index-card,
+h2.event-index-card-item,
+li.event-index-card-item {
+  list-style: none;
+  color: black;
+  width: 400px;
+  line-height: 24px;
+}
+
+
+div.event-index-card-component {
+  display: inherit;
+  justify-content: space-between;
+  flex-direction: row;
+  color: gray
 }

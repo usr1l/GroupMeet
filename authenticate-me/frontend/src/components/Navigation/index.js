@@ -10,10 +10,10 @@ import './Navigation.css';
 
 
 function Navigation({ isLoaded }) {
-  const [ click, setClick ] = useState(false);
+  // const [ click, setClick ] = useState(false);
   const [ button, setButton ] = useState(true);
 
-  const handleClick = () => setClick(!click);
+  // const handleClick = () => setClick(!click);
   const showButton = () => {
     if (window.innerWidth <= 650) {
       setButton(false);
@@ -29,11 +29,9 @@ function Navigation({ isLoaded }) {
 
   window.addEventListener('resize', showButton);
 
-  let hide = '';
   let divClassName = 'nav-buttons-wrapper';
   const sessionUser = useSelector(state => state.session.user);
   if (!sessionUser) {
-    hide = ' hidden';
     divClassName = 'hide-nav-items';
   }
 

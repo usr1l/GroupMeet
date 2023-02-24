@@ -1,25 +1,33 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
-// import './EventsPage.css';
+import { Link } from "react-router-dom";
+import ImagePreview from "../ImagePreview";
+import convertDate from "../HelperFns/ConvertDate";
+import './EventsPage.css';
 
 
 function EventIndexCard({ event }) {
-  const { id, name, type, previewImage, startDate, numAttending } = event;
-
+  const { id, name, type, previewImage, startDate, numAttending, Group } = event;
+  const newDate = convertDate(startDate);
   return (
-    <li key={`${name}-${id}`} className='event-index-card'>
-      <NavLink to={`/events/${id}`} className='event-index-cards-click'>
-        <img src={previewImage} alt='preview' className='event-index-card-component event-index-image' />
-        <ul className='event-index-card-component'>
-          <h1 className='event-index-card-item'>{name}</h1>
-          <li className='event-index-card-item'>{startDate}</li>
-          <li className='event-index-card-item'>Type: {type}</li>
-          <li className='event-index-card-item' id='num-attending'>{numAttending} Attendees</li>
-        </ul>
-      </NavLink>
-    </li>
+    <Link to={`/events/${id}`}>
+      <div className='event-index-cards-click'>
+        <ImagePreview imgSrc={previewImage} imgWrapperStyle='event-index-card-image-container' imgClassName='event-index-card-image' />
+        <div key={`${name}-${id}`} className='event-index-card'>
+          <ul className='event-index-card-component'>
+            <li className='event-index-card-item' id='event-index-card-item-startDate'>{newDate}</li>
+            <h2 className='event-index-card-item'>{name}</h2>
+            <li className='event-index-card-item'>{Group.state}, {Group.city}</li>
+          </ul>
+          <div className='event-index-card-component'>
+            <div className='event-index-card-item' id='num-attending'>{numAttending} Attendees</div>
+            <div className='event-index-card-item'>
+              <div>{type}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Link>
   )
-
 };
 
 

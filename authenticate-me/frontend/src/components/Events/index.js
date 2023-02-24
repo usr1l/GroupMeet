@@ -1,7 +1,8 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import EventIndexCard from "./EventIndexCard";
-// import './EventsPage.css';
+import FeaturesBar from "../FeaturesBar";
+import './EventsPage.css';
 
 const AllEventsPage = () => {
 
@@ -9,17 +10,20 @@ const AllEventsPage = () => {
   const events = Object.values(eventsObj);
 
   return (
-    <section className="events-page">
-      <ul className="events-index-container">
-        {
-          events.map((event) => {
-            return (
-              <EventIndexCard event={event} />
-            )
-          })
-        }
-      </ul>
-    </section >
+    <div className="events-index-page">
+      <FeaturesBar />
+      <div className="events-index-page-wrapper">
+        <div className="events-index-container">
+          {
+            events.map((event) => {
+              return (
+                <EventIndexCard event={event} />
+              )
+            })
+          }
+        </div>
+      </div>
+    </div >
   );
 };
 

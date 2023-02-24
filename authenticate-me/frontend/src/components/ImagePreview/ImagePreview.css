@@ -11,3 +11,51 @@
   justify-content: center;
   border-radius: 4px;
 }
+
+.group-page-header-image-container {
+  width: 600px;
+  height: 338px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.group-page-header-image {
+  max-width: 600px;
+  max-height: 338px;
+}
+
+
+.event-index-card-image-container {
+  width: 160px;
+  height: 100px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 22px;
+  padding-top: 22px;
+}
+
+.event-index-card-image {
+  max-height: 100px;
+  max-width: 160px;
+}
+
+
+
+.group-index-card-image-container {
+  width: 178px;
+  height: 100px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 22px;
+  padding-top: 22px;
+}
+
+.group-index-card-image {
+  max-width: 178px;
+  max-height: 100px;
+}

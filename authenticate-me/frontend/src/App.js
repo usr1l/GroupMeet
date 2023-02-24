@@ -10,7 +10,6 @@ import NotificationPage from "./components/Notifications";
 import NotFoundPage from "./components/NotFoundPage";
 import HomePage from "./components/HomePage";
 import MessagesPage from "./components/Messages";
-// import FeaturesBar from "./components/FeaturesBar";
 import CreateEventForm from './components/Events/CreateEventForm';
 import CreateGroupForm from './components/Groups/CreateGroupForm';
 import EditEventPage from "./components/Events/EditEvent";
@@ -41,32 +40,22 @@ function App() {
       <Navigation isLoaded={isLoaded} />
       {isLoaded && (
         <>
-          {/* {sessionUser ? <FeaturesBar /> : null} */}
           <Switch>
-            <Route exact path={'/'} component={sessionUser ? HomePage : SplashPage} />
-            {sessionUser && (
-              <Route exact path={'/groups/new'} component={CreateGroupForm} />
-            )}
-            <Route exact path={'/events'} component={AllEventsPage} />
-            <Route exact path={'/groups'} component={AllGroupsPage} />
-            <Route exact path={'/messages'} component={MessagesPage} />
-            <Route exact path={'/notifications'} component={NotificationPage} />
-            {sessionUser && (
-              <Route exact path={'/groups/:groupId/events/new'} component={CreateEventForm} />
-            )}
-            <Route exact path={'/events/:eventId'} component={SingleEventPage} />
-            <Route exact path={'/groups/:groupId'} component={SingleGroupPage} />
-            {sessionUser && (
-              <>
-                <Route exact path={'/events/:eventId/edit'} component={EditEventPage} />
-                <Route exact path={'/groups/:groupId/edit'} component={EditGroupPage} />
-              </>
-            )}
+            <Route exact path='/' component={sessionUser ? HomePage : SplashPage} />
+            <Route exact path='/events' component={AllEventsPage} />
+            <Route exact path='/groups' component={AllGroupsPage} />
+            <Route path='/groups/new' component={CreateGroupForm} />
+            <Route path='/messages' component={MessagesPage} />
+            <Route path='/notifications' component={NotificationPage} />
+            <Route path='/groups/:groupId/events/new' component={CreateEventForm} />
+            <Route path='/events/:eventId/edit' component={EditEventPage} />
+            <Route path='/groups/:groupId/edit' component={EditGroupPage} />
+            <Route path='/events/:eventId' component={SingleEventPage} />
+            <Route path='/groups/:groupId' component={SingleGroupPage} />
             <Route component={NotFoundPage} />
           </Switch>
         </>
       )}
-      {/* <footer></footer> */}
     </>
   );
 }

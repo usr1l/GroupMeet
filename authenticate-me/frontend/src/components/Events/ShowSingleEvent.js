@@ -6,12 +6,14 @@ import { useHistory } from "react-router-dom";
 import errorPageHandler from "../ErrorPage";
 import IconDescriptionCard from "../IconDescriptionCard";
 import Button from "../Button";
+import NotFoundPage from "../NotFoundPage";
 import './SingleEventPage.css';
 
 
 const SingleEventPage = ({ eventData }) => {
 
   const { eventId } = useParams();
+  if (isNaN(parseInt(eventId))) return (<NotFoundPage />)
   const dispatch = useDispatch();
 
   useEffect(() => {

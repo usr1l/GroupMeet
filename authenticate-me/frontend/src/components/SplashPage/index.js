@@ -38,17 +38,17 @@ const SplashPage = () => {
       </div>
       <div id="content-images">
         <div>
-          <img src={friends} className='content-row-image'></img>
+          <img src={friends} className='content-row-image' alt={'preview'}></img>
           <br></br>
           Make new friends.
         </div>
         <div>
-          <img src={outdoors} className='content-row-image'></img>
+          <img src={outdoors} className='content-row-image' alt={'preview'}></img>
           <br></br>
           Explore the outdoors.
         </div>
         <div>
-          <img src={connect} className='content-row-image'></img>
+          <img src={connect} className='content-row-image' alt={'preview'}></img>
           <br></br>
           Connect over tech.
         </div>

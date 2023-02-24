@@ -91,7 +91,7 @@ const EditEventPage = () => {
 
   return (
     <div id='create-event-page'>
-      <h2 id="event-form__title">CREATE AN EVENT</h2>
+      <h2 className='edit-form' id="event-form__title">EDIT AN EVENT</h2>
       <ul id='event-form__error-list'>
         {!!errors.length && (
           <div>
@@ -187,7 +187,7 @@ const EditEventPage = () => {
         </InputDiv>
         <div id='create-event-button-div'>
           <ImagePreview imgSrc={previewImage}></ImagePreview>
-          <Button type='submit' buttonStyle='btn--delete' buttonSize='btn--large'>Create Event</Button>
+          <Button type='submit' buttonStyle='btn--delete' buttonSize='btn--large'>Update</Button>
         </div>
       </form>
     </div >
