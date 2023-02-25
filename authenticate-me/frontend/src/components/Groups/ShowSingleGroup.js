@@ -72,9 +72,11 @@ const SingleGroupPage = ({ groupData }) => {
             <div id='group-page-description-card-bottom'>
               {/* <i id='group-index-card-component-bottom-share' class="fa-regular fa-share-from-square"></i>
               <div className='group-index-card-item'>{window.location.href}</div> */}
-              <Link to={`/groups/${groupId}/events/new`}>
-                <Button onClick={(e) => e.preventDefault} buttonStyle='btn--delete'>Create Event</Button>
-              </Link>
+              {organizerBool && (
+                <Link to={`/groups/${groupId}/events/new`}>
+                  <Button onClick={(e) => e.preventDefault} buttonStyle='btn--delete'>Create Event</Button>
+                </Link>
+              )}
             </div>
           </div>
         </div>
