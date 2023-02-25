@@ -67,6 +67,7 @@ h2#single-group-page-name {
   display: flex;
   align-items: center;
   margin-right: 10px;
+  flex-direction: row;
 }
 
 .single-group-page-navbar-functions {
@@ -77,7 +78,15 @@ h2#single-group-page-name {
 }
 
 .single-group-page-navbar-item {
-  font-size: 14pt;
+  font-size: 16px;
+  letter-spacing: 1px;
+  font-weight: 400;
+  margin-right: 35px;
+  color: black;
+}
+
+.group-navbar-navlink-active {
+  color: #008294;
 }
 
 #group-page-description-card-bottom {
@@ -94,7 +103,6 @@ h2#single-group-page-name {
 
 .group-property-page-wrapper {
   width: 1100px;
-  padding-top: 40px;
   display: flex;
   flex-direction: row;
 }
@@ -105,11 +113,12 @@ h2#single-group-page-name {
   line-height: 26px;
   letter-spacing: 1px;
   font-weight: 300;
+  padding-top: 40px;
 }
 
 .group-property-page-section {
   width: 310px;
-  padding-left: 40px;
+  padding: 40px 0 0 40px;
 }
 
 .group-property-page-section-header {
@@ -117,4 +126,9 @@ h2#single-group-page-name {
   font-weight: 400;
   margin-bottom: 0;
   padding-left: 24px;
+}
+
+.single-group-page-navbar {
+  display: flex;
+  flex-direction: row;
 }

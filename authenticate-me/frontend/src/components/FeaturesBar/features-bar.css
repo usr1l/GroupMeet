@@ -40,9 +40,6 @@ div.features-bar-component {
   color: #008294;
 }
 
-.group-navbar-navlink-active {
-  color: #008294;
-}
 
 .features-bar-navlink-active::after {
   content: "";

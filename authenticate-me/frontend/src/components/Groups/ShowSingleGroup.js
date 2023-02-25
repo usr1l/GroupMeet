@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useParams, Link, NavLink } from "react-router-dom";
+import { useParams, Link, NavLink, Switch, Route } from "react-router-dom";
 import { thunkDeleteGroup, thunkLoadSingleGroup } from "../../store/groups";
 import { useHistory } from "react-router-dom";
 import errorPageHandler from "../ErrorPage";
@@ -8,7 +8,8 @@ import ImagePreview from "../ImagePreview";
 import NotFoundPage from "../NotFoundPage";
 import IconLabel from "../IconLabel";
 import Button from "../Button";
-import IconDescriptionCard from '../IconDescriptionCard';
+import EventsList from "../Events/EventsList";
+import GroupAboutPage from "./GroupAboutPage";
 import "./SingleGroupPage.css";
 
 const SingleGroupPage = ({ groupData }) => {
@@ -23,6 +24,8 @@ const SingleGroupPage = ({ groupData }) => {
 
   const { user } = useSelector(state => state.session);
   const group = useSelector(state => state.groups.group);
+  const eventsObj = useSelector(state => state.events.events);
+  const events = Object.values(eventsObj);
 
   if (Object.keys(group).length < 4) return (<div>Not Found</div>);
 
@@ -85,8 +88,11 @@ const SingleGroupPage = ({ groupData }) => {
         <div className="single-group-page-navbar-container">
           <div className="single-group-page-navbar-wrapper">
             <div className="single-group-page-navbar">
-              <NavLink to={`/groups/${groupId}`} activeClassName='group-navbar-navlink-active '>
-                <div className="single-group-page-navbar-item">About</div>
+              <NavLink to={`/groups/${groupId}`} className="single-group-page-navbar-item" activeClassName='group-navbar-navlink-active'>
+                About
+              </NavLink>
+              <NavLink to={`/groups/${groupId}/events`} className="single-group-page-navbar-item" activeClassName='group-navbar-navlink-active'>
+                Events
               </NavLink>
             </div>
           </div>
@@ -104,18 +110,14 @@ const SingleGroupPage = ({ groupData }) => {
       </div>
       <div className="group-property-page-container">
         <div className="group-property-page-wrapper">
-          <div className="group-propery-page-element">
-            {about}
-          </div>
-          <section className="group-property-page-section">
-            <div className="group-property-page-section-header">Organizer</div>
-            <IconDescriptionCard
-              style='group-page-oragnizer-element'
-              iconClass="fas fa-user-circle"
-              heading='Hosted By'
-              subHeading={`${user.firstName} ${user.lastName[ 0 ]}.`}
-            />
-          </section>
+          <Switch>
+            <Route exact path={`/groups/${groupId}/events`}>
+              <EventsList events={events} />
+            </Route>
+            <Route path={`/groups/${groupId}`}>
+              <GroupAboutPage about={about} user={user} />
+            </Route>
+          </Switch>
         </div>
       </div>
     </>
