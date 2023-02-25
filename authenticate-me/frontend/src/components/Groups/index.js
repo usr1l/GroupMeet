@@ -2,6 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import FeaturesBar from "../FeaturesBar";
 import GroupIndexCard from "./GroupIndexCard";
+import GroupsList from "./GroupsList";
 import './GroupsPage.css'
 
 const AllGroupsPage = () => {
@@ -12,16 +13,8 @@ const AllGroupsPage = () => {
   return (
     <div className="groups-index-page">
       <FeaturesBar />
-      <div className="groups-index-page-wrapper">
-        <div className="groups-index-container">
-          {
-            groups.map((group) => (
-              <GroupIndexCard group={group} />
-            ))
-          }
-        </div>
-      </div>
-    </div >
+      <GroupsList groups={groups} />
+    </div>
   );
 };
 
