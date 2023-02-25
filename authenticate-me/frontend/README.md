@@ -7,6 +7,31 @@ Register today: https://aa-meetup-api-project.onrender.com/
 
 GitHub Repo: https://github.com/usr1l/project1
 
+## Technologies Used
+
+### Languages
+
+- JavaScript
+- HTML
+- CSS
+- DBML
+
+### Frameworks
+- React
+- Express
+
+### Libraries
+- Redux
+
+### Databases
+- SQLite3
+- PostgreSQL
+
+### Tools
+- Postman
+- GitHub
+- Visual Studio Code
+
 
 ## Features
 ### Groups
@@ -113,31 +138,6 @@ store = {
 };
 
 ```
-
-## Technologies Used
-
-### Languages
-
-- JavaScript
-- HTML
-- CSS
-- DBML
-
-### Frameworks
-- React
-- Express
-
-### Libraries
-- Redux
-
-### Databases
-- SQLite3
-- PostgreSQL
-
-### Tools
-- Postman
-- GitHub
-- Visual Studio Code
 
 ## To-Do's
 - Venue creation for events.
