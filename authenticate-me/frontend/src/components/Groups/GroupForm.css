@@ -32,9 +32,9 @@ form#group-form {
   content: "";
   position: absolute;
   height: 4px;
-  width: 132px;
+  width: 145px;
   background: linear-gradient(90deg, #95ebf7, #f7ab9d, #f7c893, #acd1b2);
-  margin: 51px 0 0 0;
+  margin: 42px 0 0 0;
 }
 
 #group-form__error-list {
@@ -128,5 +128,5 @@ form#group-form {
 }
 
 #group-form__title.edit-form::before {
-  width: 80px;
+  width: 83px;
 }
