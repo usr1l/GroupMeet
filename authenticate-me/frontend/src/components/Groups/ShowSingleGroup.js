@@ -7,8 +7,9 @@ import errorPageHandler from "../ErrorPage";
 import ImagePreview from "../ImagePreview";
 import NotFoundPage from "../NotFoundPage";
 import IconLabel from "../IconLabel";
-import "./SingleGroupPage.css";
 import Button from "../Button";
+import IconDescriptionCard from '../IconDescriptionCard';
+import "./SingleGroupPage.css";
 
 const SingleGroupPage = ({ groupData }) => {
 
@@ -102,7 +103,15 @@ const SingleGroupPage = ({ groupData }) => {
           <div className="group-propery-page-element">
             {about}
           </div>
-          <section className="group-property-page-section"></section>
+          <section className="group-property-page-section">
+            <div className="group-property-page-section-header">Organizer</div>
+            <IconDescriptionCard
+              style='group-page-oragnizer-element'
+              iconClass="fas fa-user-circle"
+              heading='Hosted By'
+              subHeading={`${user.firstName} ${user.lastName[ 0 ]}.`}
+            />
+          </section>
         </div>
       </div>
     </>

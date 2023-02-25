@@ -16,7 +16,8 @@ body {
 h1 {
   text-align: center;
   color: black;
-  font-size: 45pt;
+  font-size: 40pt;
+  font-weight: 600;
 
 }
 
@@ -40,7 +41,7 @@ h1 {
   display: flex;
   flex-direction: row;
   box-sizing: border-box;
-  margin-top: 45px;
+  margin-top: 55px;
   margin-bottom: 20px;
 }
 
@@ -56,6 +57,10 @@ h1 {
   margin-bottom: 20px;
 }
 
+#content-images>div>img {
+  margin-bottom: 5px;
+}
+
 #content-images>div {
   align-items: center;
   justify-content: center;
@@ -66,10 +71,13 @@ h1 {
   width: 330px;
   box-sizing: border-box;
   color: rgb(10, 83, 83);
+  letter-spacing: 1px;
 }
 
-.content>text {
-  font-size: 16pt;
+#content-welcome>text {
+  font-size: 14pt;
+  line-height: 26px;
+  letter-spacing: 1px;
   width: 450px;
 }
 
