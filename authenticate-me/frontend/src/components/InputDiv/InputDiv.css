@@ -1,10 +1,11 @@
 .input-div {
   display: flex;
   flex-direction: column;
+  margin-bottom: 7px;
 }
 
 .group-form__label {
-  margin: 4px 0 1px;
+  margin: 0;
   height: 22px;
   box-sizing: border-box;
 }
@@ -44,4 +45,62 @@
   transition: 0.5s;
   border-bottom: 1px solid #f65858;
   width: 150px;
+}
+
+.event-form__block:not(.event-form__private) {
+  width: 460px;
+}
+
+.event-form__block.event-form__private>label {
+  margin: 0;
+}
+
+.event-form__block.event-form__private {
+  margin: 15px 0 0 0;
+  width: 300px;
+  align-items: center;
+  justify-content: space-evenly;
+  box-sizing: border-box;
+
+}
+
+
+.event-form__block>select {
+  height: 29px;
+  box-sizing: border-box;
+  border: none;
+  outline: none;
+  font-family: 'Poppins', sans-serif;
+  background: transparent;
+  border-bottom: 1px solid #f65858;
+  border-radius: 6px;
+  transition: 0.5s;
+}
+
+.event-form__block>input {
+  height: 29px;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: 'Poppins', sans-serif;
+  border-radius: 6px;
+  transition: 0.5s;
+  border-bottom: 1px solid #f65858;
+  box-sizing: border-box;
+}
+
+
+.event-form__block>select:focus,
+#description:focus,
+.event-form__block>input:focus {
+  background: white;
+  transition: 0.5s;
+  border: 1px solid #f65858;
+}
+
+.event-form__block>select:hover,
+#description:hover,
+.event-form__block>input:hover {
+  background: white;
+  transition: 0.5s;
 }

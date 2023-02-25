@@ -32,9 +32,9 @@ form#event-form {
   content: "";
   position: absolute;
   height: 4px;
-  width: 132px;
+  width: 145px;
   background: linear-gradient(90deg, #95ebf7, #f7ab9d, #f7c893, #acd1b2);
-  margin: 51px 0 0 0;
+  margin: 42px 0 0 0;
 }
 
 #event-form__error-list {
@@ -47,63 +47,6 @@ form#event-form {
   color: #f65858;
 }
 
-.event-form__block:not(.event-form__private) {
-  width: 460px;
-}
-
-.event-form__block.event-form__private>label {
-  margin: 0;
-}
-
-.event-form__block.event-form__private {
-  margin: 15px 0 0 0;
-  width: 300px;
-  align-items: center;
-  justify-content: space-evenly;
-  box-sizing: border-box;
-
-}
-
-
-.event-form__block>select {
-  height: 29px;
-  box-sizing: border-box;
-  border: none;
-  outline: none;
-  font-family: 'Poppins', sans-serif;
-  background: transparent;
-  border-bottom: 1px solid #f65858;
-  border-radius: 6px;
-  transition: 0.5s;
-}
-
-.event-form__block>input {
-  height: 29px;
-  border: none;
-  outline: none;
-  background: transparent;
-  font-family: 'Poppins', sans-serif;
-  border-radius: 6px;
-  transition: 0.5s;
-  border-bottom: 1px solid #f65858;
-  box-sizing: border-box;
-}
-
-
-.event-form__block>select:focus,
-#description:focus,
-.event-form__block>input:focus {
-  background: white;
-  transition: 0.5s;
-  border: 1px solid #f65858;
-}
-
-.event-form__block>select:hover,
-#description:hover,
-.event-form__block>input:hover {
-  background: white;
-  transition: 0.5s;
-}
 
 #description {
   height: 75px;
@@ -129,5 +72,5 @@ form#event-form {
 }
 
 #event-form__title.edit-form::before {
-  width: 80px;
+  width: 83px;
 }
