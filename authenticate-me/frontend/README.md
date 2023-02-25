@@ -1,76 +1,152 @@
+# GroupMeet
+GroupMeet is the go-to place for people looking to meet new people, or engage with their community. Whether you're looking to connect with others, join a group of interest, or attend an event, GroupMeet provides it all.
 
-# Create React App Template
+Your next great adventure is just a click away.
 
-A no-frills template from which to create React applications with
-[Create React App](https://github.com/facebook/create-react-app).
+Register today: https://aa-meetup-api-project.onrender.com/
 
-```sh
-npx create-react-app my-app --template @appacademy/simple --use-npm
+GitHub Repo: https://github.com/usr1l/project1
+
+## Technologies Used
+
+### Languages
+
+- JavaScript
+- HTML
+- CSS
+- DBML
+
+### Frameworks
+- React
+- Express
+
+### Libraries
+- Redux
+
+### Databases
+- SQLite3
+- PostgreSQL
+
+### Tools
+- Postman
+- GitHub
+- Visual Studio Code
+
+
+## Features
+### Groups
+Create, edit or delete a group that you are hosting.
+
+View all groups.
+
+![This is an image](../../README/assets/groups1.png)
+
+![This is an image](../../README/assets/groups2.png)
+### Events
+Create, edit or delete events your group is hosting.
+
+View all events.
+
+![This is an image](../../README/assets/events1.png)
+
+![This is an image](../../README/assets/events2.png)
+## React Components
+
+- Button
+- ErrorPage
+- Events Pages
+- Features Bar
+- Groups Pages
+- Homepage
+- Icon Description Card
+- Icon Label
+- Image Preview
+- Input Div
+- Login Form
+- Navigation Bar
+- Open Modal Button
+- Preview Card
+- Signup Form Modal
+- Splash Page
+
+## Database Schema
+
+![This is an image](../../README/assets/meetup_dbdiagram.png)
+
+## Frontend Routes
+
+- /groups
+- /events
+- /groups/new
+- /events/new
+- /groups/:groupid
+- /events/:eventId
+- /groups/:groupid/edit
+- /events/:eventId/edit
+
+## API Routes
+
+[Link to API Routes](../../README/assets/API-docs-Meetup.md)
+
+## Redux Store Tree
+```
+store = {
+  session: {},
+  groups: {
+    allGroups: {
+      [groupId]: {
+        groupData,
+      },
+      optionalOrderedList: [],
+    },
+    singleGroup: {
+      groupData,
+      GroupImages: [imagesData],
+      Organizer: {
+        organizerData,
+      },
+      Venues: [venuesData],
+    },
+  },
+  events: {
+    allEvents: {
+      [eventId]: {
+        eventData,
+        Group: {
+          groupData,
+        },
+        Venue: {
+          venueData,
+        },
+      },
+    },
+    singleEvent: {
+      eventData,
+      Group: {
+        groupData,
+      },
+      // Note that venue here will have more information than venue did in the all events slice. (Refer API Docs for more info)
+      Venue: {
+        venueData,
+      },
+      EventImages: [imagesData],
+      // To be completed
+      Members: [membersData],
+      Attendees: [attendeeData],
+    },
+  },
+};
+
 ```
 
-## Available Scripts
+## To-Do's
+- Venue creation for events.
+- Membership and Attendance status and update.
+- Sort events by groups.
+- Search feature.
+- Upload image files.
+- User profile page.
 
-In the project directory, you can run:
 
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Other Files and Links
+- [Link to Kanban cards](../../README/assets/Kanban-cards-Meetup.md)
