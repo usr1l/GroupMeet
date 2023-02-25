@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, NavLink } from "react-router-dom";
 import { thunkDeleteGroup, thunkLoadSingleGroup } from "../../store/groups";
 import { useHistory } from "react-router-dom";
 import errorPageHandler from "../ErrorPage";
@@ -28,7 +28,7 @@ const SingleGroupPage = ({ groupData }) => {
 
   const history = useHistory();
 
-  let { name, about, type, city, state, organizerId, previewImage, numMembers, Organizer } = group;
+  let { name, about, city, state, organizerId, previewImage, numMembers, Organizer } = group;
   const isPrivate = group.private === true ? 'Private' : 'Public';
 
   const organizerFn = () => {
@@ -85,14 +85,16 @@ const SingleGroupPage = ({ groupData }) => {
         <div className="single-group-page-navbar-container">
           <div className="single-group-page-navbar-wrapper">
             <div className="single-group-page-navbar">
-              <div className="single-group-page-navbar-item">About</div>
+              <NavLink to={`/groups/${groupId}`} activeClassName='group-navbar-navlink-active '>
+                <div className="single-group-page-navbar-item">About</div>
+              </NavLink>
             </div>
           </div>
           <div className="single-group-page-navbar-functions">
             {organizerBool && (
               <>
-                <Link to={`/groups/${groupId}/edit`} className="single-group-page-edit-btn">
-                  <Button buttonStyle='btn--big' buttonSize='btn--large' onClick={(e) => e.preventDefault} >Edit</Button>
+                <Link to={`/groups/${groupId}/edit`}>
+                  <Button buttonStyle='btn--big' buttonSize='btn--large' onClick={(e) => e.preventDefault}>Edit</Button>
                 </Link>
                 <Button buttonStyle='btn--delete' buttonSize='btn--large' onClick={handleDelete}>Delete</Button>
               </>
