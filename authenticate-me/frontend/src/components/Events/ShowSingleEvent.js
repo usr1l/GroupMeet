@@ -28,7 +28,7 @@ const SingleEventPage = ({ eventData }) => {
 
   const event = useSelector(state => state.events.event);
   if (!event) return (<div>Not Found</div>);
-  const { name, startDate, groupId, description, previewImage } = event;
+  const { name, startDate, endDate, groupId, description, previewImage } = event;
   const groupType = event.Group.private === true ? 'Public group' : 'Private group';
   const groupName = event.Group.name;
 
@@ -46,12 +46,19 @@ const SingleEventPage = ({ eventData }) => {
 
   const organizerBool = organizerFn(user);
 
-  let newDate;
-  let newTime
+  let startDateSlice;
+  let startTimeSlice;
+  let endDateSlice;
+  let endTimeSlice;
   if (startDate) {
-    newDate = convertDate(startDate);
-    newTime = startDate.slice(10);
-  }
+    startDateSlice = convertDate(startDate);
+    startTimeSlice = startDate.slice(10);
+  };
+
+  if (endDate) {
+    endDateSlice = convertDate(endDate);
+    endTimeSlice = endDate.slice(10);
+  };
 
   const handleDelete = async (e) => {
     e.preventDefault();
@@ -96,9 +103,9 @@ const SingleEventPage = ({ eventData }) => {
                 subHeading={groupType}
               />
               <IconDescriptionCard
-                iconClass="fas fa-user-circle"
-                heading={groupName}
-                subHeading={groupType}
+                iconClass="fa-regular fa-clock"
+                heading={`${startDateSlice} ${startTimeSlice} TO`}
+                subHeading={`${endDateSlice} ${endTimeSlice}`}
               />
             </section>
           </div>
@@ -108,7 +115,7 @@ const SingleEventPage = ({ eventData }) => {
           <div className="event-page-footer-buffer">
             <div className="event-page-footer-container">
               <div className="event-page-footertext">
-                {`${newDate} ${newTime}`}
+                {`${startDateSlice} ${startTimeSlice}`}
                 <br></br>
                 {name}
               </div>
