@@ -21,8 +21,8 @@ const SingleGroupPage = ({ groupData }) => {
   }, [ dispatch, groupId ]);
 
   const { user } = useSelector(state => state.session);
-
   const group = useSelector(state => state.groups.group);
+
   if (Object.keys(group).length < 4) return (<div>Not Found</div>);
 
   const history = useHistory();
@@ -97,7 +97,14 @@ const SingleGroupPage = ({ groupData }) => {
           </div>
         </div>
       </div>
-      <div className="single-group-page-item">{about}</div>
+      <div className="group-property-page-container">
+        <div className="group-property-page-wrapper">
+          <div className="group-propery-page-element">
+            {about}
+          </div>
+          <section className="group-property-page-section"></section>
+        </div>
+      </div>
     </>
   )
 }

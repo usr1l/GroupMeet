@@ -26,11 +26,11 @@ div.features-bar {
 }
 
 div.features-bar-component {
-  width: 95px;
+  width: 80px;
   display: inherit;
   align-items: inherit;
   justify-content: left;
-  font-size: 1.6rem;
+  font-size: 20px;
   line-height: 1.75rem;
   font-weight: 500;
   text-decoration: none;
@@ -44,11 +44,11 @@ div.features-bar-component {
   content: "";
   position: absolute;
   height: 4px;
-  width: 75px;
+  width: 63px;
   background: #008294;
-  margin-top: 5px;
+  margin-top: 2px;
 }
 
 .features-bar-navlink-active.groups-navlink::after {
-  width: 84px;
+  width: 70px;
 }

@@ -20,8 +20,8 @@
 
 .event-page-header>h2 {
   margin: 0;
-  font-size: 1.8rem;
-  font-weight: 800;
+  font-size: 30px;
+  font-weight: 700;
   padding-left: 24px;
   min-width: 500px;
 }
@@ -72,7 +72,8 @@ div.event-page-header .icon-description-card-container {
 }
 
 h3 {
-  font-size: 20pt;
+  font-size: 18pt;
+  font-weight: 500;
 }
 
 .event-page-sticky-div {
@@ -99,8 +100,11 @@ section.event-page-icon-card-section>.icon-description-card-container {
 
 .event-page-info-item {
   margin: 20px 0 80px 0;
-  font-size: 13pt;
-  line-height: 27px;
+  font-size: 11pt;
+  line-height: 26px;
+  letter-spacing: 1px;
+  font-weight: 300;
+
 }
 
 .event-page-footer-buffer {
@@ -120,8 +124,10 @@ section.event-page-icon-card-section>.icon-description-card-container {
 }
 
 .event-page-footertext {
-  font-size: 14pt;
-  font-weight: bold;
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: 1px;
+  line-height: 26px;
 }
 
 

@@ -8,6 +8,7 @@ import IconDescriptionCard from "../IconDescriptionCard";
 import Button from "../Button";
 import NotFoundPage from "../NotFoundPage";
 import './SingleEventPage.css';
+import convertDate from '../HelperFns/ConvertDate';
 
 
 const SingleEventPage = ({ eventData }) => {
@@ -44,6 +45,13 @@ const SingleEventPage = ({ eventData }) => {
   };
 
   const organizerBool = organizerFn(user);
+
+  let newDate;
+  let newTime
+  if (startDate) {
+    newDate = convertDate(startDate);
+    newTime = startDate.slice(10);
+  }
 
   const handleDelete = async (e) => {
     e.preventDefault();
@@ -100,7 +108,7 @@ const SingleEventPage = ({ eventData }) => {
           <div className="event-page-footer-buffer">
             <div className="event-page-footer-container">
               <div className="event-page-footertext">
-                {startDate}
+                {`${newDate} ${newTime}`}
                 <br></br>
                 {name}
               </div>

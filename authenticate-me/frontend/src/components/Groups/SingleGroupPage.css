@@ -32,7 +32,7 @@
 h2#single-group-page-name {
   margin: 0 0 30px 0;
   font-size: 32px;
-  padding-top: 26px;
+  padding-top: 32px;
   width: 310px;
 }
 
@@ -80,4 +80,22 @@ h2#single-group-page-name {
 
 #group-page-description-card-bottom {
   display: flex;
+}
+
+.group-property-page-container {
+  width: 100vw;
+  height: auto;
+  display: flex;
+  justify-content: center;
+}
+
+.group-property-page-wrapper {
+  width: 1100px;
+  padding-top: 40px;
+}
+
+.group-propery-page-element {
+  width: 660px;
+  line-height: 24px;
+  font-weight: 300;
 }
