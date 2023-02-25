@@ -12,5 +12,14 @@
   /* font-size: 14pt; */
   height: 28px;
   width: 28px;
-  font-weight: 0;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-right: 1px;
+
+}
+
+.icon-label-item-text {
+  font-size: 14px;
+  color: #212121;
 }

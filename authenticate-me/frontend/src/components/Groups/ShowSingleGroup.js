@@ -64,7 +64,7 @@ const SingleGroupPage = ({ groupData }) => {
               <h2 id="single-group-page-name">{name}</h2>
               <div>
                 <IconLabel iconClass={"fa-solid fa-location-dot"} labelText={`${city}, ${state}`} />
-                <IconLabel iconClass={"fa-solid fa-user-group"} labelText={`${numMembers} Members, ${isPrivate} Group`} />
+                <IconLabel iconClass={"fa-solid fa-user-group"} labelText={`${numMembers} Members • ${isPrivate} Group`} />
                 <IconLabel iconClass={"fa-solid fa-user-large"} labelText={`Organized by ${Organizer.firstName} ${Organizer.lastName}`} />
               </div>
             </div>
