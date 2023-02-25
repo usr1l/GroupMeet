@@ -1,0 +1,16 @@
+.icon-label-component {
+  line-height: 28px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+
+
+.icon-label-item-image-container {
+  /* font-size: 14pt; */
+  height: 28px;
+  width: 28px;
+  font-weight: 0;
+}

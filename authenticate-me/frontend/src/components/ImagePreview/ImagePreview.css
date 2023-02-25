@@ -13,16 +13,18 @@
 }
 
 .group-page-header-image-container {
-  width: 600px;
+  width: 660px;
   height: 338px;
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-right: 10px;
 }
 
 .group-page-header-image {
-  max-width: 600px;
+  max-width: 660px;
   max-height: 338px;
+  border-radius: 1rem;
 }
 
 

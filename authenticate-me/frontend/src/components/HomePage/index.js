@@ -1,13 +1,14 @@
 import React from "react";
 import FeaturesBar from "../FeaturesBar";
+import './HomePage.css';
 
 const HomePage = () => {
 
   return (
     <>
       <FeaturesBar />
-      <div>
-        render this text
+      <div id='homepage-welcome'>
+        Welcome to GroupMeet!
       </div>
     </>
   )
