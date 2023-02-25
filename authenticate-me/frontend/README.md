@@ -54,8 +54,14 @@ View all events.
 
 - Button
 - ErrorPage
+- Events About Page
+- Events Index Card
+- Events List
 - Events Pages
 - Features Bar
+- Groups About Page
+- Groups Index Card
+- Groups List
 - Groups Pages
 - Homepage
 - Icon Description Card
