@@ -12,7 +12,7 @@
 .icon-description-card {
   display: flex;
   width: 300px;
-  height: 56px;
+  height: 50px;
   justify-content: flex-start;
   align-self: center;
   padding: 24px;
@@ -20,10 +20,10 @@
 
 i.icon-description-card-element {
   display: flex;
-  align-self: center;
-  justify-self: center;
-  height: 48px;
-  width: 48px;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  width: 50px;
   font-size: 36pt;
 }
 
@@ -33,14 +33,21 @@ div.icon-description-card-element {
   flex-direction: column;
   justify-content: center;
   margin-left: 15px;
+  row-gap: 8px;
+  letter-spacing: 1px;
 }
 
 div.icon-description-card-element-heading {
-  font-weight: 500;
-  font-size: .875rem;
+  font-size: 14px;
+  font-weight: 400;
 }
 
 div.icon-description-card-element-subheading {
-  font-size: .875rem;
+  font-size: 14px;
   color: grey;
+  font-weight: 400;
+}
+
+#group-page-oragnizer-element {
+  background: transparent;
 }

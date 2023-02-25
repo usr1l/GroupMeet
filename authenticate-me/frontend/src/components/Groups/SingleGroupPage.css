@@ -1,7 +1,120 @@
 .group-header-background {
+  background: white;
+  display: flex;
+  height: 380px;
+  width: 100vw;
+  justify-content: center;
+  border-bottom: 1px solid lightgray;
+}
+
+.group-header {
   display: flex;
   flex-direction: row;
-  height: auto;
-  justify-content: center;
+  height: 380px;
+  justify-content: start;
+  align-items: center;
+  width: 1100px;
+}
+
+.group-page-description-card-container {
+  display: flex;
+  flex-direction: column;
+  align-self: flex-start;
+  padding-left: 30px;
+  justify-content: space-between;
+  width: 310px;
+}
+
+.group-page-description-card {
+  height: 305px;
+}
+
+h2#single-group-page-name {
+  margin: 0 0 30px 0;
+  font-size: 32px;
+  padding-top: 32px;
+  width: 310px;
+}
+
+#single-group-page-item-type {
+  font-size: 14pt;
+  color: gray;
+}
+
+.single-group-page-navbar-background {
+  width: 100vw;
   background: white;
+  display: flex;
+  flex-direction: row;
+  height: 80px;
+  justify-content: center;
+  border-bottom: 1px solid lightgray;
+  position: sticky;
+  top: 70px;
+}
+
+.single-group-page-navbar-container {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  align-items: center;
+  width: 1100px;
+}
+
+.single-group-page-navbar-wrapper {
+  width: 660px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+}
+
+.single-group-page-navbar-functions {
+  padding-left: 30px;
+  display: flex;
+  width: 340px;
+  column-gap: 20px;
+}
+
+.single-group-page-navbar-item {
+  font-size: 14pt;
+}
+
+#group-page-description-card-bottom {
+  display: flex;
+}
+
+.group-property-page-container {
+  width: 100vw;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 70px;
+}
+
+.group-property-page-wrapper {
+  width: 1100px;
+  padding-top: 40px;
+  display: flex;
+  flex-direction: row;
+}
+
+.group-propery-page-element {
+  width: 660px;
+  font-size: 11pt;
+  line-height: 26px;
+  letter-spacing: 1px;
+  font-weight: 300;
+}
+
+.group-property-page-section {
+  width: 310px;
+  padding-left: 40px;
+}
+
+.group-property-page-section-header {
+  font-size: 20px;
+  font-weight: 400;
+  margin-bottom: 0;
+  padding-left: 24px;
 }

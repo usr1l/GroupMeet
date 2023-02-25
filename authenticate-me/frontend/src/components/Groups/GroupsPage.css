@@ -20,19 +20,20 @@ li.group-index-card-item {
 
 #group-index-card-item-about {
   width: 440px;
-  height: 54px;
-  white-space: pre-wrap;
+  height: 40px;
+  /* white-space: pre-wrap; */
   overflow: hidden;
+  font-size: 14px;
+  line-height: 20px;
   text-overflow: ellipsis;
-  font-size: 10pt;
 }
 
 #group-index-card-component-bottom {
   display: flex;
   flex-direction: row;
   align-items: center;
-  font-size: 12pt;
-  width: 160px;
+  font-size: 11pt;
+  width: 155px;
   justify-content: space-between;
 }
 
@@ -52,10 +53,11 @@ div.group-index-cards-click {
 }
 
 h2.group-index-card-item {
-  font-size: 1.4rem;
-  font-weight: 700;
+  font-size: 1.3rem;
+  font-weight: 500;
   color: black;
   margin: 0;
+  margin-bottom: 8px;
 }
 
 div.groups-index-container {
@@ -84,8 +86,8 @@ ul.group-index-card-component {
 
 #group-index-card-item-location {
   color: #877457;
-  font-size: 1rem;
-  font-weight: 500;
+  font-size: 14px;
+  font-weight: 400;
   margin: 0;
 
 }

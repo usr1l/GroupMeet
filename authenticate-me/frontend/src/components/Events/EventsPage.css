@@ -12,7 +12,7 @@ div.events-index-page-wrapper {
 }
 
 li.event-index-card-item:not(#event-index-card-item-startDate) {
-  font-size: 1rem;
+  font-size: 14px;
   font-weight: 400;
   color: lightslategray;
 }
@@ -26,10 +26,10 @@ a:active {
 
 #event-index-card-item-startDate {
   color: #877457;
-  font-size: 1rem;
+  font-size: 14px;
   font-weight: 500;
   margin: 0;
-  padding-top: 10px;
+  padding-top: 15px;
 }
 
 #num-attending {
@@ -37,7 +37,7 @@ a:active {
 }
 
 h2.event-index-card-item {
-  font-size: 1rem;
+  font-size: 16px;
   font-weight: 500;
   margin: 0;
 }
@@ -91,5 +91,6 @@ div.event-index-card-component {
   display: inherit;
   justify-content: space-between;
   flex-direction: row;
-  color: gray
+  color: gray;
+  font-size: 14px;
 }

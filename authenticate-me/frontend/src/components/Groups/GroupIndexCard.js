@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import ImagePreview from "../ImagePreview";
-// import './GroupsPage.css';
+import './GroupsPage.css';
 
 
 function GroupIndexCard({ group }) {

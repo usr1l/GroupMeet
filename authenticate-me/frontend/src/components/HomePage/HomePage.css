@@ -1,0 +1,9 @@
+#homepage-welcome {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  padding-top: 180px;
+  font-size: 30pt;
+  font-weight: 600;
+}
