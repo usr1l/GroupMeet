@@ -47,18 +47,16 @@ const SingleEventPage = ({ eventData }) => {
   const organizerBool = organizerFn(user);
 
   let startDateSlice;
-  let startTimeSlice;
   let endDateSlice;
-  let endTimeSlice;
   if (startDate) {
     startDateSlice = convertDate(startDate);
-    startTimeSlice = startDate.slice(10);
   };
 
   if (endDate) {
     endDateSlice = convertDate(endDate);
-    endTimeSlice = endDate.slice(10);
   };
+
+  console.log(endDateSlice, startDateSlice)
 
   const handleDelete = async (e) => {
     e.preventDefault();
@@ -104,8 +102,8 @@ const SingleEventPage = ({ eventData }) => {
               />
               <IconDescriptionCard
                 iconClass="fa-regular fa-clock"
-                heading={`${startDateSlice} ${startTimeSlice} TO`}
-                subHeading={`${endDateSlice} ${endTimeSlice}`}
+                heading={`${startDateSlice} TO`}
+                subHeading={`${endDateSlice}`}
               />
             </section>
           </div>
@@ -115,7 +113,7 @@ const SingleEventPage = ({ eventData }) => {
           <div className="event-page-footer-buffer">
             <div className="event-page-footer-container">
               <div className="event-page-footertext">
-                {`${startDateSlice} ${startTimeSlice}`}
+                {`${startDateSlice}`}
                 <br></br>
                 {name}
               </div>

@@ -14,7 +14,7 @@ function EventIndexCard({ event }) {
         <ImagePreview imgSrc={previewImage} imgWrapperStyle='event-index-card-image-container' imgClassName='event-index-card-image' />
         <div key={`${name}-${id}`} className='event-index-card'>
           <ul className='event-index-card-component'>
-            <li className='event-index-card-item' id='event-index-card-item-startDate'>{`${newDate} ${startDate.slice(10)}`}</li>
+            <li className='event-index-card-item' id='event-index-card-item-startDate'>{`${newDate}`}</li>
             <h2 className='event-index-card-item'>{name}</h2>
             <li className='event-index-card-item'>{Group.state}, {Group.city}</li>
           </ul>

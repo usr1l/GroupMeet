@@ -1,33 +1,24 @@
-const convertDate = (date) => {
-  const months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December"
-  ];
+function convertDate(date) {
 
-  const numbers = [ '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12' ];
-  const year = date.slice(0, 4);
-  let month = date.slice(5, 7);
-  const day = date.slice(8, 10);
+  const newDate = new Date(date.slice(0, 10));
+  const newDateTime = date.slice(10);
 
+  let dateTimeHour = parseInt(newDateTime.slice(0, 3));
+  const dateTimeMinSec = newDateTime.slice(3);
+  const ampm = (dateTimeHour >= 12) ? 'PM' : 'AM';
 
-  for (let i in numbers) {
-    if (numbers[ i ] === month) {
-      month = months[ i ];
-    };
+  if (dateTimeHour === 0 || dateTimeHour === 12) {
+    dateTimeHour = 12;
+  } else {
+    dateTimeHour = dateTimeHour % 12;
+    console.log(dateTimeHour, '2')
   };
 
-  const newDate = `${month} ${day}, ${year}`
-  return newDate;
-}
+  const newDateTimeString = `${dateTimeHour}${dateTimeMinSec} ${ampm}`;
+
+  const newDateString = `${newDate}`.slice(0, 15);
+  return `${newDateString} ${newDateTimeString}`;
+
+};
 
 export default convertDate;

@@ -14,7 +14,7 @@ const text = 'Breakfast agreeable incommode departure it an. By ignorant at on w
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    options.tableName = 'Events'
+    options.tableName = 'Events';
     await queryInterface.bulkInsert(options, [
       { name: 'Summer Concert Series', description: text, type: 'In person', capacity: 500, price: 0, startDate: '2024-07-01 19:00:00', endDate: '2024-07-01 22:00:00', venueId: 1, groupId: 1 },
       { name: 'Book Club Meeting', description: text, type: 'Online', capacity: null, price: null, startDate: '2024-08-15 18:00:00', endDate: '2024-08-15 19:30:00', venueId: null, groupId: 2 },
