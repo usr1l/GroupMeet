@@ -102,7 +102,7 @@ const SingleEventPage = ({ eventData }) => {
               />
               <IconDescriptionCard
                 iconClass="fa-regular fa-clock"
-                heading={`${startDateSlice} TO`}
+                heading={`${startDateSlice}`}
                 subHeading={`${endDateSlice}`}
               />
             </section>

@@ -11,7 +11,6 @@ function convertDate(date) {
     dateTimeHour = 12;
   } else {
     dateTimeHour = dateTimeHour % 12;
-    console.log(dateTimeHour, '2')
   };
 
   const newDateTimeString = `${dateTimeHour}${dateTimeMinSec} ${ampm}`;
