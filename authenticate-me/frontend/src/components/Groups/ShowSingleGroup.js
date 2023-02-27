@@ -10,6 +10,7 @@ import IconLabel from "../IconLabel";
 import Button from "../Button";
 import EventsList from "../Events/EventsList";
 import GroupAboutPage from "./GroupAboutPage";
+import { thunkLoadGroupEvents } from "../../store/groups";
 import "./SingleGroupPage.css";
 
 const SingleGroupPage = ({ groupData }) => {
@@ -20,18 +21,24 @@ const SingleGroupPage = ({ groupData }) => {
 
   useEffect(() => {
     dispatch(thunkLoadSingleGroup(groupId));
+    dispatch(thunkLoadGroupEvents(groupId));
   }, [ dispatch, groupId ]);
 
   const { user } = useSelector(state => state.session);
   const group = useSelector(state => state.groups.group);
-  const eventsObj = useSelector(state => state.events.events);
-  const events = Object.values(eventsObj);
 
-  if (Object.keys(group).length < 4) return (<div>Not Found</div>);
+
+  if (Object.keys(group).length < 5) return (<div>Not Found</div>);
 
   const history = useHistory();
 
-  let { name, about, city, state, organizerId, previewImage, numMembers, Organizer } = group;
+  let { name, about, city, state, organizerId, previewImage, numMembers, Organizer, Events } = group;
+  let events = [];
+
+  if (Events && Object.values(Events).length) {
+    events = Object.values(Events);
+  };
+
   const isPrivate = group.private === true ? 'Private' : 'Public';
 
   const organizerFn = () => {
@@ -39,7 +46,7 @@ const SingleGroupPage = ({ groupData }) => {
       return organizerId === user.id
     };
     return false;
-  }
+  };
 
   const organizerBool = organizerFn(user);
 
@@ -94,6 +101,9 @@ const SingleGroupPage = ({ groupData }) => {
               <NavLink to={`/groups/${groupId}/events`} className="single-group-page-navbar-item" activeClassName='group-navbar-navlink-active'>
                 Events
               </NavLink>
+              {/* <NavLink>
+
+              </NavLink> */}
             </div>
           </div>
           <div className="single-group-page-navbar-functions">

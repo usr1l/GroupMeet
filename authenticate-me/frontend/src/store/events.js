@@ -143,7 +143,15 @@ export const actionCreateEvent = (event) => {
 const initialState = { events: {}, event: {}, isLoading: true };
 
 const eventReducer = (state = initialState, action) => {
-  const updatedState = { ...state, events: { ...state.events }, event: { ...state.event, Group: { ...state.event.Group }, Venue: { ...state.event.Venue } } };
+  const updatedState = {
+    ...state,
+    events: { ...state.events },
+    event: {
+      ...state.event,
+      Group: { ...state.event.Group },
+      Venue: { ...state.event.Venue }
+    }
+  };
 
   switch (action.type) {
     case LOAD_EVENTS:

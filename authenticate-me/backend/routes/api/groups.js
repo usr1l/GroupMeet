@@ -416,7 +416,7 @@ router.post('/:groupId/events', requireAuth, validateEventData, async (req, res,
       price: price ? price : null,
       startDate,
       endDate,
-      // venueId,
+      // venueId,zz
       groupId
     }
   });

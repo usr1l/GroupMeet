@@ -150,8 +150,9 @@ const EditEventPage = () => {
           <input
             name="startDate-Time"
             type='time'
+            step={1}
             value={startTime}
-            onChange={(e) => setStartTime(e.target.value + ':00')}
+            onChange={(e) => setStartTime(e.target.value)}
           />
         </InputDiv>
         <InputDiv divStyle="date-time__block" labelStyle="event-form__label" labelFor='endDate-Time' label='End Date: '>
@@ -164,6 +165,7 @@ const EditEventPage = () => {
           <input
             name="endDate-Time"
             type='time'
+            step={1}
             value={endTime}
             onChange={(e) => setEndTime(e.target.value)}
           />

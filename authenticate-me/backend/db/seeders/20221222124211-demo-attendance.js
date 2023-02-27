@@ -12,11 +12,6 @@ module.exports = {
     await queryInterface.bulkInsert(options, [
       {
         status: 'member',
-        eventId: 3,
-        userId: 1
-      },
-      {
-        status: 'member',
         eventId: 1,
         userId: 1
       },
@@ -27,8 +22,13 @@ module.exports = {
       },
       {
         status: 'member',
-        eventId: 2,
-        userId: 3
+        eventId: 3,
+        userId: 1
+      },
+      {
+        status: 'attending',
+        eventId: 1,
+        userId: 2
       },
       {
         status: 'pending',
@@ -39,11 +39,6 @@ module.exports = {
         status: 'member',
         eventId: 3,
         userId: 2
-      },
-      {
-        status: 'pending',
-        eventId: 3,
-        userId: 3
       },
       {
         status: 'attending',
@@ -51,9 +46,14 @@ module.exports = {
         userId: 3
       },
       {
-        status: 'attending',
-        eventId: 1,
-        userId: 2
+        status: 'member',
+        eventId: 2,
+        userId: 3
+      },
+      {
+        status: 'pending',
+        eventId: 3,
+        userId: 3
       },
     ])
   },
