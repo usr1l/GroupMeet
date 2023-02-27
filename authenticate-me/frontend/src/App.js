@@ -20,7 +20,6 @@ import { thunkLoadEvents } from "./store/events";
 import { thunkLoadGroups } from "./store/groups";
 import SplashPage from "./components/SplashPage";
 
-
 function App() {
 
   const dispatch = useDispatch();

@@ -1,0 +1,7 @@
+.bottom-nav-wrapper {
+  width: 100vw;
+  height: 90px;
+  background: #2F363F;
+  position: relative;
+  bottom: 0;
+}

@@ -10,17 +10,19 @@ if (process.env.NODE_ENV === 'production') {
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    options.tableName = 'EventImages'
+    options.tableName = 'EventImages';
+    const imgURL = "https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.thewowstyle.com%2Fwp-content%2Fuploads%2F2015%2F01%2Fnature-image.jpg&f=1&nofb=1&ipt=618c86c394da17101140c4811c973e26d74f3499a9ad58e561f4f8932782ecee&ipo=images";
+
     await queryInterface.bulkInsert(options, [
-      { url: 'https://iezombie.net/wp-content/uploads/2019/04/asylumelements-016.png', preview: true, eventId: 1 },
-      { url: 'https://iezombie.net/wp-content/uploads/2019/04/asylumelements-016.png', preview: true, eventId: 2 },
-      { url: 'https://iezombie.net/wp-content/uploads/2019/04/asylumelements-016.png', preview: true, eventId: 3 },
-      { url: 'https://iezombie.net/wp-content/uploads/2019/04/asylumelements-016.png', preview: true, eventId: 4 },
-      { url: 'https://iezombie.net/wp-content/uploads/2019/04/asylumelements-016.png', preview: true, eventId: 5 },
-      { url: 'https://iezombie.net/wp-content/uploads/2019/04/asylumelements-016.png', preview: true, eventId: 6 },
-      { url: 'https://iezombie.net/wp-content/uploads/2019/04/asylumelements-016.png', preview: true, eventId: 7 },
-      { url: 'https://iezombie.net/wp-content/uploads/2019/04/asylumelements-016.png', preview: true, eventId: 8 },
-      { url: 'https://iezombie.net/wp-content/uploads/2019/04/asylumelements-016.png', preview: true, eventId: 9 }
+      { url: imgURL, preview: true, eventId: 1 },
+      { url: imgURL, preview: true, eventId: 2 },
+      { url: imgURL, preview: true, eventId: 3 },
+      { url: imgURL, preview: true, eventId: 4 },
+      { url: imgURL, preview: true, eventId: 5 },
+      { url: imgURL, preview: true, eventId: 6 },
+      { url: imgURL, preview: true, eventId: 7 },
+      { url: imgURL, preview: true, eventId: 8 },
+      { url: imgURL, preview: true, eventId: 9 }
     ], {})
   },
 

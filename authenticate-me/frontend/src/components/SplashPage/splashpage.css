@@ -4,7 +4,7 @@ body {
 
 .splashpage-container {
   height: 100%;
-  width: 100%;
+  width: 100vw;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
