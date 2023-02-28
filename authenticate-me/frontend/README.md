@@ -87,7 +87,8 @@ View all events.
 - /events/new
 - /groups/:groupid
 - /events/:eventId
-- /groups/:groupid/edit
+- /groups/:groupId/edit
+- /groups/:groupId/events
 - /events/:eventId/edit
 
 ## API Routes
@@ -107,11 +108,26 @@ store = {
     },
     singleGroup: {
       groupData,
+      Events: {
+        allEvents: {
+          [eventId]: {
+            eventData,
+            Group: {
+              groupData,
+            },
+            Venue: {
+              venueData,
+            },
+          },
+        },
+      },
       GroupImages: [imagesData],
       Organizer: {
         organizerData,
       },
       Venues: [venuesData],
+      // To be completed
+      Me                                                      mbers: [membersData],
     },
   },
   events: {
@@ -131,13 +147,11 @@ store = {
       Group: {
         groupData,
       },
-      // Note that venue here will have more information than venue did in the all events slice. (Refer API Docs for more info)
       Venue: {
         venueData,
       },
       EventImages: [imagesData],
       // To be completed
-      Members: [membersData],
       Attendees: [attendeeData],
     },
   },

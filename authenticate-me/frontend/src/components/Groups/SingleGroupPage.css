@@ -132,3 +132,17 @@ h2#single-group-page-name {
   display: flex;
   flex-direction: row;
 }
+
+.group-events-page-icon-card-section {
+  background: white;
+  width: 240px;
+  height: 100px;
+  border-radius: 1rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  left: -100px;
+  top: 35px;
+}

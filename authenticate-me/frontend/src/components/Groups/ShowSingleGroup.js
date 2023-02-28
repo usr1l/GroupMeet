@@ -28,7 +28,7 @@ const SingleGroupPage = ({ groupData }) => {
   const group = useSelector(state => state.groups.group);
 
 
-  if (Object.keys(group).length < 5) return (<div>Not Found</div>);
+  if (Object.keys(group).length < 6) return (<div>Loading . . .</div>);
 
   const history = useHistory();
 
@@ -80,13 +80,8 @@ const SingleGroupPage = ({ groupData }) => {
               </div>
             </div>
             <div id='group-page-description-card-bottom'>
-              {/* <i id='group-index-card-component-bottom-share' class="fa-regular fa-share-from-square"></i>
-              <div className='group-index-card-item'>{window.location.href}</div> */}
-              {organizerBool && (
-                <Link to={`/groups/${groupId}/events/new`}>
-                  <Button onClick={(e) => e.preventDefault} buttonStyle='btn--delete'>Create Event</Button>
-                </Link>
-              )}
+              <i id='group-index-card-component-bottom-share' class="fa-regular fa-share-from-square"></i>
+              <div className='group-index-card-item'>{window.location.href}</div>
             </div>
           </div>
         </div>
@@ -101,9 +96,7 @@ const SingleGroupPage = ({ groupData }) => {
               <NavLink to={`/groups/${groupId}/events`} className="single-group-page-navbar-item" activeClassName='group-navbar-navlink-active'>
                 Events
               </NavLink>
-              {/* <NavLink>
-
-              </NavLink> */}
+              {/* <NavLink></NavLink> */}
             </div>
           </div>
           <div className="single-group-page-navbar-functions">
@@ -122,7 +115,18 @@ const SingleGroupPage = ({ groupData }) => {
         <div className="group-property-page-wrapper">
           <Switch>
             <Route exact path={`/groups/${groupId}/events`}>
-              <EventsList events={events} />
+              <>
+                <EventsList events={events} />
+                {organizerBool && (
+                  <section className="group-events-page-sticky-div">
+                    <div className="group-events-page-icon-card-section">
+                      <Link to={`/groups/${groupId}/events/new`}>
+                        <Button onClick={(e) => e.preventDefault} buttonStyle='btn--delete'>Create Event</Button>
+                      </Link>
+                    </div>
+                  </section>
+                )}
+              </>
             </Route>
             <Route path={`/groups/${groupId}`}>
               <GroupAboutPage about={about} user={user} />

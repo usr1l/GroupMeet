@@ -2,7 +2,6 @@ import React from "react";
 import GroupIndexCard from "./GroupIndexCard";
 import './GroupsPage.css';
 
-
 const GroupsList = ({
   groups
 }) => {

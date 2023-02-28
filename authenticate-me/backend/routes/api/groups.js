@@ -205,7 +205,6 @@ router.get('/:groupId/members', async (req, res, next) => {
       },
       order: [ [ 'firstName' ], [ 'lastName' ] ]
     });
-
     return res.json(members);
   };
 });
