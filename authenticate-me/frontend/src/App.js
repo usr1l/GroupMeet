@@ -48,7 +48,8 @@ function App() {
             <Route path='/messages' component={MessagesPage} />
             <Route path='/notifications' component={NotificationPage} />
             <Route path='/groups/:groupId/events/new' component={CreateEventForm} />
-            {/* <Route path='/groups/:groupId/members' component={MembershipsPage} /> */}
+            <Route path='/groups/:groupId/members' component={SingleGroupPage} />
+            <Route path='/groups/:groupId/events' component={SingleGroupPage} />
             <Route path='/events/:eventId/edit' component={EditEventPage} />
             <Route path='/groups/:groupId/edit' component={EditGroupPage} />
             <Route path='/events/:eventId' component={SingleEventPage} />

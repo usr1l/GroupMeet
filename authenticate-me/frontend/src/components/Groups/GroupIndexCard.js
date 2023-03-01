@@ -1,14 +1,23 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import ImagePreview from "../ImagePreview";
+import { useSelector } from "react-redux";
 import './GroupsPage.css';
 
 
 function GroupIndexCard({ group }) {
   const { id, name, about, state, type, numMembers, previewImage, city } = group;
+  const { user } = useSelector(state => state.session)
+
+  const loginAlert = (e) => {
+    if (!Object.values(user).length) {
+      e.preventDefault();
+      return alert('Please login to see more.');
+    };
+  };
 
   return (
-    <Link to={`/groups/${id}`}>
+    <Link to={`/groups/${id}`} onClick={loginAlert}>
       <div className='group-index-cards-click'>
         <ImagePreview imgSrc={previewImage} imgWrapperStyle='group-index-card-image-container' imgClassName='group-index-card-image' />
         <div key={`${name}-${id}`} className='group-index-card'>

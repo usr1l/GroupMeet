@@ -1,10 +1,13 @@
 import React from "react";
-import './MembershipsPage.css'
+import IconDescriptionCard from "../IconDescriptionCard";
+import './MembershipsPage.css';
 
 const MembershipsPage = ({ members }) => {
-  console.log(members)
+
   return (
-    <div>Members</div>
+    <div className="membership-page-background">
+      {members.firstName}
+    </div>
   )
 }
 

@@ -20,10 +20,14 @@ const SingleGroupPage = ({ groupData }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(thunkLoadSingleGroup(groupId));
-    dispatch(thunkLoadGroupEvents(groupId));
-    dispatch(thunkLoadGroupMembers(groupId));
+    dispatch(thunkLoadSingleGroup(groupId))
+      .then(() => dispatch(thunkLoadGroupEvents(groupId)));
+
   }, [ dispatch, groupId ]);
+
+  useEffect(() => {
+    dispatch(thunkLoadGroupMembers(groupId));
+  }, [ dispatch, groupId, Members ])
 
   const { user } = useSelector(state => state.session);
   const group = useSelector(state => state.groups.group);
@@ -35,9 +39,14 @@ const SingleGroupPage = ({ groupData }) => {
 
   let { name, about, city, state, organizerId, previewImage, numMembers, Organizer, Events, Members } = group;
   let events = [];
+  let members = [];
 
   if (Events && Object.values(Events).length) {
     events = Object.values(Events);
+  };
+
+  if (Members && Object.values(Members).length) {
+    members = Object.values(Members);
   };
 
   const isPrivate = group.private === true ? 'Private' : 'Public';
@@ -132,7 +141,7 @@ const SingleGroupPage = ({ groupData }) => {
               </>
             </Route>
             <Route path={`/groups/${groupId}/members`}>
-              <MembershipsPage members={Members} />
+              <MembershipsPage members={members} />
             </Route>
             <Route path={`/groups/${groupId}`}>
               <GroupAboutPage about={about} user={user} />
