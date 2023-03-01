@@ -24,7 +24,7 @@
 }
 
 .btn--demo {
-  background-color: #008294;
+  background-color: var(--site-blue);
   border-radius: 8px;
   color: #fff;
   fill: #fff;
@@ -32,11 +32,11 @@
 }
 
 .btn--big {
-  background-color: #008294;
+  background-color: var(--site-blue);
   border-radius: 8px;
-  border: 1px solid #008294;
+  border: 1px solid var(--site-blue);
   background-color: white;
-  color: #008294;
+  color: var(--site-blue);
   fill: #fff;
   transition: 0.3s;
   box-sizing: border-box;
@@ -44,10 +44,10 @@
 
 .btn--wide {
   border: none;
-  background-color: #f65858;
+  background-color: var(--site-red);
   color: white;
   border-radius: 8px;
-  border: 1px solid #f65858;
+  border: 1px solid var(--site-red);
 }
 
 .btn--menu-item {
@@ -58,11 +58,11 @@
 }
 
 .btn--delete {
-  background-color: #f65858;
+  background-color: var(--site-red);
   border-radius: 8px;
   font-size: 10pt;
   color: white;
-  border: 1px solid #f65858;
+  border: 1px solid var(--site-red);
   transition: 0.3s ease-out;
 }
 
@@ -114,17 +114,17 @@
 
 .btn--demo:hover {
   background-color: transparent;
-  color: #008294;
+  color: var(--site-blue);
   transition: 0.3s;
 }
 
 .btn--menu:hover {
-  color: #008294;
+  color: var(--site-blue);
   transition: 0.3s;
 }
 
 .btn--big:hover {
-  background-color: #008294;
+  background-color: var(--site-blue);
   border-radius: 8px;
   color: #fff;
   fill: #fff;

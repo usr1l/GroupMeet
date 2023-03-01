@@ -86,7 +86,7 @@ h2#single-group-page-name {
 }
 
 .group-navbar-navlink-active {
-  color: #008294;
+  color: var(--site-blue);
 }
 
 #group-page-description-card-bottom {

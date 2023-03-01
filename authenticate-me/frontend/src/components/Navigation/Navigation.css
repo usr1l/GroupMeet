@@ -92,7 +92,7 @@
 }
 
 .navbar-button:hover {
-  color: #008294;
+  color: var(--site-blue);
   transition: 0.5s;
 }
 

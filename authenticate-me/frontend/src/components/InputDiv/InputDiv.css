@@ -43,7 +43,7 @@
   font-family: 'Poppins', sans-serif;
   border-radius: 6px;
   transition: 0.5s;
-  border-bottom: 1px solid #f65858;
+  border-bottom: 1px solid var(--site-red);
   width: 150px;
 }
 
@@ -72,7 +72,7 @@
   outline: none;
   font-family: 'Poppins', sans-serif;
   background: transparent;
-  border-bottom: 1px solid #f65858;
+  border-bottom: 1px solid var(--site-red);
   border-radius: 6px;
   transition: 0.5s;
 }
@@ -85,7 +85,7 @@
   font-family: 'Poppins', sans-serif;
   border-radius: 6px;
   transition: 0.5s;
-  border-bottom: 1px solid #f65858;
+  border-bottom: 1px solid var(--site-red);
   box-sizing: border-box;
 }
 
@@ -95,7 +95,7 @@
 .event-form__block>input:focus {
   background: white;
   transition: 0.5s;
-  border: 1px solid #f65858;
+  border: 1px solid var(--site-red);
 }
 
 .event-form__block>select:hover,
