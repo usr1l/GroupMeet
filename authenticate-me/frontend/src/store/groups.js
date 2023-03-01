@@ -1,6 +1,5 @@
 import { csrfFetch } from "./csrf";
 import normalizeFn from "../components/HelperFns/NormalizeFn";
-import objDeepCopyFn from "../components/HelperFns/ObjDeepCopyFn";
 
 const LOAD_GROUPS = 'groups/LOAD';
 const LOAD_GROUP = 'group/LOAD';
@@ -157,7 +156,7 @@ const groupReducer = (state = initialState, action) => {
       const groups = normalizeFn(action.payload.Groups);
       return { ...state, groups: groups, isLoading: false };
     case LOAD_GROUP:
-      const group = objDeepCopyFn(action.payload);
+      const group = action.payload;
       return { ...state, group: group };
     case LOAD_GROUP_EVENTS:
       const events = normalizeFn(action.payload);
@@ -172,7 +171,7 @@ const groupReducer = (state = initialState, action) => {
       delete updatedState[ 'groups' ][ id ];
       return updatedState;
     case UPDATE_GROUP:
-      const updateGroup = objDeepCopyFn(action.payload);
+      const updateGroup = action.payload;
       const updateGroupId = updateGroup.id;
       updatedState.groups[ updateGroupId ] = updateGroup;
       return updatedState;
