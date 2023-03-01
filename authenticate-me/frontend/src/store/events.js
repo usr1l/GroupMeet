@@ -20,12 +20,9 @@ export const thunkLoadEvents = () => async (dispatch) => {
   }
 };
 
-export const thunkDeleteEvent = ({ user, eventId }) => async (dispatch) => {
+export const thunkDeleteEvent = ({ eventId }) => async (dispatch) => {
   const response = await csrfFetch(`/api/events/${eventId}`, {
-    method: 'DELETE',
-    body: JSON.stringify({
-      user
-    })
+    method: 'DELETE'
   })
     .catch(err => err);
 

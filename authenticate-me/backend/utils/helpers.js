@@ -74,6 +74,14 @@ async function updateGroupPreviewImage(groupId) {
   };
 };
 
+const membershipArrToObj = (members) => {
+  const membersArr = members.map(member => member.toJSON());
+  for (const member of membersArr) {
+    member.membership = member.Memberships[ 0 ];
+    delete member.Memberships;
+  };
+  return membersArr;
+};
 
 
 module.exports = {
@@ -82,5 +90,6 @@ module.exports = {
   toJSONDisplay,
   checkUserId,
   updateEventPreviewImage,
-  updateGroupPreviewImage
+  updateGroupPreviewImage,
+  membershipArrToObj
 }

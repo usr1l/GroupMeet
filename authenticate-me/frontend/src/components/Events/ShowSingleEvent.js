@@ -56,11 +56,9 @@ const SingleEventPage = ({ eventData }) => {
     endDateSlice = convertDate(endDate);
   };
 
-  console.log(endDateSlice, startDateSlice)
-
   const handleDelete = async (e) => {
     e.preventDefault();
-    const data = await dispatch(thunkDeleteEvent({ user, eventId }))
+    const data = await dispatch(thunkDeleteEvent({ eventId }))
     if (data.ok === true) {
       history.push(`/events`);
     };

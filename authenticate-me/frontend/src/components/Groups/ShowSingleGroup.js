@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams, Link, NavLink, Switch, Route } from "react-router-dom";
-import { thunkDeleteGroup, thunkLoadSingleGroup } from "../../store/groups";
+import { thunkDeleteGroup, thunkLoadSingleGroup, thunkLoadGroupEvents, thunkLoadGroupMembers } from "../../store/groups";
 import { useHistory } from "react-router-dom";
 import errorPageHandler from "../ErrorPage";
 import ImagePreview from "../ImagePreview";
@@ -10,8 +10,8 @@ import IconLabel from "../IconLabel";
 import Button from "../Button";
 import EventsList from "../Events/EventsList";
 import GroupAboutPage from "./GroupAboutPage";
-import { thunkLoadGroupEvents } from "../../store/groups";
 import "./SingleGroupPage.css";
+import MembershipsPage from "../MembershipsPage";
 
 const SingleGroupPage = ({ groupData }) => {
 
@@ -22,6 +22,7 @@ const SingleGroupPage = ({ groupData }) => {
   useEffect(() => {
     dispatch(thunkLoadSingleGroup(groupId));
     dispatch(thunkLoadGroupEvents(groupId));
+    dispatch(thunkLoadGroupMembers(groupId));
   }, [ dispatch, groupId ]);
 
   const { user } = useSelector(state => state.session);
@@ -32,7 +33,7 @@ const SingleGroupPage = ({ groupData }) => {
 
   const history = useHistory();
 
-  let { name, about, city, state, organizerId, previewImage, numMembers, Organizer, Events } = group;
+  let { name, about, city, state, organizerId, previewImage, numMembers, Organizer, Events, Members } = group;
   let events = [];
 
   if (Events && Object.values(Events).length) {
@@ -52,7 +53,7 @@ const SingleGroupPage = ({ groupData }) => {
 
   const handleDelete = async (e) => {
     e.preventDefault();
-    const data = await dispatch(thunkDeleteGroup({ user, groupId }));
+    const data = await dispatch(thunkDeleteGroup({ groupId }));
 
     if (data.ok === true) {
       history.push(`/groups`);
@@ -96,7 +97,9 @@ const SingleGroupPage = ({ groupData }) => {
               <NavLink to={`/groups/${groupId}/events`} className="single-group-page-navbar-item" activeClassName='group-navbar-navlink-active'>
                 Events
               </NavLink>
-              {/* <NavLink></NavLink> */}
+              <NavLink to={`/groups/${groupId}/members`} className="single-group-page-navbar-item" activeClassName='group-navbar-navlink-active'>
+                Members
+              </NavLink>
             </div>
           </div>
           <div className="single-group-page-navbar-functions">
@@ -127,6 +130,9 @@ const SingleGroupPage = ({ groupData }) => {
                   </section>
                 )}
               </>
+            </Route>
+            <Route path={`/groups/${groupId}/members`}>
+              <MembershipsPage members={Members} />
             </Route>
             <Route path={`/groups/${groupId}`}>
               <GroupAboutPage about={about} user={user} />

@@ -7,7 +7,7 @@ const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 const { validateVenueData } = require('./venues');
 const { validateEventData, getEvents } = require('./events');
-const { inputToDate, getDisplayDate, toJSONDisplay, checkUserId, updateGroupPreviewImage } = require('../../utils/helpers')
+const { inputToDate, getDisplayDate, toJSONDisplay, checkUserId, updateGroupPreviewImage, membershipArrToObj } = require('../../utils/helpers')
 const { venueDoesNotExist } = require('./venues');
 const { validateMembershipData, validateMembershipDataDelete } = require('./memberships');
 
@@ -188,7 +188,8 @@ router.get('/:groupId/members', async (req, res, next) => {
       order: [ [ 'firstName' ], [ 'lastName' ] ]
     });
 
-    return res.json(members);
+    const memberships = membershipArrToObj(members);
+    return res.json(memberships);
 
   } else if (cohostBool instanceof Error) {
     const members = await User.findAll({
@@ -205,8 +206,11 @@ router.get('/:groupId/members', async (req, res, next) => {
       },
       order: [ [ 'firstName' ], [ 'lastName' ] ]
     });
-    return res.json(members);
+
+    const memberships = membershipArrToObj(members);
+    return res.json(memberships);
   };
+
 });
 
 
