@@ -2,14 +2,24 @@ import React from "react";
 import { Link } from "react-router-dom";
 import ImagePreview from "../ImagePreview";
 import convertDate from "../HelperFns/ConvertDate";
+import { useSelector } from "react-redux";
 import './EventsPage.css';
 
 
 function EventIndexCard({ event }) {
   const { id, name, type, previewImage, startDate, numAttending, Group } = event;
   const newDate = convertDate(startDate);
+  const { user } = useSelector(state => state.session);
+
+  const loginAlert = (e) => {
+    if (!Object.values(user).length) {
+      e.preventDefault();
+      return alert('Please login to see more.');
+    };
+  };
+
   return (
-    <Link to={`/events/${id}`}>
+    <Link to={`/events/${id}`} onClick={loginAlert}>
       <div className='event-index-cards-click'>
         <ImagePreview imgSrc={previewImage} imgWrapperStyle='event-index-card-image-container' imgClassName='event-index-card-image' />
         <div key={`${name}-${id}`} className='event-index-card'>

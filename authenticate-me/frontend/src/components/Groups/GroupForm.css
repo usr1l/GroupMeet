@@ -44,7 +44,7 @@ form#group-form {
   height: 80px;
   padding: 0;
   font-size: 10pt;
-  color: #f65858;
+  color: var(--site-red);
 }
 
 .group-form__block:not(.group-form__private) {
@@ -72,7 +72,7 @@ form#group-form {
   outline: none;
   font-family: 'Poppins', sans-serif;
   background: transparent;
-  border-bottom: 1px solid #f65858;
+  border-bottom: 1px solid var(--site-red);
   border-radius: 6px;
   transition: 0.5s;
 }
@@ -85,7 +85,7 @@ form#group-form {
   font-family: 'Poppins', sans-serif;
   border-radius: 6px;
   transition: 0.5s;
-  border-bottom: 1px solid #f65858;
+  border-bottom: 1px solid var(--site-red);
   box-sizing: border-box;
 }
 
@@ -94,7 +94,7 @@ form#group-form {
 .group-form__block>input:focus {
   background: white;
   transition: 0.5s;
-  border: 1px solid #f65858;
+  border: 1px solid var(--site-red);
 }
 
 .group-form__block>select:hover,
@@ -113,7 +113,7 @@ form#group-form {
   overflow: hidden auto;
   resize: none;
   box-sizing: border-box;
-  border-bottom: 1px solid #f65858;
+  border-bottom: 1px solid var(--site-red);
   border-radius: 6px;
   background: transparent;
   transition: 0.5s;

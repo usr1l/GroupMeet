@@ -27,7 +27,7 @@ const SingleEventPage = ({ eventData }) => {
   if (eventState.status === true) return (<div>Loading...</div>);
 
   const event = useSelector(state => state.events.event);
-  if (!event) return (<div>Not Found</div>);
+  if (!event) return (<div>Loading . . .</div>);
   const { name, startDate, endDate, groupId, description, previewImage } = event;
   const groupType = event.Group.private === true ? 'Public group' : 'Private group';
   const groupName = event.Group.name;
@@ -56,11 +56,9 @@ const SingleEventPage = ({ eventData }) => {
     endDateSlice = convertDate(endDate);
   };
 
-  console.log(endDateSlice, startDateSlice)
-
   const handleDelete = async (e) => {
     e.preventDefault();
-    const data = await dispatch(thunkDeleteEvent({ user, eventId }))
+    const data = await dispatch(thunkDeleteEvent({ eventId }))
     if (data.ok === true) {
       history.push(`/events`);
     };

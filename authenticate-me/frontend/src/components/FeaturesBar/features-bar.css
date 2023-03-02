@@ -37,7 +37,7 @@ div.features-bar-component {
 }
 
 .features-bar-navlink-active {
-  color: #008294;
+  color: var(--site-blue);
 }
 
 
@@ -46,7 +46,7 @@ div.features-bar-component {
   position: absolute;
   height: 4px;
   width: 63px;
-  background: #008294;
+  background: var(--site-blue);
   margin-top: 2px;
 }
 

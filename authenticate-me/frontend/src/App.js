@@ -11,6 +11,7 @@ import NotFoundPage from "./components/NotFoundPage";
 import HomePage from "./components/HomePage";
 import MessagesPage from "./components/Messages";
 import CreateEventForm from './components/Events/CreateEventForm';
+import MembershipsPage from "./components/MembershipsPage";
 import CreateGroupForm from './components/Groups/CreateGroupForm';
 import EditEventPage from "./components/Events/EditEvent";
 import EditGroupPage from "./components/Groups/EditGroup";
@@ -47,6 +48,8 @@ function App() {
             <Route path='/messages' component={MessagesPage} />
             <Route path='/notifications' component={NotificationPage} />
             <Route path='/groups/:groupId/events/new' component={CreateEventForm} />
+            <Route path='/groups/:groupId/members' component={SingleGroupPage} />
+            <Route path='/groups/:groupId/events' component={SingleGroupPage} />
             <Route path='/events/:eventId/edit' component={EditEventPage} />
             <Route path='/groups/:groupId/edit' component={EditGroupPage} />
             <Route path='/events/:eventId' component={SingleEventPage} />

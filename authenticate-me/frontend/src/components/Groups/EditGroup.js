@@ -12,6 +12,17 @@ const EditGroupPage = () => {
   const { groupId } = useParams();
   const dispatch = useDispatch();
 
+  const history = useHistory();
+
+  const [ name, setName ] = useState('');
+  const [ about, setAbout ] = useState('');
+  const [ type, setType ] = useState('');
+  const [ isPrivate, setIsPrivate ] = useState('true');
+  const [ city, setCity ] = useState('');
+  const [ state, setState ] = useState('');
+  const [ errors, setErrors ] = useState([]);
+  const [ previewImage, setPreviewImage ] = useState('');
+
   useEffect(() => {
     dispatch(thunkLoadSingleGroup(groupId))
       .then((data) => {
@@ -26,16 +37,6 @@ const EditGroupPage = () => {
       });
   }, []);
 
-  const history = useHistory();
-
-  const [ name, setName ] = useState('');
-  const [ about, setAbout ] = useState('');
-  const [ type, setType ] = useState('');
-  const [ isPrivate, setIsPrivate ] = useState('true');
-  const [ city, setCity ] = useState('');
-  const [ state, setState ] = useState('');
-  const [ errors, setErrors ] = useState([]);
-  const [ previewImage, setPreviewImage ] = useState('');
 
   const validate = () => {
     const validationErrors = [];

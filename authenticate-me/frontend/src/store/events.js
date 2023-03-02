@@ -20,12 +20,9 @@ export const thunkLoadEvents = () => async (dispatch) => {
   }
 };
 
-export const thunkDeleteEvent = ({ user, eventId }) => async (dispatch) => {
+export const thunkDeleteEvent = ({ eventId }) => async (dispatch) => {
   const response = await csrfFetch(`/api/events/${eventId}`, {
-    method: 'DELETE',
-    body: JSON.stringify({
-      user
-    })
+    method: 'DELETE'
   })
     .catch(err => err);
 
@@ -156,14 +153,13 @@ const eventReducer = (state = initialState, action) => {
   switch (action.type) {
     case LOAD_EVENTS:
       const events = normalizeFn(action.payload.Events);
-      const eventsCopy = objDeepCopyFn(events)
-      return { ...state, events: eventsCopy, isLoading: false };
+      return { ...state, events: events, isLoading: false };
     case LOAD_EVENT:
-      const event = objDeepCopyFn(action.payload.Event);
+      const event = action.payload.Event;
       return { ...state, event: event };
     case CREATE_EVENT:
       const newEventId = action.payload.id;
-      const newEvent = objDeepCopyFn(action.payload)
+      const newEvent = action.payload;
       updatedState[ 'events' ][ newEventId ] = newEvent;
       return updatedState;
     case DELETE_EVENT:
@@ -171,7 +167,7 @@ const eventReducer = (state = initialState, action) => {
       delete updatedState[ 'events' ][ id ];
       return updatedState;
     case UPDATE_EVENT:
-      const updateEvent = objDeepCopyFn(action.payload);
+      const updateEvent = action.payload;
       const updateEventId = updateEvent.id;
       updatedState.events[ updateEventId ] = updateEvent;
       return updatedState;

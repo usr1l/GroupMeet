@@ -12,6 +12,20 @@ const EditEventPage = () => {
   const { eventId } = useParams();
   const dispatch = useDispatch();
 
+  const history = useHistory();
+
+  const [ name, setName ] = useState('');
+  const [ description, setDescription ] = useState('');
+  const [ type, setType ] = useState('');
+  const [ startDate, setStartDate ] = useState('');
+  const [ startTime, setStartTime ] = useState('');
+  const [ endDate, setEndDate ] = useState('');
+  const [ endTime, setEndTime ] = useState('');
+  const [ capacity, setCapacity ] = useState(null);
+  const [ price, setPrice ] = useState(null);
+  const [ errors, setErrors ] = useState([]);
+  const [ previewImage, setPreviewImage ] = useState('');
+
   useEffect(() => {
     dispatch(thunkLoadSingleEvent(eventId))
       .then((data) => {
@@ -29,19 +43,6 @@ const EditEventPage = () => {
       });
   }, []);
 
-  const history = useHistory();
-
-  const [ name, setName ] = useState('');
-  const [ description, setDescription ] = useState('');
-  const [ type, setType ] = useState('');
-  const [ startDate, setStartDate ] = useState('');
-  const [ startTime, setStartTime ] = useState('');
-  const [ endDate, setEndDate ] = useState('');
-  const [ endTime, setEndTime ] = useState('');
-  const [ capacity, setCapacity ] = useState(null);
-  const [ price, setPrice ] = useState(null);
-  const [ errors, setErrors ] = useState([]);
-  const [ previewImage, setPreviewImage ] = useState('');
 
 
   const validate = () => {
