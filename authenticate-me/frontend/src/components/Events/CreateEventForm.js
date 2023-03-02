@@ -82,6 +82,7 @@ const CreateEventForm = (event) => {
   };
 
 
+
   return (
     <div id='create-event-page'>
       <h2 id="event-form__title">CREATE AN EVENT</h2>

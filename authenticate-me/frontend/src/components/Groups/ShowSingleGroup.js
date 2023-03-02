@@ -21,13 +21,9 @@ const SingleGroupPage = ({ groupData }) => {
 
   useEffect(() => {
     dispatch(thunkLoadSingleGroup(groupId))
-      .then(() => dispatch(thunkLoadGroupEvents(groupId)));
-
+      .then(() => dispatch(thunkLoadGroupEvents(groupId)))
+      .then(() => dispatch(thunkLoadGroupMembers(groupId)));
   }, [ dispatch, groupId ]);
-
-  useEffect(() => {
-    dispatch(thunkLoadGroupMembers(groupId));
-  }, [ dispatch, groupId, Members ])
 
   const { user } = useSelector(state => state.session);
   const group = useSelector(state => state.groups.group);

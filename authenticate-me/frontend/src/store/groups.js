@@ -163,7 +163,9 @@ const groupReducer = (state = initialState, action) => {
       GroupImages: { ...state.group.GroupImages },
       Organizer: { ...state.group.Organizer },
       Venues: { ...state.group.Venues },
-      Members: { ...state.group.Members, membership: { ...state.group.membership } }
+      Members: {
+        ...state.group.Members
+      }
     }
   };
 

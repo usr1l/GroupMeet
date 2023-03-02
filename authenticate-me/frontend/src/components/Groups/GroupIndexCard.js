@@ -10,7 +10,7 @@ function GroupIndexCard({ group }) {
   const { user } = useSelector(state => state.session)
 
   const loginAlert = (e) => {
-    if (!Object.values(user).length) {
+    if (!user.id) {
       e.preventDefault();
       return alert('Please login to see more.');
     };
