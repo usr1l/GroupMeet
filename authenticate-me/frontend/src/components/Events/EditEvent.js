@@ -43,8 +43,6 @@ const EditEventPage = () => {
       });
   }, []);
 
-
-
   const validate = () => {
     const validationErrors = [];
 

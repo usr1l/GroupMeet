@@ -6,6 +6,7 @@ const LOAD_GROUPS = 'groups/LOAD';
 const LOAD_GROUP = 'group/LOAD';
 const LOAD_GROUP_EVENTS = 'group/events/LOAD';
 const LOAD_GROUP_MEMBERS = 'group/members/LOAD';
+const LOAD_USER_STATUS = 'group/status/LOAD';
 const DELETE_GROUP = 'groups/DELETE';
 const CREATE_GROUP = 'groups/CREATE';
 const UPDATE_GROUP = 'groups/EDIT';
@@ -33,13 +34,24 @@ export const thunkLoadGroupEvents = (groupId) => async (dispatch) => {
 
 export const thunkLoadGroupMembers = (groupId) => async (dispatch) => {
   const response = await csrfFetch(`/api/groups/${groupId}/members`);
-
   if (response.ok) {
     const members = await response.json();
     dispatch(actionLoadGroupMembers(members));
     return members;
   };
 };
+
+export const thunkLoadUserStatus = (groupId) => async (dispatch) => {
+  const response = await csrfFetch(`/api/groups/${groupId}/membership/status`);
+
+  if (response.ok) {
+    const status = await response.json();
+    dispatch(actionLoadUserStatus(status));
+  }
+
+  return;
+};
+
 
 export const thunkDeleteGroup = ({ groupId }) => async (dispatch) => {
   const response = await csrfFetch(`/api/groups/${groupId}`, {
@@ -60,16 +72,16 @@ export const thunkCreateGroup = (groupInfo) => async (dispatch) => {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(groupInfo)
   })
-    .catch(err => err)
+    .catch(err => err);
 
   if (response.ok) {
     const data = await response.json();
     await dispatch(actionCreateGroup(data));
     return data;
-  }
+  };
 
-  return response
-}
+  return response;
+};
 
 export const thunkLoadSingleGroup = (groupId) => async (dispatch) => {
 
@@ -122,6 +134,13 @@ const actionLoadGroupMembers = (members) => {
   }
 }
 
+const actionLoadUserStatus = (status) => {
+  return {
+    type: LOAD_USER_STATUS,
+    payload: status
+  };
+};
+
 const actionLoadSingleGroup = (group) => {
   return {
     type: LOAD_GROUP,
@@ -163,9 +182,7 @@ const groupReducer = (state = initialState, action) => {
       GroupImages: { ...state.group.GroupImages },
       Organizer: { ...state.group.Organizer },
       Venues: { ...state.group.Venues },
-      Members: {
-        ...state.group.Members
-      }
+      Members: { ...state.group.Members },
     }
   };
 
@@ -183,6 +200,10 @@ const groupReducer = (state = initialState, action) => {
     case LOAD_GROUP_MEMBERS:
       const members = normalizeFn(action.payload);
       updatedState.group.Members = members;
+      return updatedState;
+    case LOAD_USER_STATUS:
+      const status = action.payload;
+      updatedState.group.userStatus = status;
       return updatedState;
     case CREATE_GROUP:
       const newGroupId = action.payload.id;

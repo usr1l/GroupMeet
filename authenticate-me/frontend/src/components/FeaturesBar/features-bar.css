@@ -13,6 +13,7 @@ div.features-header {
   position: sticky;
   top: 70px;
   box-shadow: 0 0 5px 0 lightgray;
+  z-index: 100;
 }
 
 div.features-bar {

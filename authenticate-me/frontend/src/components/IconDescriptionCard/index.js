@@ -9,7 +9,7 @@ const IconDescriptionCard = ({
   subHeading
 }) => {
 
-  const STYLES = [ '', 'group-page-oragnizer-element' ];
+  const STYLES = [ '', 'group-page-oragnizer-element', 'membership-page-member-cards' ];
   const checkDivStyle = STYLES.includes(style) ? style : STYLES[ 0 ];
 
   return (

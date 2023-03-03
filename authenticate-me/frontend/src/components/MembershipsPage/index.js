@@ -6,13 +6,16 @@ const MembershipsPage = ({ members }) => {
 
   return (
     <div className="membership-page-background">
-      {members.map((member) => (
-        <IconDescriptionCard
-          iconClass="fas fa-user-circle"
-          heading={member.firstName}
-          subHeading={member.lastName}
-        />
-      ))}
+      <div className="membership-page-container">
+        {members.map((member) => (
+          <IconDescriptionCard
+            iconClass="fas fa-user-circle"
+            style='membership-page-member-cards'
+            heading={`${member.firstName} ${member.lastName}`}
+            subHeading={`${member.memberStatus}`}
+          />
+        ))}
+      </div>
     </div>
   )
 }

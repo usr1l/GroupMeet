@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import ImagePreview from "../ImagePreview";
 import convertDate from "../HelperFns/ConvertDate";
 import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { thunkLoadSingleEvent } from "../../store/events";
 import './EventsPage.css';
 
 
@@ -10,12 +12,17 @@ function EventIndexCard({ event }) {
   const { id, name, type, previewImage, startDate, numAttending, Group } = event;
   const newDate = convertDate(startDate);
   const { user } = useSelector(state => state.session);
+  const dispatch = useDispatch();
 
   const loginAlert = (e) => {
     if (!Object.values(user).length) {
       e.preventDefault();
       return alert('Please login to see more.');
     };
+
+    dispatch(thunkLoadSingleEvent(id));
+
+    return;
   };
 
   return (

@@ -51,3 +51,7 @@ div.icon-description-card-element-subheading {
 #group-page-oragnizer-element {
   background: transparent;
 }
+
+#membership-page-member-cards {
+  contain: strict;
+}
