@@ -20,7 +20,7 @@ const SingleGroupPage = ({ groupData }) => {
   const dispatch = useDispatch();
 
   // const [ membershipButton, setMembershipButton ] = useState('');
-  const [ membershipState, setMembershipState ] = useState('this');
+  const [ membershipState, setMembershipState ] = useState('');
 
   function membershipButtonDisplay(status) {
     switch (status) {
@@ -31,10 +31,13 @@ const SingleGroupPage = ({ groupData }) => {
       case 'co-host':
         return 'JOIN GROUP';
       default:
-        return 'Loading';
+        return 'JOIN GROUP';
     };
   };
 
+  useEffect(() => {
+    setMembershipState(userStatus || '');
+  }, [ userStatus ])
   useEffect(() => {
     dispatch(thunkLoadSingleGroup(groupId))
       .then(() => dispatch(thunkLoadGroupEvents(groupId)))
@@ -42,10 +45,6 @@ const SingleGroupPage = ({ groupData }) => {
       .then(() => dispatch(thunkLoadUserStatus(groupId)))
   }, [ dispatch, groupId ]);
 
-  useEffect(() => {
-    setMembershipState(userStatus || '');
-    console.log('membrshipstate', membershipState);
-  }, [ userStatus ])
 
   const { user } = useSelector(state => state.session);
   const group = useSelector(state => state.groups.group);
@@ -70,6 +69,7 @@ const SingleGroupPage = ({ groupData }) => {
 
   let events = [];
   let members = [];
+  console.log('membrshipstate', userStatus);
 
   if (Events && Object.values(Events).length) {
     events = Object.values(Events);
@@ -123,7 +123,7 @@ const SingleGroupPage = ({ groupData }) => {
             <div id='group-page-description-card-bottom'>
               {/* <i id='group-index-card-component-bottom-share' class="fa-regular fa-share-from-square"></i>
               <div className='group-index-card-item'>{window.location.href}</div> */}
-              <Button buttonStyle='btn--delete' buttonSize='btn--large' >{}</Button>
+              <Button buttonStyle='btn--delete' buttonSize='btn--large' ></Button>
             </div>
           </div>
         </div>
