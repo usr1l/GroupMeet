@@ -155,11 +155,11 @@ const eventReducer = (state = initialState, action) => {
       const events = normalizeFn(action.payload.Events);
       return { ...state, events: events, isLoading: false };
     case LOAD_EVENT:
-      const event = action.payload.Event;
+      const event = objDeepCopyFn(action.payload.Event);
       return { ...state, event: event };
     case CREATE_EVENT:
       const newEventId = action.payload.id;
-      const newEvent = action.payload;
+      const newEvent = objDeepCopyFn(action.payload);
       updatedState[ 'events' ][ newEventId ] = newEvent;
       return updatedState;
     case DELETE_EVENT:
@@ -167,7 +167,7 @@ const eventReducer = (state = initialState, action) => {
       delete updatedState[ 'events' ][ id ];
       return updatedState;
     case UPDATE_EVENT:
-      const updateEvent = action.payload;
+      const updateEvent = objDeepCopyFn(action.payload);
       const updateEventId = updateEvent.id;
       updatedState.events[ updateEventId ] = updateEvent;
       return updatedState;

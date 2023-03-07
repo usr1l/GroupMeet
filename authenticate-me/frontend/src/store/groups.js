@@ -1,5 +1,6 @@
 import { csrfFetch } from "./csrf";
 import normalizeFn from "../components/HelperFns/NormalizeFn";
+import objDeepCopyFn from "../components/HelperFns/ObjDeepCopyFn";
 
 
 const LOAD_GROUPS = 'groups/LOAD';
@@ -47,6 +48,7 @@ export const thunkLoadUserStatus = (groupId) => async (dispatch) => {
   if (response.ok) {
     const status = await response.json();
     dispatch(actionLoadUserStatus(status));
+    return;
   }
 
   return;
@@ -61,6 +63,7 @@ export const thunkDeleteGroup = ({ groupId }) => async (dispatch) => {
 
   if (response.ok) {
     dispatch(actionDeleteGroup(groupId));
+    return;
   };
 
   return response;
@@ -191,7 +194,7 @@ const groupReducer = (state = initialState, action) => {
       const groups = normalizeFn(action.payload.Groups);
       return { ...state, groups: groups, isLoading: false };
     case LOAD_GROUP:
-      const group = action.payload;
+      const group = objDeepCopyFn(action.payload);
       return { ...state, group: group };
     case LOAD_GROUP_EVENTS:
       const events = normalizeFn(action.payload);
@@ -207,14 +210,14 @@ const groupReducer = (state = initialState, action) => {
       return updatedState;
     case CREATE_GROUP:
       const newGroupId = action.payload.id;
-      updatedState[ 'groups' ][ newGroupId ] = action.payload;
+      updatedState[ 'groups' ][ newGroupId ] = { ...action.payload };
       return updatedState;
     case DELETE_GROUP:
       const id = action.payload;
       delete updatedState[ 'groups' ][ id ];
       return updatedState;
     case UPDATE_GROUP:
-      const updateGroup = action.payload;
+      const updateGroup = { ...action.payload };
       const updateGroupId = updateGroup.id;
       updatedState.groups[ updateGroupId ] = updateGroup;
       return updatedState;
