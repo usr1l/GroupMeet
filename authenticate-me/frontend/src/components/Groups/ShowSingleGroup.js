@@ -19,8 +19,7 @@ const SingleGroupPage = ({ groupData }) => {
   if (isNaN(parseInt(groupId))) return (<NotFoundPage />)
   const dispatch = useDispatch();
 
-  // const [ membershipButton, setMembershipButton ] = useState('');
-  const [ membershipState, setMembershipState ] = useState('');
+  const [ membershipState, setMembershipState ] = useState('...');
 
   function membershipButtonDisplay(status) {
     switch (status) {
@@ -29,9 +28,9 @@ const SingleGroupPage = ({ groupData }) => {
       case 'member':
         return 'JOINED';
       case 'co-host':
-        return 'JOINED';
+        return 'CO-HOST';
       default:
-        return 'JOIN';
+        return 'JOIN GROUP';
     };
   };
 
@@ -39,13 +38,10 @@ const SingleGroupPage = ({ groupData }) => {
   useEffect(() => {
     dispatch(thunkLoadSingleGroup(groupId))
       .then(() => dispatch(thunkLoadGroupEvents(groupId)))
-      .then(() => dispatch(thunkLoadGroupMembers(groupId)))
-      .then(() => dispatch(thunkLoadUserStatus(groupId)));
+      .then(() => dispatch(thunkLoadUserStatus(groupId)))
+      .then((res) => setMembershipState(membershipButtonDisplay(res)))
+      .then(() => dispatch(thunkLoadGroupMembers(groupId)));
   }, [ dispatch, groupId ]);
-
-  useEffect(() => {
-    setMembershipState(membershipButtonDisplay(userStatus));
-  }, [ userStatus, groupId ])
 
   const { user } = useSelector(state => state.session);
   const group = useSelector(state => state.groups.group);

@@ -40,6 +40,8 @@ export const thunkLoadGroupMembers = (groupId) => async (dispatch) => {
     dispatch(actionLoadGroupMembers(members));
     return members;
   };
+
+  return;
 };
 
 export const thunkLoadUserStatus = (groupId) => async (dispatch) => {
@@ -48,7 +50,7 @@ export const thunkLoadUserStatus = (groupId) => async (dispatch) => {
   if (response.ok) {
     const status = await response.json();
     dispatch(actionLoadUserStatus(status));
-    return;
+    return status;
   }
 
   return;
@@ -74,7 +76,7 @@ export const thunkCreateGroup = (groupInfo) => async (dispatch) => {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(groupInfo)
-  })
+  })` `
     .catch(err => err);
 
   if (response.ok) {
