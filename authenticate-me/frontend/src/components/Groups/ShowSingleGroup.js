@@ -56,7 +56,6 @@ const SingleGroupPage = ({ groupData }) => {
 
   const history = useHistory();
 
-
   let {
     name,
     about,
@@ -67,8 +66,7 @@ const SingleGroupPage = ({ groupData }) => {
     numMembers,
     Organizer,
     Events,
-    Members,
-    userStatus
+    Members
   } = group;
 
   let events = [];
@@ -80,6 +78,11 @@ const SingleGroupPage = ({ groupData }) => {
 
   if (Members && Object.values(Members).length) {
     members = Object.values(Members);
+  };
+
+  let hostName;
+  if (Organizer && Organizer.id) {
+    hostName = `${Organizer.firstName} ${Organizer.lastName}`;
   };
 
   const isPrivate = group.private === true ? 'Private' : 'Public';
@@ -94,6 +97,7 @@ const SingleGroupPage = ({ groupData }) => {
 
   const organizerBool = organizerFn(user);
 
+  // need to work on not allowing single host to leave a group
   const handleMemberClick = async (e) => {
     e.preventDefault();
     switch (membershipState) {
@@ -144,7 +148,7 @@ const SingleGroupPage = ({ groupData }) => {
               <div>
                 <IconLabel iconClass={"fa-solid fa-location-dot"} labelText={`${city}, ${state}`} />
                 <IconLabel iconClass={"fa-solid fa-user-group"} labelText={`${numMembers} Members • ${isPrivate} Group`} />
-                <IconLabel iconClass={"fa-solid fa-user-large"} labelText={`Organized by ${Organizer.firstName} ${Organizer.lastName}`} />
+                <IconLabel iconClass={"fa-solid fa-user-large"} labelText={`Organized by ${hostName}`} />
               </div>
             </div>
             <div id='group-page-description-card-bottom'>

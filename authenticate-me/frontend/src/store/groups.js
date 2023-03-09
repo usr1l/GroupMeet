@@ -82,7 +82,8 @@ export const thunkCreateGroup = (groupInfo) => async (dispatch) => {
   const data = await response.json();
 
   if (response.ok) {
-    await dispatch(actionCreateGroup(data));
+    dispatch(actionCreateGroup(data));
+    dispatch(thunkLoadGroups());
   };
 
   return data;
@@ -216,53 +217,48 @@ const initialState = { groups: {}, group: {}, isLoading: true };
 
 
 const groupReducer = (state = initialState, action) => {
-  const updatedState = {
-    ...state,
-    groups: { ...state.groups },
-    group: {
-      ...state.group,
-      Events: { ...state.group.Events },
-      GroupImages: { ...state.group.GroupImages },
-      Organizer: { ...state.group.Organizer },
-      Venues: { ...state.group.Venues },
-      Members: { ...state.group.Members },
-    }
-  };
+  // const updatedState = {
+  //   ...state,
+  //   groups: { ...state.groups },
+  //   group: {
+  //     ...state.group,
+  //     Events: { ...state.group.Events },
+  //     GroupImages: { ...state.group.GroupImages },
+  //     Organizer: { ...state.group.Organizer },
+  //     Venues: { ...state.group.Venues },
+  //     Members: { ...state.group.Members },
+  //   }
+  // };
 
   switch (action.type) {
     case LOAD_GROUPS:
       const groups = normalizeFn(action.payload.Groups);
       return { ...state, groups: groups, isLoading: false };
     case LOAD_GROUP:
-      const group = objDeepCopyFn(action.payload);
-      return { ...state, group: group };
+      return { ...state, group: { ...action.payload } };
     case LOAD_GROUP_EVENTS:
       const events = normalizeFn(action.payload);
-      updatedState.group.Events = events;
-      return updatedState;
+      return { ...state, group: { ...state.group, Events: events } };
     case LOAD_GROUP_MEMBERS:
       const members = normalizeFn(action.payload);
-      updatedState.group.Members = members;
-      return updatedState;
+      return { ...state, group: { ...state.group, Members: members } };
     case LOAD_USER_STATUS:
       const status = action.payload;
-      updatedState.group.userStatus = status;
-      return updatedState;
+      return { ...state, group: { ...state.group, userStatus: status } };
     case CREATE_GROUP:
       const newGroupId = action.payload.id;
-      updatedState[ 'groups' ][ newGroupId ] = { ...action.payload };
-      return updatedState;
+      return { ...state, groups: { ...state.groups, [ newGroupId ]: { ...action.payload } } };
     case DELETE_GROUP:
       const id = action.payload;
+      const updatedState = objDeepCopyFn(state);
       delete updatedState[ 'groups' ][ id ];
       return updatedState;
     case UPDATE_GROUP:
       const updateGroup = { ...action.payload };
       const updateGroupId = updateGroup.id;
-      updatedState.groups[ updateGroupId ] = updateGroup;
-      return updatedState;
+      return { ...state, groups: { ...state.groups, [ updateGroupId ]: updateGroup } };
     default:
-      return updatedState;
+      return { ...state };
   };
 };
 
