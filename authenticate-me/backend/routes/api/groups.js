@@ -479,7 +479,7 @@ router.post('/:groupId/events', requireAuth, validateEventData, async (req, res,
   });
 
   if (previewImage) {
-    const newImg = await EventImage.create({
+    await EventImage.create({
       url: previewImage,
       preview: true,
       eventId: newEvent.id
