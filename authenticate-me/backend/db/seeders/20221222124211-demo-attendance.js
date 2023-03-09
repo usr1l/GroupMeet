@@ -16,49 +16,29 @@ module.exports = {
         userId: 1
       },
       {
-        status: 'pending',
-        eventId: 2,
-        userId: 1
-      },
-      {
-        status: 'member',
-        eventId: 3,
-        userId: 1
-      },
-      {
-        status: 'attending',
-        eventId: 1,
-        userId: 2
-      },
-      {
-        status: 'pending',
-        eventId: 2,
-        userId: 2
-      },
-      {
-        status: 'member',
-        eventId: 3,
-        userId: 2
-      },
-      {
-        status: 'attending',
-        eventId: 1,
-        userId: 3
-      },
-      {
-        status: 'member',
-        eventId: 2,
-        userId: 3
-      },
-      {
-        status: 'pending',
-        eventId: 3,
-        userId: 3
-      },
-      {
         status: 'member',
         eventId: 4,
         userId: 1
+      },
+      {
+        status: 'member',
+        eventId: 7,
+        userId: 1
+      },
+      {
+        status: 'pending',
+        eventId: 2,
+        userId: 1
+      },
+      {
+        status: 'pending',
+        eventId: 8,
+        userId: 1
+      },
+      {
+        status: 'member',
+        eventId: 2,
+        userId: 2
       },
       {
         status: 'member',
@@ -67,18 +47,33 @@ module.exports = {
       },
       {
         status: 'member',
+        eventId: 8,
+        userId: 2
+      },
+      {
+        status: 'attending',
         eventId: 6,
+        userId: 2
+      },
+      {
+        status: 'attending',
+        eventId: 7,
+        userId: 2
+      },
+      {
+        status: 'pending',
+        eventId: 1,
+        userId: 2
+      },
+      {
+        status: 'member',
+        eventId: 3,
         userId: 3
       },
       {
         status: 'member',
-        eventId: 7,
-        userId: 1
-      },
-      {
-        status: 'member',
-        eventId: 8,
-        userId: 2
+        eventId: 6,
+        userId: 3
       },
       {
         status: 'member',

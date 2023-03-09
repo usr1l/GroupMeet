@@ -1,7 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams, Link, NavLink, Switch, Route } from "react-router-dom";
-import { thunkDeleteGroup, thunkLoadSingleGroup, thunkLoadGroupEvents, thunkLoadGroupMembers, thunkLoadUserStatus } from "../../store/groups";
+import {
+  thunkDeleteGroup,
+  thunkLoadSingleGroup,
+  thunkLoadGroupEvents,
+  thunkLoadGroupMembers,
+  thunkLoadUserStatus,
+  thunkRequestMembership,
+  thunkDeleteMembership
+} from "../../store/groups";
 import { useHistory } from "react-router-dom";
 import errorPageHandler from "../ErrorPage";
 import ImagePreview from "../ImagePreview";
@@ -48,6 +56,7 @@ const SingleGroupPage = ({ groupData }) => {
 
   const history = useHistory();
 
+
   let {
     name,
     about,
@@ -74,15 +83,40 @@ const SingleGroupPage = ({ groupData }) => {
   };
 
   const isPrivate = group.private === true ? 'Private' : 'Public';
+  const userId = user.id;
 
   const organizerFn = () => {
-    if (user) {
-      return organizerId === user.id
+    if (userId) {
+      return organizerId === userId;
     };
     return false;
   };
 
   const organizerBool = organizerFn(user);
+
+  const handleMemberClick = async (e) => {
+    e.preventDefault();
+    switch (membershipState) {
+      case 'JOIN GROUP':
+        const res = await dispatch(thunkRequestMembership(groupId));
+        setMembershipState(membershipButtonDisplay(res));
+        return;
+      case 'JOINED':
+        const deleteMembershipMember = await dispatch(thunkDeleteMembership({ groupId, memberId: user.id }));
+        setMembershipState(membershipButtonDisplay(deleteMembershipMember));
+        return;
+      case 'REQUESTED':
+        const deleteMembershipReq = await dispatch(thunkDeleteMembership({ groupId, memberId: user.id }));
+        setMembershipState(membershipButtonDisplay(deleteMembershipReq));
+        return;
+      case 'CO-HOST':
+        const deleteMembershipHost = await dispatch(thunkDeleteMembership({ groupId, memberId: user.id }));
+        setMembershipState(membershipButtonDisplay(deleteMembershipHost));
+        return;
+      default:
+        return;
+    };
+  };
 
   const handleDelete = async (e) => {
     e.preventDefault();
@@ -116,7 +150,7 @@ const SingleGroupPage = ({ groupData }) => {
             <div id='group-page-description-card-bottom'>
               {/* <i id='group-index-card-component-bottom-share' class="fa-regular fa-share-from-square"></i>
               <div className='group-index-card-item'>{window.location.href}</div> */}
-              <Button buttonStyle='btn--delete' buttonSize='btn--large'>{membershipState}</Button>
+              <Button buttonStyle='btn--delete' buttonSize='btn--large' onClick={handleMemberClick}>{membershipState}</Button>
             </div>
           </div>
         </div>

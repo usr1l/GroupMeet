@@ -1,6 +1,6 @@
 // backend/routes/api/groups.js
 const router = require('express').Router();
-const { Group, GroupImage, User, Membership, Venue, Event, EventImage } = require('../../db/models');
+const { Group, GroupImage, User, Membership, Venue, Event, EventImage, Attendance } = require('../../db/models');
 const { Op, ValidationError } = require('sequelize');
 const { requireAuth, checkAuth, checkCohost, deleteAuth } = require('../../utils/auth');
 const { check } = require('express-validator');
@@ -479,11 +479,19 @@ router.post('/:groupId/events', requireAuth, validateEventData, async (req, res,
   });
 
   if (previewImage) {
-    const newImg = await EventImage.create({
+    await EventImage.create({
       url: previewImage,
       preview: true,
       eventId: newEvent.id
     });
+  };
+
+  if (newEvent) {
+    await Attendance.create({
+      status: 'member',
+      eventId: newEvent.id,
+      userId
+    })
   };
 
   const newEventJSON = toJSONDisplay(newEvent, 'startDate', 'endDate')
