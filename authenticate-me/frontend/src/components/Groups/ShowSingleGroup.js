@@ -98,20 +98,20 @@ const SingleGroupPage = ({ groupData }) => {
     e.preventDefault();
     switch (membershipState) {
       case 'JOIN GROUP':
-        const res = await dispatch(thunkRequestMembership(groupId));
-        setMembershipState(membershipButtonDisplay(res));
+        dispatch(thunkRequestMembership(groupId))
+          .then((data) => setMembershipState(membershipButtonDisplay(data)));
         return;
       case 'JOINED':
-        const deleteMembershipMember = await dispatch(thunkDeleteMembership({ groupId, memberId: user.id }));
-        setMembershipState(membershipButtonDisplay(deleteMembershipMember));
+        dispatch(thunkDeleteMembership({ groupId, memberId: user.id }))
+          .then((data) => setMembershipState(membershipButtonDisplay(data)));
         return;
       case 'REQUESTED':
-        const deleteMembershipReq = await dispatch(thunkDeleteMembership({ groupId, memberId: user.id }));
-        setMembershipState(membershipButtonDisplay(deleteMembershipReq));
+        dispatch(thunkDeleteMembership({ groupId, memberId: user.id }))
+          .then((data) => setMembershipState(membershipButtonDisplay(data)));
         return;
       case 'CO-HOST':
-        const deleteMembershipHost = await dispatch(thunkDeleteMembership({ groupId, memberId: user.id }));
-        setMembershipState(membershipButtonDisplay(deleteMembershipHost));
+        dispatch(thunkDeleteMembership({ groupId, memberId: user.id }))
+          .then((data) => setMembershipState(membershipButtonDisplay(data)));
         return;
       default:
         return;
