@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams, Link, NavLink, Switch, Route } from "react-router-dom";
-import { thunkDeleteGroup, thunkLoadSingleGroup, thunkLoadGroupEvents, thunkLoadGroupMembers, thunkLoadUserStatus } from "../../store/groups";
+import {
+  thunkDeleteGroup,
+  thunkLoadSingleGroup,
+  thunkLoadGroupEvents,
+  thunkLoadGroupMembers,
+  thunkLoadUserStatus,
+  thunkRequestMembership
+} from "../../store/groups";
 import { useHistory } from "react-router-dom";
 import errorPageHandler from "../ErrorPage";
 import ImagePreview from "../ImagePreview";
@@ -84,6 +91,18 @@ const SingleGroupPage = ({ groupData }) => {
 
   const organizerBool = organizerFn(user);
 
+  const handleMemberClick = async (e) => {
+    e.preventDefault();
+    switch (membershipState) {
+      case 'JOIN GROUP':
+        const res = await dispatch(thunkRequestMembership(groupId));
+        setMembershipState(membershipButtonDisplay(res));
+        return;
+      default:
+        return;
+    };
+  };
+
   const handleDelete = async (e) => {
     e.preventDefault();
     const data = await dispatch(thunkDeleteGroup({ groupId }));
@@ -116,7 +135,7 @@ const SingleGroupPage = ({ groupData }) => {
             <div id='group-page-description-card-bottom'>
               {/* <i id='group-index-card-component-bottom-share' class="fa-regular fa-share-from-square"></i>
               <div className='group-index-card-item'>{window.location.href}</div> */}
-              <Button buttonStyle='btn--delete' buttonSize='btn--large'>{membershipState}</Button>
+              <Button buttonStyle='btn--delete' buttonSize='btn--large' onClick={handleMemberClick}>{membershipState}</Button>
             </div>
           </div>
         </div>

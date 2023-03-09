@@ -11,6 +11,7 @@ const LOAD_USER_STATUS = 'group/status/LOAD';
 const DELETE_GROUP = 'groups/DELETE';
 const CREATE_GROUP = 'groups/CREATE';
 const UPDATE_GROUP = 'groups/EDIT';
+const JOIN_GROUP = 'group/membership/CREATE';
 
 export const thunkLoadGroups = () => async (dispatch) => {
   const response = await csrfFetch('/api/groups/');
@@ -116,6 +117,25 @@ export const thunkUpdateGroup = (groupInfo, groupId) => async (dispatch) => {
     return response;
   };
 };
+
+
+export const thunkRequestMembership = (groupId) => async (dispatch) => {
+  const response = await csrfFetch(`/api/groups/${groupId}/membership`, {
+    method: 'POST'
+  })
+    .catch(err => err);
+
+  const data = await response.json();
+  if (data.status === 'pending') {
+    dispatch(thunkLoadGroupMembers(groupId));
+    dispatch(actionLoadUserStatus(data.status));
+    return data.status;
+  };
+
+  return response;
+
+};
+
 
 export const actionLoadGroups = (groups) => {
   return {

@@ -14,6 +14,7 @@
     "undo-mig": "npx dotenv sequelize db:migrate:undo:all",
     "unseed": "npx dotenv sequelize db:seed:undo:all",
     "seed": "npx dotenv sequelize db:seed:all",
+    "reseed": "npm run unseed && npm run seed",
     "resetdb": "npm run unseed && npm run undo-mig && npm run mig && npm run seed"
   },
   "keywords": [],
