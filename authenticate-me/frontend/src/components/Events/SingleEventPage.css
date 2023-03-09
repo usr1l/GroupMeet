@@ -38,6 +38,7 @@ div.event-page-header .icon-description-card-container {
 .event-page-container {
   background: rgba(0, 0, 0, 0.03);
   position: relative;
+  padding-bottom: 90px;
 }
 
 .event-page-icon-card-section {
@@ -87,7 +88,7 @@ section.event-page-icon-card-section>.icon-description-card-container {
 }
 
 .event-page-footer {
-  position: sticky;
+  position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;

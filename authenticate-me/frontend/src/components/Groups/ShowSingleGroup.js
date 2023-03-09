@@ -46,8 +46,6 @@ const SingleGroupPage = ({ groupData }) => {
   const { user } = useSelector(state => state.session);
   const group = useSelector(state => state.groups.group);
 
-  if (!group.Organizer.id) return (<div>Loading . . .</div>);
-
   const history = useHistory();
 
   let {
@@ -85,7 +83,6 @@ const SingleGroupPage = ({ groupData }) => {
   };
 
   const organizerBool = organizerFn(user);
-  // const buttonDisplay = membershipButtonDisplay();
 
   const handleDelete = async (e) => {
     e.preventDefault();

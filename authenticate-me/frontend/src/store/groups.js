@@ -65,7 +65,6 @@ export const thunkDeleteGroup = ({ groupId }) => async (dispatch) => {
 
   if (response.ok) {
     dispatch(actionDeleteGroup(groupId));
-    return;
   };
 
   return response;
@@ -76,16 +75,16 @@ export const thunkCreateGroup = (groupInfo) => async (dispatch) => {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(groupInfo)
-  })` `
+  })
     .catch(err => err);
 
+  const data = await response.json();
+
   if (response.ok) {
-    const data = await response.json();
     await dispatch(actionCreateGroup(data));
-    return data;
   };
 
-  return response;
+  return data;
 };
 
 export const thunkLoadSingleGroup = (groupId) => async (dispatch) => {

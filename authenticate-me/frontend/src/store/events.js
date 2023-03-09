@@ -67,6 +67,7 @@ export const thunkCreateEvent = (eventInfo) => async (dispatch) => {
   if (response.ok) {
     const data = await response.json();
     await dispatch(actionCreateEvent(data));
+    await dispatch(thunkLoadEvents());
     return data;
   };
 };
@@ -157,11 +158,12 @@ const eventReducer = (state = initialState, action) => {
     case LOAD_EVENT:
       const event = objDeepCopyFn(action.payload.Event);
       return { ...state, event: event };
-    case CREATE_EVENT:
+    case CREATE_EVENT: {
       const newEventId = action.payload.id;
-      const newEvent = objDeepCopyFn(action.payload);
+      const newEvent = { ...action.payload, Group: { ...action.payload.Group } };
       updatedState[ 'events' ][ newEventId ] = newEvent;
       return updatedState;
+    }
     case DELETE_EVENT:
       const id = action.payload;
       delete updatedState[ 'events' ][ id ];

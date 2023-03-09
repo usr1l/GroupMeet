@@ -39,7 +39,7 @@ const CreateEventForm = (event) => {
     if (!type) validationErrors.push('Please specify if event is \'In person\' or \'Online\'');
 
     if (`${startDate} ${startTime}` <= currDateTime) validationErrors.push('Please provide a start date, must be in the future');
-    if (`${endDate} ${endTime}` < startDate) validationErrors.push('Please provide an end date, must be after start date');
+    if (`${endDate} ${endTime}` <= `${startDate} ${startTime}`) validationErrors.push('Please provide an end date, must be after start date');
     if (!type) validationErrors.push('Please specify the type');
     if (price && parseFloat(price) < 0) validationErrors.push('Invalid Price');
     if (capacity && capacity < 0) validationErrors.push('Invalid Capacity');
@@ -87,13 +87,9 @@ const CreateEventForm = (event) => {
     <div id='create-event-page'>
       <h2 id="event-form__title">CREATE AN EVENT</h2>
       <ul id='event-form__error-list'>
-        {!!errors.length && (
-          <div>
-            {errors.map((error) => (
-              <li key={error}>{error}</li>
-            ))}
-          </div>
-        )}
+        {errors.map((error) => (
+          <li key={error}>{error}</li>
+        ))}
       </ul>
       <form id="event-form" onSubmit={onSubmit}>
         <InputDiv divStyle="event-form__block" labelStyle="event-form__label" labelFor='eventName' label='Name: '>
