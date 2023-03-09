@@ -7,7 +7,8 @@ import {
   thunkLoadGroupEvents,
   thunkLoadGroupMembers,
   thunkLoadUserStatus,
-  thunkRequestMembership
+  thunkRequestMembership,
+  thunkDeleteMembership
 } from "../../store/groups";
 import { useHistory } from "react-router-dom";
 import errorPageHandler from "../ErrorPage";
@@ -55,6 +56,7 @@ const SingleGroupPage = ({ groupData }) => {
 
   const history = useHistory();
 
+
   let {
     name,
     about,
@@ -81,10 +83,11 @@ const SingleGroupPage = ({ groupData }) => {
   };
 
   const isPrivate = group.private === true ? 'Private' : 'Public';
+  const userId = user.id;
 
   const organizerFn = () => {
-    if (user) {
-      return organizerId === user.id
+    if (userId) {
+      return organizerId === userId;
     };
     return false;
   };
@@ -97,6 +100,18 @@ const SingleGroupPage = ({ groupData }) => {
       case 'JOIN GROUP':
         const res = await dispatch(thunkRequestMembership(groupId));
         setMembershipState(membershipButtonDisplay(res));
+        return;
+      case 'JOINED':
+        const deleteMembershipMember = await dispatch(thunkDeleteMembership({ groupId, memberId: user.id }));
+        setMembershipState(membershipButtonDisplay(deleteMembershipMember));
+        return;
+      case 'REQUESTED':
+        const deleteMembershipReq = await dispatch(thunkDeleteMembership({ groupId, memberId: user.id }));
+        setMembershipState(membershipButtonDisplay(deleteMembershipReq));
+        return;
+      case 'CO-HOST':
+        const deleteMembershipHost = await dispatch(thunkDeleteMembership({ groupId, memberId: user.id }));
+        setMembershipState(membershipButtonDisplay(deleteMembershipHost));
         return;
       default:
         return;

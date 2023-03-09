@@ -133,7 +133,26 @@ export const thunkRequestMembership = (groupId) => async (dispatch) => {
   };
 
   return response;
+};
 
+
+export const thunkDeleteMembership = ({ groupId, memberId }) => async (dispatch) => {
+  const response = await csrfFetch(`/api/groups/${groupId}/membership`, {
+    method: 'DELETE',
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ memberId })
+  })
+    .catch(err => err);
+
+  if (response.ok) {
+    dispatch(thunkLoadGroupMembers(groupId));
+    dispatch(actionLoadUserStatus(''));
+    return '';
+  }
+
+  // const data = await response.json();
+
+  return response;
 };
 
 
