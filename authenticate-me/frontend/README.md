@@ -127,7 +127,7 @@ store = {
       },
       Venues: [venuesData],
       // To be completed
-      Me                                                      mbers: [membersData],
+      Members: [membersData],
     },
   },
   events: {
