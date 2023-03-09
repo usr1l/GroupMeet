@@ -22,12 +22,8 @@ const SingleEventPage = ({ eventData }) => {
   }, [ dispatch, eventId ]);
 
   const { user } = useSelector(state => state.session);
-  const eventState = useSelector(state => state.events);
-
-  if (eventState.status === true) return (<div>Loading...</div>);
-
   const event = useSelector(state => state.events.event);
-  if (!event) return (<div>Loading . . .</div>);
+
   const { name, startDate, endDate, groupId, description, previewImage } = event;
   const groupType = event.Group.private === true ? 'Public group' : 'Private group';
   const groupName = event.Group.name;
@@ -60,7 +56,7 @@ const SingleEventPage = ({ eventData }) => {
     e.preventDefault();
     const data = await dispatch(thunkDeleteEvent({ eventId }))
     if (data.ok === true) {
-      history.push(`/events`);
+      history.push('/events');
     };
 
     if (data.ok === false) {
@@ -106,25 +102,25 @@ const SingleEventPage = ({ eventData }) => {
             </section>
           </div>
         </div>
-        <div></div>
-        <div className="event-page-footer">
-          <div className="event-page-footer-buffer">
-            <div className="event-page-footer-container">
-              <div className="event-page-footertext">
-                {`${startDateSlice}`}
-                <br></br>
-                {name}
-              </div>
-              <div>
-                {organizerBool && (
-                  <section className="event-page-footer-buttons">
-                    <NavLink to={`/events/${eventId}/edit`} id='event-edit-navlink'>
-                      <Button buttonStyle='btn--big' buttonSize='btn--large' onClick={(e) => e.preventDefault} >Edit</Button>
-                    </NavLink>
-                    <Button buttonStyle='btn--delete' buttonSize='btn--large' onClick={handleDelete}>Delete</Button>
-                  </section>
-                )}
-              </div>
+      </div>
+      <div></div>
+      <div className="event-page-footer">
+        <div className="event-page-footer-buffer">
+          <div className="event-page-footer-container">
+            <div className="event-page-footertext">
+              {`${startDateSlice}`}
+              <br></br>
+              {name}
+            </div>
+            <div>
+              {organizerBool && (
+                <section className="event-page-footer-buttons">
+                  <NavLink to={`/events/${eventId}/edit`} id='event-edit-navlink'>
+                    <Button buttonStyle='btn--big' buttonSize='btn--large' onClick={(e) => e.preventDefault} >Edit</Button>
+                  </NavLink>
+                  <Button buttonStyle='btn--delete' buttonSize='btn--large' onClick={handleDelete}>Delete</Button>
+                </section>
+              )}
             </div>
           </div>
         </div>

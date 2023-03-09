@@ -51,6 +51,7 @@ h2#single-group-page-name {
   border-bottom: 1px solid lightgray;
   position: sticky;
   top: 70px;
+  z-index: 99;
 }
 
 .single-group-page-navbar-container {

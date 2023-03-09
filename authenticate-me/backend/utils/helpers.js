@@ -77,7 +77,7 @@ async function updateGroupPreviewImage(groupId) {
 const membershipArrToObj = (members) => {
   const membersArr = members.map(member => member.toJSON());
   for (const member of membersArr) {
-    member.status = member.Memberships[ 0 ].status;
+    member.memberStatus = member.Memberships[ 0 ].status;
     delete member.Memberships;
   };
   return membersArr;

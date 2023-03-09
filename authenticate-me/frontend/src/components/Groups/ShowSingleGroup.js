@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams, Link, NavLink, Switch, Route } from "react-router-dom";
-import { thunkDeleteGroup, thunkLoadSingleGroup, thunkLoadGroupEvents, thunkLoadGroupMembers } from "../../store/groups";
+import { thunkDeleteGroup, thunkLoadSingleGroup, thunkLoadGroupEvents, thunkLoadGroupMembers, thunkLoadUserStatus } from "../../store/groups";
 import { useHistory } from "react-router-dom";
 import errorPageHandler from "../ErrorPage";
 import ImagePreview from "../ImagePreview";
@@ -10,8 +10,8 @@ import IconLabel from "../IconLabel";
 import Button from "../Button";
 import EventsList from "../Events/EventsList";
 import GroupAboutPage from "./GroupAboutPage";
-import "./SingleGroupPage.css";
 import MembershipsPage from "../MembershipsPage";
+import "./SingleGroupPage.css";
 
 const SingleGroupPage = ({ groupData }) => {
 
@@ -19,21 +19,49 @@ const SingleGroupPage = ({ groupData }) => {
   if (isNaN(parseInt(groupId))) return (<NotFoundPage />)
   const dispatch = useDispatch();
 
+  const [ membershipState, setMembershipState ] = useState('...');
+
+  function membershipButtonDisplay(status) {
+    switch (status) {
+      case 'pending':
+        return 'REQUESTED';
+      case 'member':
+        return 'JOINED';
+      case 'co-host':
+        return 'CO-HOST';
+      default:
+        return 'JOIN GROUP';
+    };
+  };
+
+
   useEffect(() => {
     dispatch(thunkLoadSingleGroup(groupId))
       .then(() => dispatch(thunkLoadGroupEvents(groupId)))
+      .then(() => dispatch(thunkLoadUserStatus(groupId)))
+      .then((res) => setMembershipState(membershipButtonDisplay(res)))
       .then(() => dispatch(thunkLoadGroupMembers(groupId)));
   }, [ dispatch, groupId ]);
 
   const { user } = useSelector(state => state.session);
   const group = useSelector(state => state.groups.group);
 
-
-  if (Object.keys(group).length < 6) return (<div>Loading . . .</div>);
-
   const history = useHistory();
 
-  let { name, about, city, state, organizerId, previewImage, numMembers, Organizer, Events, Members } = group;
+  let {
+    name,
+    about,
+    city,
+    state,
+    organizerId,
+    previewImage,
+    numMembers,
+    Organizer,
+    Events,
+    Members,
+    userStatus
+  } = group;
+
   let events = [];
   let members = [];
 
@@ -86,8 +114,9 @@ const SingleGroupPage = ({ groupData }) => {
               </div>
             </div>
             <div id='group-page-description-card-bottom'>
-              <i id='group-index-card-component-bottom-share' class="fa-regular fa-share-from-square"></i>
-              <div className='group-index-card-item'>{window.location.href}</div>
+              {/* <i id='group-index-card-component-bottom-share' class="fa-regular fa-share-from-square"></i>
+              <div className='group-index-card-item'>{window.location.href}</div> */}
+              <Button buttonStyle='btn--delete' buttonSize='btn--large'>{membershipState}</Button>
             </div>
           </div>
         </div>

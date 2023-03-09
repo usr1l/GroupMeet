@@ -1,11 +1,13 @@
 import { csrfFetch } from "./csrf";
 import normalizeFn from "../components/HelperFns/NormalizeFn";
+import objDeepCopyFn from "../components/HelperFns/ObjDeepCopyFn";
 
 
 const LOAD_GROUPS = 'groups/LOAD';
 const LOAD_GROUP = 'group/LOAD';
 const LOAD_GROUP_EVENTS = 'group/events/LOAD';
 const LOAD_GROUP_MEMBERS = 'group/members/LOAD';
+const LOAD_USER_STATUS = 'group/status/LOAD';
 const DELETE_GROUP = 'groups/DELETE';
 const CREATE_GROUP = 'groups/CREATE';
 const UPDATE_GROUP = 'groups/EDIT';
@@ -33,13 +35,27 @@ export const thunkLoadGroupEvents = (groupId) => async (dispatch) => {
 
 export const thunkLoadGroupMembers = (groupId) => async (dispatch) => {
   const response = await csrfFetch(`/api/groups/${groupId}/members`);
-
   if (response.ok) {
     const members = await response.json();
     dispatch(actionLoadGroupMembers(members));
     return members;
   };
+
+  return;
 };
+
+export const thunkLoadUserStatus = (groupId) => async (dispatch) => {
+  const response = await csrfFetch(`/api/groups/${groupId}/membership/status`);
+
+  if (response.ok) {
+    const status = await response.json();
+    dispatch(actionLoadUserStatus(status));
+    return status;
+  }
+
+  return;
+};
+
 
 export const thunkDeleteGroup = ({ groupId }) => async (dispatch) => {
   const response = await csrfFetch(`/api/groups/${groupId}`, {
@@ -60,16 +76,16 @@ export const thunkCreateGroup = (groupInfo) => async (dispatch) => {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(groupInfo)
   })
-    .catch(err => err)
+    .catch(err => err);
+
+  const data = await response.json();
 
   if (response.ok) {
-    const data = await response.json();
     await dispatch(actionCreateGroup(data));
-    return data;
-  }
+  };
 
-  return response
-}
+  return data;
+};
 
 export const thunkLoadSingleGroup = (groupId) => async (dispatch) => {
 
@@ -122,6 +138,13 @@ const actionLoadGroupMembers = (members) => {
   }
 }
 
+const actionLoadUserStatus = (status) => {
+  return {
+    type: LOAD_USER_STATUS,
+    payload: status
+  };
+};
+
 const actionLoadSingleGroup = (group) => {
   return {
     type: LOAD_GROUP,
@@ -163,9 +186,7 @@ const groupReducer = (state = initialState, action) => {
       GroupImages: { ...state.group.GroupImages },
       Organizer: { ...state.group.Organizer },
       Venues: { ...state.group.Venues },
-      Members: {
-        ...state.group.Members
-      }
+      Members: { ...state.group.Members },
     }
   };
 
@@ -174,7 +195,7 @@ const groupReducer = (state = initialState, action) => {
       const groups = normalizeFn(action.payload.Groups);
       return { ...state, groups: groups, isLoading: false };
     case LOAD_GROUP:
-      const group = action.payload;
+      const group = objDeepCopyFn(action.payload);
       return { ...state, group: group };
     case LOAD_GROUP_EVENTS:
       const events = normalizeFn(action.payload);
@@ -184,16 +205,20 @@ const groupReducer = (state = initialState, action) => {
       const members = normalizeFn(action.payload);
       updatedState.group.Members = members;
       return updatedState;
+    case LOAD_USER_STATUS:
+      const status = action.payload;
+      updatedState.group.userStatus = status;
+      return updatedState;
     case CREATE_GROUP:
       const newGroupId = action.payload.id;
-      updatedState[ 'groups' ][ newGroupId ] = action.payload;
+      updatedState[ 'groups' ][ newGroupId ] = { ...action.payload };
       return updatedState;
     case DELETE_GROUP:
       const id = action.payload;
       delete updatedState[ 'groups' ][ id ];
       return updatedState;
     case UPDATE_GROUP:
-      const updateGroup = action.payload;
+      const updateGroup = { ...action.payload };
       const updateGroupId = updateGroup.id;
       updatedState.groups[ updateGroupId ] = updateGroup;
       return updatedState;

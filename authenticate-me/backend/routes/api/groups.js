@@ -90,8 +90,27 @@ function membershipDoesNotExist(next) {
   const err = new Error('Membership between the user and the group does not exist')
   err.status = 404;
   return next(err);
-}
+};
 
+// get currUser membershipStatus
+router.get('/:groupId/membership/status', requireAuth, async (req, res, next) => {
+  const userId = req.user.id;
+  const { groupId } = req.params;
+
+  const membership = await Membership.findOne({
+    where: {
+      userId,
+      groupId
+    }
+  });
+
+  res.status = 200;
+  if (!membership) {
+    return res.json(null);
+  };
+
+  return res.json(membership.status);
+});
 
 
 // delete a membership

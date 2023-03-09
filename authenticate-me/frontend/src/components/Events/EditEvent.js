@@ -43,8 +43,6 @@ const EditEventPage = () => {
       });
   }, []);
 
-
-
   const validate = () => {
     const validationErrors = [];
 
@@ -54,7 +52,7 @@ const EditEventPage = () => {
     if (!type) validationErrors.push('Please specify if event is \'In person\' or \'Online\'');
 
     if (`${startDate} ${startTime}` <= currDateTime) validationErrors.push('Please provide a start date, must be in the future');
-    if (`${endDate} ${endTime}` < startDate) validationErrors.push('Please provide an end date, must be after start date');
+    if (`${endDate} ${endTime}` <= `${startDate} ${startTime}`) validationErrors.push('Please provide an end date, must be after start date');
     if (!type) validationErrors.push('Please specify the type');
 
     if ((price && parseFloat(price) < 0) || (!Number.isInteger(100 * parseFloat(price)))) validationErrors.push('Invalid Price');
