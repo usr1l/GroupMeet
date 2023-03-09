@@ -141,15 +141,15 @@ export const actionCreateEvent = (event) => {
 const initialState = { events: {}, event: {}, isLoading: true };
 
 const eventReducer = (state = initialState, action) => {
-  const updatedState = {
-    ...state,
-    events: { ...state.events },
-    event: {
-      ...state.event,
-      Group: { ...state.event.Group },
-      Venue: { ...state.event.Venue }
-    }
-  };
+  // const updatedState = {
+  //   ...state,
+  //   events: { ...state.events },
+  //   event: {
+  //     ...state.event,
+  //     Group: { ...state.event.Group },
+  //     Venue: { ...state.event.Venue }
+  //   }
+  // };
 
   switch (action.type) {
     case LOAD_EVENTS:
@@ -158,23 +158,21 @@ const eventReducer = (state = initialState, action) => {
     case LOAD_EVENT:
       const event = objDeepCopyFn(action.payload.Event);
       return { ...state, event: event };
-    case CREATE_EVENT: {
+    case CREATE_EVENT:
       const newEventId = action.payload.id;
-      const newEvent = { ...action.payload, Group: { ...action.payload.Group } };
-      updatedState[ 'events' ][ newEventId ] = newEvent;
-      return updatedState;
-    }
+      const newEvent = { ...action.payload, Group: { ...action.payload.Group }, Venue: { ...action.payload.Venue } };
+      return { ...state, events: { ...state.events, [ newEventId ]: newEvent } };
     case DELETE_EVENT:
       const id = action.payload;
+      const updatedState = objDeepCopyFn(state);
       delete updatedState[ 'events' ][ id ];
       return updatedState;
     case UPDATE_EVENT:
       const updateEvent = objDeepCopyFn(action.payload);
       const updateEventId = updateEvent.id;
-      updatedState.events[ updateEventId ] = updateEvent;
-      return updatedState;
+      return { ...state, events: { ...state.events, [ updateEventId ]: updateEvent } };
     default:
-      return updatedState;
+      return { ...state };
   };
 };
 

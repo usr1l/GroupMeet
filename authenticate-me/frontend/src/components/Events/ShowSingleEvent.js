@@ -24,9 +24,14 @@ const SingleEventPage = ({ eventData }) => {
   const { user } = useSelector(state => state.session);
   const event = useSelector(state => state.events.event);
 
-  const { name, startDate, endDate, groupId, description, previewImage } = event;
-  const groupType = event.Group.private === true ? 'Public group' : 'Private group';
-  const groupName = event.Group.name;
+  let groupType;
+  let groupName;
+  const { name, startDate, endDate, groupId, description, previewImage, Group } = event;
+
+  if (Group && Group.name) {
+    groupType = Group.private === true ? 'Public group' : 'Private group';
+    groupName = Group.name;
+  };
 
   const history = useHistory();
 

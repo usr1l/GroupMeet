@@ -56,7 +56,6 @@ const SingleGroupPage = ({ groupData }) => {
 
   const history = useHistory();
 
-
   let {
     name,
     about,
@@ -67,8 +66,7 @@ const SingleGroupPage = ({ groupData }) => {
     numMembers,
     Organizer,
     Events,
-    Members,
-    userStatus
+    Members
   } = group;
 
   let events = [];
@@ -80,6 +78,11 @@ const SingleGroupPage = ({ groupData }) => {
 
   if (Members && Object.values(Members).length) {
     members = Object.values(Members);
+  };
+
+  let hostName;
+  if (Organizer && Organizer.id) {
+    hostName = `${Organizer.firstName} ${Organizer.lastName}`;
   };
 
   const isPrivate = group.private === true ? 'Private' : 'Public';
@@ -94,24 +97,25 @@ const SingleGroupPage = ({ groupData }) => {
 
   const organizerBool = organizerFn(user);
 
+  // need to work on not allowing single host to leave a group
   const handleMemberClick = async (e) => {
     e.preventDefault();
     switch (membershipState) {
       case 'JOIN GROUP':
-        const res = await dispatch(thunkRequestMembership(groupId));
-        setMembershipState(membershipButtonDisplay(res));
+        dispatch(thunkRequestMembership(groupId))
+          .then((data) => setMembershipState(membershipButtonDisplay(data)));
         return;
       case 'JOINED':
-        const deleteMembershipMember = await dispatch(thunkDeleteMembership({ groupId, memberId: user.id }));
-        setMembershipState(membershipButtonDisplay(deleteMembershipMember));
+        dispatch(thunkDeleteMembership({ groupId, memberId: user.id }))
+          .then((data) => setMembershipState(membershipButtonDisplay(data)));
         return;
       case 'REQUESTED':
-        const deleteMembershipReq = await dispatch(thunkDeleteMembership({ groupId, memberId: user.id }));
-        setMembershipState(membershipButtonDisplay(deleteMembershipReq));
+        dispatch(thunkDeleteMembership({ groupId, memberId: user.id }))
+          .then((data) => setMembershipState(membershipButtonDisplay(data)));
         return;
       case 'CO-HOST':
-        const deleteMembershipHost = await dispatch(thunkDeleteMembership({ groupId, memberId: user.id }));
-        setMembershipState(membershipButtonDisplay(deleteMembershipHost));
+        dispatch(thunkDeleteMembership({ groupId, memberId: user.id }))
+          .then((data) => setMembershipState(membershipButtonDisplay(data)));
         return;
       default:
         return;
@@ -144,7 +148,7 @@ const SingleGroupPage = ({ groupData }) => {
               <div>
                 <IconLabel iconClass={"fa-solid fa-location-dot"} labelText={`${city}, ${state}`} />
                 <IconLabel iconClass={"fa-solid fa-user-group"} labelText={`${numMembers} Members • ${isPrivate} Group`} />
-                <IconLabel iconClass={"fa-solid fa-user-large"} labelText={`Organized by ${Organizer.firstName} ${Organizer.lastName}`} />
+                <IconLabel iconClass={"fa-solid fa-user-large"} labelText={`Organized by ${hostName}`} />
               </div>
             </div>
             <div id='group-page-description-card-bottom'>
