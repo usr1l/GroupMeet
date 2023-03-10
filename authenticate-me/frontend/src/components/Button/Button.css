@@ -100,30 +100,30 @@
   text-decoration: none;
 }
 
-.btn--wide:hover {
+.btn--wide:hover:enabled {
   background-color: #fa8282;
   transition: 0.3s
 }
 
-.btn--medium:hover,
-.btn--large:hover {
+.btn--medium:hover:enabled,
+.btn--large:hover:enabled {
   background: transparent;
   color: #242424;
   transition: all 0.3s ease-out;
 }
 
-.btn--demo:hover {
+.btn--demo:hover:enabled {
   background-color: transparent;
   color: var(--site-green);
   transition: 0.3s;
 }
 
-.btn--menu:hover {
+.btn--menu:hover:enabled {
   color: var(--site-green);
   transition: 0.3s;
 }
 
-.btn--big:hover {
+.btn--big:hover:enabled {
   background-color: var(--site-green);
   border-radius: 8px;
   color: #fff;
@@ -131,7 +131,7 @@
   transition: 0.3s;
 }
 
-.btn--delete:hover {
+.btn--delete:hover:enabled {
   background-color: #fa8282;
   transition: 0.3s ease-out;
   color: white;

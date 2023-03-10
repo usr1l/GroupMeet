@@ -53,7 +53,7 @@ const SplashPage = () => {
           Connect over tech.
         </div>
       </div>
-      <Button onClick={demoUser} buttonStyle='btn--demo' id='demo-button'>Join Today</Button>
+      <Button onClick={demoUser} buttonStyle='btn--demo' id='demo-button'>Try GroupMeet</Button>
     </div>
   )
 };
