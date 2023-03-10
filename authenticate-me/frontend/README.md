@@ -127,7 +127,7 @@ store = {
       },
       Venues: [venuesData],
       // To be completed
-      Members: [membersData],
+      Members: {membersData},
     },
   },
   events: {
@@ -152,7 +152,7 @@ store = {
       },
       EventImages: [imagesData],
       // To be completed
-      Attendees: [attendeeData],
+      Attendees: {attendeeData},
     },
   },
 };

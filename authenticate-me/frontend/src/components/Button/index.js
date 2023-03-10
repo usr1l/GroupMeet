@@ -10,7 +10,7 @@ const Button = ({
   onClick,
   buttonStyle,
   buttonSize,
-  // disableButton
+  disableButton
 }) => {
   const checkButtonStyle = STYLES.includes(buttonStyle) ? buttonStyle : STYLES[ 0 ];
   const checkButtonSize = SIZES.includes(buttonSize) ? buttonSize : SIZES[ 0 ];
@@ -21,7 +21,7 @@ const Button = ({
         className={`btn ${checkButtonStyle} ${checkButtonSize}`}
         onClick={onClick}
         type={type}
-      // disabled={disableButton || false}
+        disabled={disableButton || false}
       >
         {children}
       </button>

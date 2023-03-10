@@ -24,7 +24,7 @@
 }
 
 .btn--demo {
-  background-color: var(--site-blue);
+  background-color: var(--site-green);
   border-radius: 8px;
   color: #fff;
   fill: #fff;
@@ -32,11 +32,11 @@
 }
 
 .btn--big {
-  background-color: var(--site-blue);
+  background-color: var(--site-green);
   border-radius: 8px;
-  border: 1px solid var(--site-blue);
+  border: 1px solid var(--site-green);
   background-color: white;
-  color: var(--site-blue);
+  color: var(--site-green);
   fill: #fff;
   transition: 0.3s;
   box-sizing: border-box;
@@ -88,7 +88,7 @@
 
 .btn--modal {
   width: 400px;
-  height: 30px;
+  height: 40px;
   margin-top: 20px;
   font-size: 10pt;
 }
@@ -114,17 +114,17 @@
 
 .btn--demo:hover {
   background-color: transparent;
-  color: var(--site-blue);
+  color: var(--site-green);
   transition: 0.3s;
 }
 
 .btn--menu:hover {
-  color: var(--site-blue);
+  color: var(--site-green);
   transition: 0.3s;
 }
 
 .btn--big:hover {
-  background-color: var(--site-blue);
+  background-color: var(--site-green);
   border-radius: 8px;
   color: #fff;
   fill: #fff;
@@ -135,4 +135,9 @@
   background-color: #fa8282;
   transition: 0.3s ease-out;
   color: white;
+}
+
+.btn[disabled] {
+  opacity: 0.5;
+  cursor: default;
 }

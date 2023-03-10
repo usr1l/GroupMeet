@@ -97,8 +97,9 @@ const SingleGroupPage = ({ groupData }) => {
 
   const organizerBool = organizerFn(user);
 
+
   // need to work on not allowing single host to leave a group
-  const handleMemberClick = async (e) => {
+  const handleMemberClick = (e) => {
     e.preventDefault();
     switch (membershipState) {
       case 'JOIN GROUP':
@@ -114,8 +115,7 @@ const SingleGroupPage = ({ groupData }) => {
           .then((data) => setMembershipState(membershipButtonDisplay(data)));
         return;
       case 'CO-HOST':
-        dispatch(thunkDeleteMembership({ groupId, memberId: user.id }))
-          .then((data) => setMembershipState(membershipButtonDisplay(data)));
+        window.alert('Hosts are not able to leave their groups.')
         return;
       default:
         return;

@@ -1,5 +1,5 @@
 // frontend/src/components/LoginFormModal/index.js
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import * as sessionActions from "../../store/session";
 import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
@@ -20,10 +20,17 @@ function LoginFormModal() {
       .then(closeModal);
     return;
   };
+
+  const [ disableLoginBool, setDsiableLoginBool ] = useState(true);
   const [ credential, setCredential ] = useState("");
   const [ password, setPassword ] = useState("");
   const [ errors, setErrors ] = useState([]);
   const { closeModal } = useModal();
+
+  useEffect(() => {
+    if (credential && password) setDsiableLoginBool(false);
+    else setDsiableLoginBool(true);
+  }, [ dispatch, credential, password ]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -70,7 +77,7 @@ function LoginFormModal() {
           required
         />
       </form>
-      <Button onClick={handleSubmit} buttonSize='btn--modal' buttonStyle='btn--wide'>Log In</Button>
+      <Button onClick={handleSubmit} disableButton={disableLoginBool} buttonSize='btn--modal' buttonStyle='btn--wide'>Log In</Button>
       <div id='separator'></div>
       <Button onClick={demoUser} buttonSize='btn--modal' buttonStyle='btn--wide'>Log In as Guest</Button>
     </div>

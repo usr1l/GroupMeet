@@ -1,26 +1,15 @@
 // frontend/src/components/SignupFormPage/index.js
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
 import * as sessionActions from "../../store/session";
 import Button from "../Button";
 import './SignupForm.css';
 import icon from '../../images/g-icon.png';
-import { thunkLogin } from "../../store/session";
+
 
 function SignupFormModal() {
-  const dispatch = useDispatch();
-  const demoUser = async () => {
-    const user = {
-      credential: 'Demo-lition',
-      password: 'password'
-    };
-
-    dispatch(thunkLogin(user))
-      .then(closeModal);
-    return;
-  };
-
+  const [ disableLoginBool, setDsiableLoginBool ] = useState(true);
   const [ email, setEmail ] = useState("");
   const [ username, setUsername ] = useState("");
   const [ firstName, setFirstName ] = useState("");
@@ -29,6 +18,13 @@ function SignupFormModal() {
   const [ confirmPassword, setConfirmPassword ] = useState("");
   const [ errors, setErrors ] = useState([]);
   const { closeModal } = useModal();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (username.length > 3 && password.length > 5) setDsiableLoginBool(false)
+    else setDsiableLoginBool(true);
+  }, [ dispatch, username, password ]);
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -120,11 +116,7 @@ function SignupFormModal() {
           required
         />
       </form>
-      <Button onClick={handleSubmit} buttonStyle='btn--wide' buttonSize='btn--modal'>Sign Up</Button>
-      <p id='question'>
-        Click the Sign Up button to register now! Or login as a guest below.
-      </p>
-      <Button onClick={demoUser} buttonStyle='btn--wide' buttonSize='btn--modal'>Guest Login</Button>
+      <Button onClick={handleSubmit} disableButton={disableLoginBool} buttonStyle='btn--wide' buttonSize='btn--modal'>Sign Up</Button>
     </div>
 
   );
