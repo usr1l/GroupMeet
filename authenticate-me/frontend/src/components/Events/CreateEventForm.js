@@ -35,7 +35,7 @@ const CreateEventForm = (event) => {
 
     const { currDateTime } = getCurrTime();
     if (!name || (name.length < 5)) validationErrors.push('Please provide a name at least 5 characters long');
-    if ((!description)) validationErrors.push('A description is required');
+    if ((!description || description.length < 30)) validationErrors.push('A description is required (30 characters min.');
     if (!type) validationErrors.push('Please specify if event is \'In person\' or \'Online\'');
 
     if (`${startDate} ${startTime}` <= currDateTime) validationErrors.push('Please provide a start date, must be in the future');
@@ -164,7 +164,7 @@ const CreateEventForm = (event) => {
             name="description"
             onChange={(e) => setDescription(e.target.value)}
             value={description}
-            placeholder='What is your event about'
+            placeholder='What is your event about (30 characters min.)'
           />
         </InputDiv>
         <InputDiv divStyle="event-form__block" labelStyle="event-form__label" labelFor="event-profile-img" label='Event Profile Image: '>
