@@ -89,6 +89,7 @@ section.event-page-icon-card-section>.icon-description-card-container {
 
 .event-page-footer {
   position: sticky;
+  /* margin-top: auto; */
   bottom: 0;
   left: 0;
   width: 100%;
