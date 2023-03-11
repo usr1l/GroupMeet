@@ -4,4 +4,25 @@
   background: #2F363F;
   position: relative;
   bottom: 0;
+  display: flex;
+  align-items: center;
+  margin-top: auto;
+}
+
+.page-return {
+  margin-left: 60px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.page-return>i {
+  font-size: 20pt;
+  margin-right: 10px;
+  color: lightgray;
+}
+
+.page-return>h3 {
+  font-size: 15pt;
+  color: lightgray;
 }

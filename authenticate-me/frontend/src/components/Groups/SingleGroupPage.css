@@ -147,3 +147,21 @@ h2#single-group-page-name {
   left: -100px;
   top: 35px;
 }
+
+#group-events-page-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+#group-events-header-wrapper>h2 {
+  background: transparent;
+  font-size: 20pt;
+  font-weight: 500;
+}
+
+#group-events-header-wrapper {
+  width: 600px;
+  background-color: white;
+  padding-top: 20px;
+  padding-bottom: 5px;
+}

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react"
-import { useParams, NavLink } from "react-router-dom";
+import { useParams, NavLink, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { thunkDeleteEvent, thunkLoadSingleEvent } from "../../store/events";
 import { useHistory } from "react-router-dom";
@@ -7,9 +7,9 @@ import errorPageHandler from "../ErrorPage";
 import IconDescriptionCard from "../IconDescriptionCard";
 import Button from "../Button";
 import NotFoundPage from "../NotFoundPage";
-import './SingleEventPage.css';
+import BottomNav from "../BottomNav";
 import convertDate from '../HelperFns/ConvertDate';
-
+import './SingleEventPage.css';
 
 const SingleEventPage = ({ eventData }) => {
 
@@ -130,6 +130,12 @@ const SingleEventPage = ({ eventData }) => {
           </div>
         </div>
       </div>
+      <BottomNav>
+        <Link to={`/events`} className="page-return">
+          <i class="fa-solid fa-angle-left"></i>
+          <h3>Back to More Events</h3>
+        </Link>
+      </BottomNav>
     </>
   )
 }

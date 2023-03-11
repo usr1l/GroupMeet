@@ -1,9 +1,14 @@
 import React from "react";
 import './BottomNav.css';
 
-const BottomNav = () => {
+const BottomNav = ({
+  children,
+  navStyle
+}) => {
   return (
-    <div className="bottom-nav-wrapper"></div>
+    <div className={`bottom-nav-wrapper ${navStyle}`}>
+      {children}
+    </div>
   )
 }
 

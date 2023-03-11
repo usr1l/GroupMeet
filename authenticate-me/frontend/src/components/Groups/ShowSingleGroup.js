@@ -19,6 +19,7 @@ import Button from "../Button";
 import EventsList from "../Events/EventsList";
 import GroupAboutPage from "./GroupAboutPage";
 import MembershipsPage from "../MembershipsPage";
+import BottomNav from "../BottomNav";
 import "./SingleGroupPage.css";
 
 const SingleGroupPage = ({ groupData }) => {
@@ -95,7 +96,7 @@ const SingleGroupPage = ({ groupData }) => {
     return false;
   };
 
-  const organizerBool = organizerFn(user);
+  const organizerBool = organizerFn();
 
 
   // need to work on not allowing single host to leave a group
@@ -191,7 +192,12 @@ const SingleGroupPage = ({ groupData }) => {
           <Switch>
             <Route exact path={`/groups/${groupId}/events`}>
               <>
-                <EventsList events={events} />
+                <div id='group-events-page-wrapper'>
+                  <div id='group-events-header-wrapper'>
+                    <h2>{`Events for this group (${events.length})`}:</h2>
+                  </div>
+                  <EventsList events={events} />
+                </div>
                 {organizerBool && (
                   <section className="group-events-page-sticky-div">
                     <div className="group-events-page-icon-card-section">
@@ -212,6 +218,12 @@ const SingleGroupPage = ({ groupData }) => {
           </Switch>
         </div>
       </div>
+      <BottomNav>
+        <Link to={`/groups`} className="page-return groups-bottom-nav">
+          <i class="fa-solid fa-angle-left"></i>
+          <h3>Back to More Groups</h3>
+        </Link>
+      </BottomNav>
     </>
   )
 }
