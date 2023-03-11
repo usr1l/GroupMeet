@@ -82,15 +82,16 @@ const CreateGroupForm = () => {
         }
       </ul>
       <form id="group-form" onSubmit={onSubmit}>
-        <InputDiv divStyle="group-form__block" labelStyle="group-form__label" labelFor="name" label='Name: '>
+        <InputDiv divStyle="group-form__block" labelStyle="group-form__label" labelFor="name" label="What will your group's name be?">
           <input
             id="name"
             type="text"
             onChange={(e) => setName(e.target.value)}
             value={name}
+            placeholder={'Give your group a creative name!'}
           />
         </InputDiv>
-        <InputDiv divStyle="group-form__block" labelStyle="group-form__label" labelFor="type" label='Type: '>
+        <InputDiv divStyle="group-form__block" labelStyle="group-form__label" labelFor="type" label='Is this an in-person or online group?'>
           <select
             className="group-form__label"
             name="type"
@@ -110,6 +111,7 @@ const CreateGroupForm = () => {
             type="text"
             onChange={(e) => setCity(e.target.value)}
             value={city}
+            placeholder='What city is your group located'
           />
         </InputDiv>
         <InputDiv divStyle="group-form__block" labelStyle="group-form__label" labelFor="state" label='State: '>
@@ -127,12 +129,13 @@ const CreateGroupForm = () => {
             ))}
           </select>
         </InputDiv>
-        <InputDiv divStyle="group-form__block" labelStyle="group-form__label" labelFor="about" label='About: '>
+        <InputDiv divStyle="group-form__block" labelStyle="group-form__label" labelFor="about" label='Describe the purpose of your group.'>
           <textarea
             id="about-input"
             name="about"
             onChange={(e) => setAbout(e.target.value)}
             value={about}
+            placeholder='Please write at least 30 characters'
           />
         </InputDiv>
         <div className="group-form__block group-form__private">
@@ -147,7 +150,7 @@ const CreateGroupForm = () => {
             onChange={(e) => setIsPrivate(e.target.value)}
           /> Public
         </div>
-        <InputDiv divStyle="group-form__block" labelStyle="group-form__label" labelFor="group-profile-image" label='Group Image: '>
+        <InputDiv divStyle="group-form__block" labelStyle="group-form__label" labelFor="group-profile-image" label='Please add an image URL for your group below:'>
           <input
             name="group-profile-img"
             type='url'

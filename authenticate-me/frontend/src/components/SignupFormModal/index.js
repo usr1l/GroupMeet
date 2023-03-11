@@ -21,9 +21,9 @@ function SignupFormModal() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (username.length > 3 && password.length > 5) setDsiableLoginBool(false)
+    if (username.length > 3 && password.length > 5 && password === confirmPassword) setDsiableLoginBool(false)
     else setDsiableLoginBool(true);
-  }, [ dispatch, username, password ]);
+  }, [ dispatch, username, password, confirmPassword ]);
 
 
   const handleSubmit = (e) => {

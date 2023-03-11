@@ -5,7 +5,7 @@ import * as sessionActions from '../../store/session';
 import OpenModalMenuItem from './OpenModalMenuItem';
 import LoginFormModal from '../LoginFormModal';
 import SignupFormModal from '../SignupFormModal';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 function ProfileButton({ user }) {
   const history = useHistory();
@@ -49,9 +49,14 @@ function ProfileButton({ user }) {
       <ul className={ulClassName} ref={ulRef}>
         {user ? (
           <div id='profile-menu'>
+            <li className='modal-menu-item'>Hello, {user.firstName}!</li>
             <li className='modal-menu-item'>{user.username}</li>
-            <li className='modal-menu-item'>{user.firstName} {user.lastName}</li>
             <li className='modal-menu-item'>{user.email}</li>
+            <div className="menu-div"></div>
+            <div id='profile-menu-links-wrapper'>
+              <Link className="profile-menu-link" to={'/groups'}>See All Groups</Link>
+              <Link className="profile-menu-link" to={'/events'}>Find Events</Link>
+            </div>
             <div className="menu-div"></div>
             <button className="btn btn--menu-item btn--menu" onClick={logout}>Log Out</button>
           </div>
