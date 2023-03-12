@@ -25,6 +25,7 @@ import BottomNav from "./components/BottomNav";
 function App() {
 
   const dispatch = useDispatch();
+  const sessionUser = useSelector(state => state.session.user);
 
   useEffect(() => {
     dispatch(thunkLoadEvents());
@@ -33,9 +34,11 @@ function App() {
       .then(() => setIsLoaded(true));
   }, [ dispatch ]);
 
-  const [ isLoaded, setIsLoaded ] = useState(false);
+  useEffect(() => {
+    if (sessionUser) dispatch(sessionActions.thunkLoadUserMemberships());
+  }, [ sessionUser ]);
 
-  const sessionUser = useSelector(state => state.session.user);
+  const [ isLoaded, setIsLoaded ] = useState(false);
 
   return (
     <>
@@ -46,8 +49,12 @@ function App() {
             <Route exact path='/' component={sessionUser ? HomePage : SplashPage} />
             <Route exact path='/events' component={AllEventsPage} />
             <Route exact path='/groups' component={AllGroupsPage} />
-            <Route exact path='/messages' component={MessagesPage} />
-            <Route exact path='/notifications' component={NotificationPage} />
+            {sessionUser && (
+              <Route exact path='/messages' component={MessagesPage} />
+            )}
+            {sessionUser && (
+              <Route exact path='/notifications' component={NotificationPage} />
+            )}
             {sessionUser && (
               <Route path='/groups/:groupId/events/new' component={CreateEventForm} />
             )}

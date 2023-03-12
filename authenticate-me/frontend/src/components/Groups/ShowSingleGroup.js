@@ -47,7 +47,6 @@ const SingleGroupPage = ({ groupData }) => {
     };
   };
 
-
   useEffect(() => {
     dispatch(thunkLoadSingleGroup(groupId))
       .then(() => dispatch(thunkLoadGroupEvents(groupId)))
@@ -55,7 +54,6 @@ const SingleGroupPage = ({ groupData }) => {
       .then((res) => setMembershipState(membershipButtonDisplay(res)))
       .then(() => dispatch(thunkLoadGroupMembers(groupId)));
   }, [ dispatch, groupId ]);
-
 
   const history = useHistory();
 
@@ -99,7 +97,6 @@ const SingleGroupPage = ({ groupData }) => {
   };
 
   const organizerBool = organizerFn();
-
 
   // need to work on not allowing single host to leave a group
   const handleMemberClick = (e) => {
@@ -193,14 +190,12 @@ const SingleGroupPage = ({ groupData }) => {
         <div className="group-property-page-wrapper">
           <Switch>
             <Route exact path={`/groups/${groupId}/events`}>
-
               <div id='group-events-page-wrapper'>
                 <div id='group-events-header-wrapper'>
                   <h2>{`Events for this group (${events.length})`}:</h2>
                 </div>
                 <EventsList events={events} />
               </div>
-
             </Route>
             <Route path={`/groups/${groupId}/members`}>
               <MembershipsPage members={members} />
@@ -220,8 +215,7 @@ const SingleGroupPage = ({ groupData }) => {
           </Link>
           {organizerBool && (
             <Link to={`/groups/${groupId}/events/new`} className='page-return'>
-              <h3>Create An Event
-                <i class="fa-solid fa-angle-right"></i>
+              <h3>Create An Event <i class="fa-solid fa-angle-right"></i>
               </h3>
             </Link>
           )}
@@ -229,7 +223,7 @@ const SingleGroupPage = ({ groupData }) => {
       </BottomNav>
     </>
   )
-}
+};
 
 
 

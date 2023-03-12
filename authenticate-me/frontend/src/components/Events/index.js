@@ -13,8 +13,9 @@ const AllEventsPage = () => {
   const events = eventsArr.sort((a, b) => {
     const currDate = new Date();
     const startA = new Date(a.startDate);
-    if (startA < currDate) return b.startDate - a.startDate;
-    if (startA > currDate) return a.startDate - b.startDate;
+    const startB = new Date(b.startDate);
+    if (startA < currDate) return startB - startA;
+    if (startA > currDate) return startA - startB;
   });
 
   return (

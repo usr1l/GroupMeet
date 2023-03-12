@@ -140,8 +140,7 @@ const SingleEventPage = ({ eventData }) => {
             </h3>
           </Link>
           <Link to={`/groups/${groupId}`} className='page-return'>
-            <h3>Visit This Group
-              <i class="fa-solid fa-angle-right"></i>
+            <h3>Visit This Group <i class="fa-solid fa-angle-right"></i>
             </h3>
           </Link>
         </div>
