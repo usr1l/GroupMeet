@@ -46,3 +46,7 @@
   width: 1150px;
   justify-content: space-between;
 }
+
+.site-footer {
+  margin: 0;
+}
