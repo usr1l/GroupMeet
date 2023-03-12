@@ -7,7 +7,15 @@ import './EventsPage.css';
 const AllEventsPage = () => {
 
   const eventsObj = useSelector(state => state.events.events);
-  const events = Object.values(eventsObj);
+  const eventsArr = Object.values(eventsObj);
+
+  // sort order by order, but past events go last
+  const events = eventsArr.sort((a, b) => {
+    const currDate = new Date();
+    const startA = new Date(a.startDate);
+    if (startA < currDate) return b.startDate - a.startDate;
+    if (startA > currDate) return a.startDate - b.startDate;
+  });
 
   return (
     <div className="events-index-page">

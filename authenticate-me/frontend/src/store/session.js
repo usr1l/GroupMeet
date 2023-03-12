@@ -1,5 +1,5 @@
 import { csrfFetch } from "./csrf";
-
+import normalizeFn from "../components/HelperFns/NormalizeFn";
 
 const LOGIN_USER = 'user/LOGIN_USER';
 const LOGOUT_USER = 'user/LOGOUT_USER';
@@ -23,6 +23,13 @@ const actionLoadUserMemberships = (memberships) => {
     type: LOAD_USER_MEMBERSHIPS,
     payload: memberships
   };
+};
+
+export const thunkLoadUserMemberships = () => async (dispatch) => {
+  const response = await csrfFetch('/api/groups/current');
+  const data = await response.json();
+  dispatch(actionLoadUserMemberships(data));
+  return response;
 };
 
 // login
@@ -90,6 +97,11 @@ const sessionReducer = (state = initialState, action) => {
     case LOGOUT_USER:
       newState = Object.assign({}, state);
       newState.user = null;
+      return newState;
+    case LOAD_USER_MEMBERSHIPS:
+      newState = Object.assign({}, state);
+      const { Groups } = action.payload;
+      newState.memberships = normalizeFn(Groups);
       return newState;
     default:
       return state;

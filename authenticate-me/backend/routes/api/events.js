@@ -101,7 +101,7 @@ async function getEvents(events) {
       },
       where: {
         id: venueId,
-      },
+      }
     });
 
     if (venue) {
@@ -683,7 +683,7 @@ eventsRouter.get('/', async (req, res, next) => {
     attributes: {
       exclude: [ 'price', 'capacity', 'description' ]
     },
-    order: [ [ 'name' ], [ 'type' ] ],
+    order: [ [ 'startDate' ], [ 'name' ], [ 'type' ] ],
     include: {
       model: Group,
       attributes: [ 'id', 'name', 'city', 'state', 'organizerId' ]

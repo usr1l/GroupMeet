@@ -29,7 +29,9 @@ function App() {
   useEffect(() => {
     dispatch(thunkLoadEvents());
     dispatch(thunkLoadGroups());
-    dispatch(sessionActions.thunkRestoreUser()).then(() => setIsLoaded(true));
+    dispatch(sessionActions.thunkRestoreUser())
+      .then(() => dispatch(sessionActions.thunkLoadUserMemberships()))
+      .then(() => setIsLoaded(true));
   }, [ dispatch ]);
 
   const [ isLoaded, setIsLoaded ] = useState(false);
