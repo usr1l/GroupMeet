@@ -30,7 +30,6 @@ function App() {
     dispatch(thunkLoadEvents());
     dispatch(thunkLoadGroups());
     dispatch(sessionActions.thunkRestoreUser())
-      .then(() => dispatch(sessionActions.thunkLoadUserMemberships()))
       .then(() => setIsLoaded(true));
   }, [ dispatch ]);
 
@@ -47,14 +46,26 @@ function App() {
             <Route exact path='/' component={sessionUser ? HomePage : SplashPage} />
             <Route exact path='/events' component={AllEventsPage} />
             <Route exact path='/groups' component={AllGroupsPage} />
-            <Route path='/groups/new' component={CreateGroupForm} />
-            <Route path='/messages' component={MessagesPage} />
-            <Route path='/notifications' component={NotificationPage} />
-            <Route path='/groups/:groupId/events/new' component={CreateEventForm} />
-            <Route path='/groups/:groupId/members' component={SingleGroupPage} />
-            <Route path='/groups/:groupId/events' component={SingleGroupPage} />
-            <Route path='/events/:eventId/edit' component={EditEventPage} />
-            <Route path='/groups/:groupId/edit' component={EditGroupPage} />
+            <Route exact path='/messages' component={MessagesPage} />
+            <Route exact path='/notifications' component={NotificationPage} />
+            {sessionUser && (
+              <Route path='/groups/:groupId/events/new' component={CreateEventForm} />
+            )}
+            {sessionUser && (
+              <Route path='/groups/:groupId/members' component={SingleGroupPage} />
+            )}
+            {sessionUser && (
+              <Route path='/groups/:groupId/events' component={SingleGroupPage} />
+            )}
+            {sessionUser && (
+              <Route path='/events/:eventId/edit' component={EditEventPage} />
+            )}
+            {sessionUser && (
+              <Route path='/groups/:groupId/edit' component={EditGroupPage} />
+            )}
+            {sessionUser && (
+              <Route path='/groups/new' component={CreateGroupForm} />
+            )}
             <Route path='/events/:eventId' component={SingleEventPage} />
             <Route path='/groups/:groupId' component={SingleGroupPage} />
             <Route component={NotFoundPage} />

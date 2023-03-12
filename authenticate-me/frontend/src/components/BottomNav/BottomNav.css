@@ -20,6 +20,10 @@
   margin-right: 10px;
 }
 
+.page-return>h3>i.fa-angle-right {
+  margin: 0 0 0 10px;
+}
+
 .page-return>h3 {
   font-size: 15pt;
   color: lightgray;

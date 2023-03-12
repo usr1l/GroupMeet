@@ -15,7 +15,7 @@ function EventIndexCard({ event }) {
   const dispatch = useDispatch();
 
   const loginAlert = (e) => {
-    if (!Object.values(user).length) {
+    if (!user) {
       e.preventDefault();
       return alert('Please login to see more.');
     };

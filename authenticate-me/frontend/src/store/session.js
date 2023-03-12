@@ -97,6 +97,7 @@ const sessionReducer = (state = initialState, action) => {
     case LOGOUT_USER:
       newState = Object.assign({}, state);
       newState.user = null;
+      newState.memberships = {};
       return newState;
     case LOAD_USER_MEMBERSHIPS:
       newState = Object.assign({}, state);

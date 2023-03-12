@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useParams, Link, NavLink, Switch, Route } from "react-router-dom";
+import { useParams, Link, NavLink, Switch, Route, Redirect } from "react-router-dom";
 import {
   thunkDeleteGroup,
   thunkLoadSingleGroup,
@@ -23,6 +23,10 @@ import BottomNav from "../BottomNav";
 import "./SingleGroupPage.css";
 
 const SingleGroupPage = ({ groupData }) => {
+  const { user } = useSelector(state => state.session);
+  if (!user) return <Redirect to='/groups' />
+
+  const group = useSelector(state => state.groups.group);
 
   const { groupId } = useParams();
   if (isNaN(parseInt(groupId))) return (<NotFoundPage />)
@@ -52,8 +56,6 @@ const SingleGroupPage = ({ groupData }) => {
       .then(() => dispatch(thunkLoadGroupMembers(groupId)));
   }, [ dispatch, groupId ]);
 
-  const { user } = useSelector(state => state.session);
-  const group = useSelector(state => state.groups.group);
 
   const history = useHistory();
 
@@ -218,7 +220,9 @@ const SingleGroupPage = ({ groupData }) => {
           </Link>
           {organizerBool && (
             <Link to={`/groups/${groupId}/events/new`} className='page-return'>
-              <h3>Create An Event</h3>
+              <h3>Create An Event
+                <i class="fa-solid fa-angle-right"></i>
+              </h3>
             </Link>
           )}
         </div>

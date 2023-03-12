@@ -7,20 +7,19 @@ import selfie from "../../images/download.png"
 import connect from '../../images/connect.jpg';
 import friends from '../../images/friends.jpg';
 import outdoors from '../../images/outdoors.jpg';
+import { useHistory } from "react-router-dom";
 
 const SplashPage = () => {
-
+  const history = useHistory();
   const dispatch = useDispatch();
   const demoUser = async () => {
     const user = {
       credential: 'Demo-lition',
       password: 'password'
     };
-
     const response = dispatch(thunkLogin(user));
     return response;
-  }
-
+  };
 
   return (
     <div className="splashpage-container">
@@ -53,7 +52,10 @@ const SplashPage = () => {
           Connect over tech.
         </div>
       </div>
-      <Button onClick={demoUser} buttonStyle='btn--demo' id='demo-button'>Try GroupMeet</Button>
+      <div id="splash-page-buttons-container">
+        <Button onClick={demoUser} buttonStyle='btn--demo' id='demo-button'>Demo User</Button>
+        <Button onClick={() => history.push('/events')} buttonStyle='btn--demo' id='demo-button'>Try GroupMeet</Button>
+      </div>
     </div>
   )
 };

@@ -5,6 +5,8 @@
   width: 470px;
   margin: auto;
   height: 670px;
+  border-radius: 1rem;
+
 }
 
 #sign-up__title {
