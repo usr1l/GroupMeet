@@ -1,8 +1,8 @@
 // backend/routes/api/venues.js
 const venuesRouter = require('express').Router();
-const { Group, GroupImage, User, Membership, Venue } = require('../../db/models');
+const { Group, Venue } = require('../../db/models');
 const { Op } = require('sequelize');
-const { requireAuth, checkAuth, checkCohost } = require('../../utils/auth');
+const { requireAuth, checkCohost } = require('../../utils/auth');
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 

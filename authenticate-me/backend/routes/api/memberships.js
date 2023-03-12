@@ -1,7 +1,10 @@
+const express = require('express');
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
-const { User } = require('../../db/models');
+const { requireAuth } = require('../../utils/auth');
+const { User, Membership } = require('../../db/models');
 
+const membershipRouter = express.Router();
 
 const validateMembershipData = [
   check('memberId')
@@ -21,10 +24,10 @@ const validateMembershipData = [
     .withMessage('status is required'),
   check('status')
     .not()
-    .isIn(['pending'])
+    .isIn([ 'pending' ])
     .withMessage('Cannot change a membership status to pending'),
   check('status')
-    .isIn(['member', 'co-host', 'pending'])
+    .isIn([ 'member', 'co-host', 'pending' ])
     .withMessage('That is not a valid status'),
   handleValidationErrors
 ];
@@ -36,4 +39,18 @@ const validateMembershipDataDelete = [
   handleValidationErrors
 ]
 
-module.exports = { validateMembershipData, validateMembershipDataDelete }
+membershipRouter.get('/current', requireAuth, async (req, res) => {
+  const userId = req.user.id;
+  const memberships = await Membership.findAll({
+    where: {
+      userId
+    }
+  });
+
+  res.status = 200;
+  return res.json(memberships);
+});
+
+
+
+module.exports = { validateMembershipData, validateMembershipDataDelete, membershipRouter }

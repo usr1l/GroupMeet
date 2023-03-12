@@ -8,6 +8,7 @@ const { restoreUser } = require("../../utils/auth.js");
 const { eventsRouter } = require('./events')
 const groupImageRouter = require('./group-images');
 const eventImageRouter = require('./event-images');
+const { membershipRouter } = require('./memberships');
 
 // Connect restoreUser middleware to the API router
 // If current user session is valid, set req.user to the user in the database
@@ -17,6 +18,8 @@ router.use(restoreUser);
 router.use('/event-images', eventImageRouter);
 
 router.use('/group-images', groupImageRouter);
+
+router.use('/memberships', membershipRouter);
 
 router.use('/events', eventsRouter);
 

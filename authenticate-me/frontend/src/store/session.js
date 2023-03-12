@@ -26,7 +26,7 @@ const actionLoadUserMemberships = (memberships) => {
 };
 
 export const thunkLoadUserMemberships = () => async (dispatch) => {
-  const response = await csrfFetch('/api/groups/current');
+  const response = await csrfFetch('/api/memberships/current');
   const data = await response.json();
   dispatch(actionLoadUserMemberships(data));
   return response;
@@ -100,8 +100,8 @@ const sessionReducer = (state = initialState, action) => {
       return newState;
     case LOAD_USER_MEMBERSHIPS:
       newState = Object.assign({}, state);
-      const { Groups } = action.payload;
-      newState.memberships = normalizeFn(Groups);
+      const memberships = action.payload;
+      newState.memberships = normalizeFn(memberships);
       return newState;
     default:
       return state;
