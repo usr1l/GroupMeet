@@ -101,8 +101,12 @@ const sessionReducer = (state = initialState, action) => {
       return newState;
     case LOAD_USER_MEMBERSHIPS:
       newState = Object.assign({}, state);
-      const memberships = action.payload;
-      newState.memberships = normalizeFn(memberships);
+      const membershipsArr = action.payload;
+      const memberships = {};
+      membershipsArr.forEach(ele => {
+        memberships[ ele.groupId ] = ele;
+      });
+      newState.memberships = memberships;
       return newState;
     default:
       return state;

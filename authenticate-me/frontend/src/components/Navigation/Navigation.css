@@ -130,7 +130,7 @@
   list-style: none;
   position: absolute;
   top: 80px;
-  right: 30px;
+  right: 20px;
   border-radius: 6px;
   height: auto;
   width: auto;
@@ -143,7 +143,6 @@
 #profile-menu {
   padding: 17px 0 17px 10px;
 }
-
 
 .modal-menu-item {
   background-color: white;

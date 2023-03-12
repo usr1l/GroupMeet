@@ -27,6 +27,7 @@ const SingleGroupPage = ({ groupData }) => {
   if (!user) return <Redirect to='/groups' />
 
   const group = useSelector(state => state.groups.group);
+  const { memberships } = useSelector(state => state.session);
 
   const { groupId } = useParams();
   if (isNaN(parseInt(groupId))) return (<NotFoundPage />)
@@ -37,23 +38,29 @@ const SingleGroupPage = ({ groupData }) => {
   function membershipButtonDisplay(status) {
     switch (status) {
       case 'pending':
-        return 'REQUESTED';
+        return 'Requested';
       case 'member':
-        return 'JOINED';
+        return 'Joined';
       case 'co-host':
-        return 'CO-HOST';
+        return 'Co-Host';
       default:
-        return 'JOIN GROUP';
+        return 'Join Group';
     };
   };
 
   useEffect(() => {
     dispatch(thunkLoadSingleGroup(groupId))
       .then(() => dispatch(thunkLoadGroupEvents(groupId)))
-      .then(() => dispatch(thunkLoadUserStatus(groupId)))
-      .then((res) => setMembershipState(membershipButtonDisplay(res)))
       .then(() => dispatch(thunkLoadGroupMembers(groupId)));
   }, [ dispatch, groupId ]);
+
+  useEffect(() => {
+    if (memberships[ groupId ]) {
+      setMembershipState(membershipButtonDisplay(memberships[ groupId ].status));
+    } else {
+      setMembershipState('Join Group');
+    };
+  }, [ dispatch, memberships ])
 
   const history = useHistory();
 
