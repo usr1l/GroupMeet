@@ -14,7 +14,7 @@ const GroupAboutPage = ({
       <section className="group-property-page-section">
         <div className="group-property-page-section-header">Organizer</div>
         <IconDescriptionCard
-          style='group-page-oragnizer-element'
+          cardStyle='group-page-oragnizer-element'
           iconClass="fas fa-user-circle"
           heading='Hosted By'
           subHeading={`${user.firstName} ${user.lastName[ 0 ]}.`}

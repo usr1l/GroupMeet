@@ -116,7 +116,7 @@ const SingleGroupPage = ({ groupData }) => {
       case 'Requested':
         dispatch(thunkSessionDeleteMembership({ groupId, memberId: user.id }))
         return;
-      case 'co-host':
+      case 'Co-Host':
         window.alert('Hosts are not able to leave their groups.')
         return;
       default:
@@ -209,19 +209,17 @@ const SingleGroupPage = ({ groupData }) => {
         </div>
       </div>
       <BottomNav>
-        <div className="groups-bottom-nav-wrapper">
-          <Link to={`/groups`} className="page-return">
-            <h3>
-              <i class="fa-solid fa-angle-left" /> Back to More Groups
+        <Link to={`/groups`} className="page-return">
+          <h3>
+            <i class="fa-solid fa-angle-left" /> Back to More Groups
+          </h3>
+        </Link>
+        {organizerBool && (
+          <Link to={`/groups/${groupId}/events/new`} className='page-return'>
+            <h3>Create An Event <i class="fa-solid fa-angle-right"></i>
             </h3>
           </Link>
-          {organizerBool && (
-            <Link to={`/groups/${groupId}/events/new`} className='page-return'>
-              <h3>Create An Event <i class="fa-solid fa-angle-right"></i>
-              </h3>
-            </Link>
-          )}
-        </div>
+        )}
       </BottomNav>
     </>
   )

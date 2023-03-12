@@ -24,7 +24,10 @@ module.exports = {
       { name: 'Art Show', description: text, type: 'In person', capacity: 50, price: 0, startDate: '2024-12-05 14:00:00', endDate: '2024-12-05 17:00:00', venueId: 2, groupId: 6 },
       { name: 'Dinner Party', description: text, type: 'In person', capacity: 12, price: null, startDate: '2024-01-15 19:00:00', endDate: '2024-01-15 22:00:00', venueId: 1, groupId: 7 },
       { name: 'Trivia Night', description: text, type: 'In person', capacity: 100, price: 0, startDate: '2024-02-01 19:00:00', endDate: '2024-02-01 21:00:00', venueId: 2, groupId: 8 },
-      { name: 'Gardening Class', description: text, type: 'Online', capacity: null, price: null, startDate: '2024-03-15 18:00:00', endDate: '2024-03-15 19:30:00', venueId: null, groupId: 9 }
+      { name: 'Gardening Class', description: text, type: 'Online', capacity: null, price: null, startDate: '2024-03-15 18:00:00', endDate: '2024-03-15 19:30:00', venueId: null, groupId: 9 },
+      { name: 'Random Class', description: text, type: 'Online', capacity: null, price: null, startDate: '2022-03-15 18:00:00', endDate: '2022-03-15 19:30:00', venueId: null, groupId: 1 },
+      { name: 'Swim Class', description: text, type: 'Online', capacity: null, price: null, startDate: '2022-04-15 18:00:00', endDate: '2022-04-15 19:30:00', venueId: null, groupId: 1 },
+      { name: 'Dance Class', description: text, type: 'Online', capacity: null, price: null, startDate: '2022-05-15 18:00:00', endDate: '2022-05-15 19:30:00', venueId: null, groupId: 1 }
     ])
   },
 

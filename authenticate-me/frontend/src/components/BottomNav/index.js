@@ -7,8 +7,10 @@ const BottomNav = ({
 }) => {
   return (
     <div className={`bottom-nav-wrapper ${navStyle}`}>
-      {children}
-    </div>
+      <div className="groups-bottom-nav-wrapper">
+        {children}
+      </div>
+    </div >
   )
 }
 

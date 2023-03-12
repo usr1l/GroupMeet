@@ -20,7 +20,7 @@ import SingleGroupPage from "./components/Groups/ShowSingleGroup";
 import { thunkLoadEvents } from "./store/events";
 import { thunkLoadGroups } from "./store/groups";
 import SplashPage from "./components/SplashPage";
-import BottomNav from "./components/BottomNav";
+// import BottomNav from "./components/BottomNav";
 
 function App() {
 

@@ -10,7 +10,7 @@ const LOAD_GROUP_MEMBERS = 'group/members/LOAD';
 const DELETE_GROUP = 'groups/DELETE';
 const CREATE_GROUP = 'groups/CREATE';
 const UPDATE_GROUP = 'groups/EDIT';
-const JOIN_GROUP = 'group/membership/CREATE';
+// const JOIN_GROUP = 'group/membership/CREATE';
 
 export const thunkLoadGroups = () => async (dispatch) => {
   const response = await csrfFetch('/api/groups/');

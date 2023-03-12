@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react"
-import { useDispatch, useSelector } from "react-redux";
-import { useHistory, useParams, Redirect } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { useHistory, useParams, Link } from "react-router-dom";
 import { thunkLoadSingleGroup, thunkUpdateGroup } from "../../store/groups";
 import Button from '../Button';
 import InputDiv from "../InputDiv";
 import ImagePreview from "../ImagePreview";
+import BottomNav from "../BottomNav";
 import './GroupForm.css';
 
 const EditGroupPage = () => {
@@ -85,95 +86,106 @@ const EditGroupPage = () => {
   };
 
   return (
-    <div id='create-group-page'>
-      <h2 id="group-form__title" className="edit-form">EDIT GROUP</h2>
-      <ul id='group-form__error-list'>
-        {!!errors.length && (
-          errors.map((error) => (
-            <li key={error}>{error}</li>
-          ))
-        )}
-      </ul>
-      <form id="group-form" onSubmit={onSubmit}>
-        <InputDiv divStyle="group-form__block" labelStyle="group-form__label" labelFor="name" label='Name: '>
-          <input
-            id="name"
-            type="text"
-            onChange={(e) => setName(e.target.value)}
-            value={name}
-            placeholder='Name'
-          />
-        </InputDiv>
-        <InputDiv divStyle="group-form__block" labelStyle="group-form__label" labelFor="type" label='Type: '>
-          <select
-            name="type"
-            onChange={(e) => setType(e.target.value)}
-            value={type}
-          >
-            <option value="" disabled>
-              select:
-            </option>
-            <option value='In person'>In person</option>
-            <option value='Online'>Online</option>
-          </select>
-        </InputDiv>
-        <InputDiv divStyle="group-form__block" labelStyle="group-form__label" labelFor="city" label='City: '>
-          <input
-            id="city"
-            type="text"
-            onChange={(e) => setCity(e.target.value)}
-            value={city}
-            placeholder='City'
-          />
-        </InputDiv>
-        <InputDiv divStyle="group-form__block" labelStyle="group-form__label" labelFor="state" label='State: '>
-          <select
-            name="state"
-            onChange={(e) => setState(e.target.value)}
-            value={state}
-          >
-            <option value="" disabled>
-              select:
-            </option>
-            {states.map(state => (
-              <option value={state}>{state}</option>
-            ))}
-          </select>
-        </InputDiv>
-        <InputDiv divStyle="group-form__block" labelStyle="group-form__label" labelFor="about" label='About: '>
-          <textarea
-            id="about-input"
-            name="about"
-            onChange={(e) => setAbout(e.target.value)}
-            value={about}
-          />
-        </InputDiv>
-        <div className="group-form__block group-form__private">
-          <input type="radio" value="true" className='private-radio-button'
-            name="isPrivate" id='isPrivate-yes-button'
-            checked={isPrivate === "true" ? "checked" : ""}
-            onChange={(e) => setIsPrivate(e.target.value)}
-          /> Private
-          <input type="radio" value="false" className='private-radio-buttons'
-            name="isPrivate" id='isPrivate-no-button'
-            checked={isPrivate === "false" ? "checked" : ""}
-            onChange={(e) => setIsPrivate(e.target.value)}
-          /> Public
+    <>
+      <div id='create-group-page-container'>
+        <div id='create-group-page'>
+          <h2 id="group-form__title" className="edit-form">EDIT GROUP</h2>
+          <ul id='group-form__error-list'>
+            {!!errors.length && (
+              errors.map((error) => (
+                <li key={error}>{error}</li>
+              ))
+            )}
+          </ul>
+          <form id="group-form" onSubmit={onSubmit}>
+            <InputDiv divStyle="group-form__block" labelStyle="group-form__label" labelFor="name" label='Name: '>
+              <input
+                id="name"
+                type="text"
+                onChange={(e) => setName(e.target.value)}
+                value={name}
+                placeholder='Name'
+              />
+            </InputDiv>
+            <InputDiv divStyle="group-form__block" labelStyle="group-form__label" labelFor="type" label='Type: '>
+              <select
+                name="type"
+                onChange={(e) => setType(e.target.value)}
+                value={type}
+              >
+                <option value="" disabled>
+                  select:
+                </option>
+                <option value='In person'>In person</option>
+                <option value='Online'>Online</option>
+              </select>
+            </InputDiv>
+            <InputDiv divStyle="group-form__block" labelStyle="group-form__label" labelFor="city" label='City: '>
+              <input
+                id="city"
+                type="text"
+                onChange={(e) => setCity(e.target.value)}
+                value={city}
+                placeholder='City'
+              />
+            </InputDiv>
+            <InputDiv divStyle="group-form__block" labelStyle="group-form__label" labelFor="state" label='State: '>
+              <select
+                name="state"
+                onChange={(e) => setState(e.target.value)}
+                value={state}
+              >
+                <option value="" disabled>
+                  select:
+                </option>
+                {states.map(state => (
+                  <option value={state}>{state}</option>
+                ))}
+              </select>
+            </InputDiv>
+            <InputDiv divStyle="group-form__block" labelStyle="group-form__label" labelFor="about" label='About: '>
+              <textarea
+                id="about-input"
+                name="about"
+                onChange={(e) => setAbout(e.target.value)}
+                value={about}
+              />
+            </InputDiv>
+            <div className="group-form__block group-form__private">
+              <input type="radio" value="true" className='private-radio-button'
+                name="isPrivate" id='isPrivate-yes-button'
+                checked={isPrivate === "true" ? "checked" : ""}
+                onChange={(e) => setIsPrivate(e.target.value)}
+              /> Private
+              <input type="radio" value="false" className='private-radio-buttons'
+                name="isPrivate" id='isPrivate-no-button'
+                checked={isPrivate === "false" ? "checked" : ""}
+                onChange={(e) => setIsPrivate(e.target.value)}
+              /> Public
+            </div>
+            <InputDiv divStyle="group-form__block" labelStyle="group-form__label" labelFor="group-profile-image" label='Group Image: '>
+              <input
+                name="group-profile-img"
+                type='url'
+                value={previewImage}
+                onChange={(e) => setPreviewImage(e.target.value)}
+              />
+            </InputDiv>
+            <div id='create-group-button-div'>
+              <ImagePreview imgSrc={previewImage}></ImagePreview>
+              <Button type='submit' buttonStyle='btn--wide'>Update</Button>
+            </div>
+          </form>
         </div>
-        <InputDiv divStyle="group-form__block" labelStyle="group-form__label" labelFor="group-profile-image" label='Group Image: '>
-          <input
-            name="group-profile-img"
-            type='url'
-            value={previewImage}
-            onChange={(e) => setPreviewImage(e.target.value)}
-          />
-        </InputDiv>
-        <div id='create-group-button-div'>
-          <ImagePreview imgSrc={previewImage}></ImagePreview>
-          <Button type='submit' buttonStyle='btn--wide'>Update</Button>
-        </div>
-      </form>
-    </div>
+      </div>
+      <BottomNav>
+        <Link to={`/groups/${groupId}`} className="page-return">
+          <h3>
+            <i class="fa-solid fa-angle-left" /> Back to Group
+          </h3>
+        </Link>
+      </BottomNav>
+    </>
   );
 }
 
