@@ -349,6 +349,9 @@ router.post('/:groupId/membership', requireAuth, async (req, res, next) => {
       groupId,
       userId,
       status: 'pending'
+    },
+    attributes: {
+      exclude: [ 'id' ]
     }
   })
 

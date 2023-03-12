@@ -5,10 +5,7 @@ import {
   thunkDeleteGroup,
   thunkLoadSingleGroup,
   thunkLoadGroupEvents,
-  thunkLoadGroupMembers,
-  thunkLoadUserStatus,
-  thunkRequestMembership,
-  thunkDeleteMembership
+  thunkLoadGroupMembers
 } from "../../store/groups";
 import { useHistory } from "react-router-dom";
 import errorPageHandler from "../ErrorPage";
@@ -21,6 +18,7 @@ import GroupAboutPage from "./GroupAboutPage";
 import MembershipsPage from "../MembershipsPage";
 import BottomNav from "../BottomNav";
 import "./SingleGroupPage.css";
+import { thunkSessionDeleteMembership, thunkSessionRequestMembership } from "../../store/session";
 
 const SingleGroupPage = ({ groupData }) => {
   const { user } = useSelector(state => state.session);
@@ -40,7 +38,7 @@ const SingleGroupPage = ({ groupData }) => {
       case 'pending':
         return 'Requested';
       case 'member':
-        return 'Joined';
+        return 'Member';
       case 'co-host':
         return 'Co-Host';
       default:
@@ -109,19 +107,16 @@ const SingleGroupPage = ({ groupData }) => {
   const handleMemberClick = (e) => {
     e.preventDefault();
     switch (membershipState) {
-      case 'JOIN GROUP':
-        dispatch(thunkRequestMembership(groupId))
-          .then((data) => setMembershipState(membershipButtonDisplay(data)));
+      case 'Join Group':
+        dispatch(thunkSessionRequestMembership(groupId))
         return;
-      case 'JOINED':
-        dispatch(thunkDeleteMembership({ groupId, memberId: user.id }))
-          .then((data) => setMembershipState(membershipButtonDisplay(data)));
+      case 'Member':
+        dispatch(thunkSessionDeleteMembership({ groupId, memberId: user.id }))
         return;
-      case 'REQUESTED':
-        dispatch(thunkDeleteMembership({ groupId, memberId: user.id }))
-          .then((data) => setMembershipState(membershipButtonDisplay(data)));
+      case 'Requested':
+        dispatch(thunkSessionDeleteMembership({ groupId, memberId: user.id }))
         return;
-      case 'CO-HOST':
+      case 'co-host':
         window.alert('Hosts are not able to leave their groups.')
         return;
       default:

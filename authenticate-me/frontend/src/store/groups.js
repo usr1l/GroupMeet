@@ -7,7 +7,6 @@ const LOAD_GROUPS = 'groups/LOAD';
 const LOAD_GROUP = 'group/LOAD';
 const LOAD_GROUP_EVENTS = 'group/events/LOAD';
 const LOAD_GROUP_MEMBERS = 'group/members/LOAD';
-const LOAD_USER_STATUS = 'group/status/LOAD';
 const DELETE_GROUP = 'groups/DELETE';
 const CREATE_GROUP = 'groups/CREATE';
 const UPDATE_GROUP = 'groups/EDIT';
@@ -49,17 +48,7 @@ export const thunkLoadGroupMembers = (groupId) => async (dispatch) => {
   return;
 };
 
-export const thunkLoadUserStatus = (groupId) => async (dispatch) => {
-  const response = await csrfFetch(`/api/groups/${groupId}/membership/status`);
 
-  if (response.ok) {
-    const status = await response.json();
-    dispatch(actionLoadUserStatus(status));
-    return status;
-  }
-
-  return;
-};
 
 
 export const thunkDeleteGroup = ({ groupId }) => async (dispatch) => {
@@ -124,41 +113,41 @@ export const thunkUpdateGroup = (groupInfo, groupId) => async (dispatch) => {
 };
 
 
-export const thunkRequestMembership = (groupId) => async (dispatch) => {
-  const response = await csrfFetch(`/api/groups/${groupId}/membership`, {
-    method: 'POST'
-  })
-    .catch(err => err);
+// export const thunkGroupRequestMembership = (groupId) => async (dispatch) => {
+//   const response = await csrfFetch(`/api/groups/${groupId}/membership`, {
+//     method: 'POST'
+//   })
+//     .catch(err => err);
 
-  const data = await response.json();
-  if (data.status === 'pending') {
-    dispatch(thunkLoadGroupMembers(groupId));
-    dispatch(actionLoadUserStatus(data.status));
-    return data.status;
-  };
+//   const data = await response.json();
+//   if (data.status === 'pending') {
+//     dispatch(thunkLoadGroupMembers(groupId));
+//     dispatch(actionLoadUserStatus(data.status));
+//     return data.status;
+//   };
 
-  return response;
-};
+//   return response;
+// };
 
 
-export const thunkDeleteMembership = ({ groupId, memberId }) => async (dispatch) => {
-  const response = await csrfFetch(`/api/groups/${groupId}/membership`, {
-    method: 'DELETE',
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ memberId })
-  })
-    .catch(err => err);
+// export const thunkGroupDeleteMembership = ({ groupId, memberId }) => async (dispatch) => {
+//   const response = await csrfFetch(`/api/groups/${groupId}/membership`, {
+//     method: 'DELETE',
+//     headers: { "Content-Type": "application/json" },
+//     body: JSON.stringify({ memberId })
+//   })
+//     .catch(err => err);
 
-  if (response.ok) {
-    dispatch(thunkLoadGroupMembers(groupId));
-    dispatch(actionLoadUserStatus(''));
-    return '';
-  }
+//   if (response.ok) {
+//     dispatch(thunkLoadGroupMembers(groupId));
+//     dispatch(actionLoadUserStatus(''));
+//     return '';
+//   }
 
-  // const data = await response.json();
+//   // const data = await response.json();
 
-  return response;
-};
+//   return response;
+// };
 
 
 export const actionLoadGroups = (groups) => {
@@ -181,13 +170,6 @@ const actionLoadGroupMembers = (members) => {
     payload: members
   }
 }
-
-const actionLoadUserStatus = (status) => {
-  return {
-    type: LOAD_USER_STATUS,
-    payload: status
-  };
-};
 
 const actionLoadSingleGroup = (group) => {
   return {
@@ -246,9 +228,6 @@ const groupReducer = (state = initialState, action) => {
     case LOAD_GROUP_MEMBERS:
       const members = normalizeFn(action.payload);
       return { ...state, group: { ...state.group, Members: members } };
-    case LOAD_USER_STATUS:
-      const status = action.payload;
-      return { ...state, group: { ...state.group, userStatus: status } };
     case CREATE_GROUP:
       const newGroupId = action.payload.id;
       return { ...state, groups: { ...state.groups, [ newGroupId ]: { ...action.payload } } };

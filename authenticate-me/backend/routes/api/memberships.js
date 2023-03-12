@@ -44,7 +44,10 @@ membershipRouter.get('/current', requireAuth, async (req, res) => {
   const memberships = await Membership.findAll({
     where: {
       userId
-    }
+    },
+    attributes: {
+      exclude: [ 'id' ]
+    },
   });
 
   res.status = 200;

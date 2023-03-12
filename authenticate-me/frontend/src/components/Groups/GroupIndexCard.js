@@ -13,16 +13,14 @@ function GroupIndexCard({ group }) {
   const dispatch = useDispatch();
 
   const loginAlert = (e) => {
-    if (!user) {
+    if (!user.id) {
       e.preventDefault();
       return alert('Please login to see more.');
     };
 
     dispatch(thunkLoadSingleGroup(id))
       .then(() => dispatch(thunkLoadGroupEvents(id)))
-      .then(() => dispatch(thunkLoadGroupMembers(id)))
-      .then(() => dispatch(thunkLoadUserStatus(id)));
-
+      .then(() => dispatch(thunkLoadGroupMembers(id)));
     return;
   };
 
