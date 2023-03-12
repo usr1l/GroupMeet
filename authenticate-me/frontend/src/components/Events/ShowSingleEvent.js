@@ -39,7 +39,7 @@ const SingleEventPage = ({ eventData }) => {
     if (memberships && memberships[ groupId ]) {
       console.log(memberships[ groupId ].status)
       userStatus = memberships[ groupId ].status === 'co-host' ? true : false;
-      setOrganizerBool(userStatus);
+      setOrganizerBool(userStatus || false);
     };
   }, [ dispatch, memberships, groupId, event, userStatus ])
 
@@ -131,7 +131,7 @@ const SingleEventPage = ({ eventData }) => {
           </div>
         </div>
       </div>
-      <BottomNav>
+      <BottomNav pageType={'events'}>
         <Link to={`/events`} className="page-return">
           <h3>
             <i class="fa-solid fa-angle-left" /> Back to More Events

@@ -35,16 +35,14 @@
   transition: 0.3s;
 }
 
-.groups-bottom-nav-wrapper {
+.page-bottom-nav-wrapper {
   display: flex;
-  width: 1100px;
   justify-content: space-between;
+  width: 1100px;
 }
 
 .events-bottom-nav-wrapper {
-  display: flex;
   width: 1150px;
-  justify-content: space-between;
 }
 
 .site-footer {
