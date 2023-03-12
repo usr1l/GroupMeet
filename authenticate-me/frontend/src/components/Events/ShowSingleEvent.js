@@ -131,10 +131,16 @@ const SingleEventPage = ({ eventData }) => {
         </div>
       </div>
       <BottomNav>
-        <Link to={`/events`} className="page-return">
-          <i class="fa-solid fa-angle-left"></i>
-          <h3>Back to More Events</h3>
-        </Link>
+        <div className="events-bottom-nav-wrapper">
+          <Link to={`/events`} className="page-return">
+            <h3>
+              <i class="fa-solid fa-angle-left" /> Back to More Events
+            </h3>
+          </Link>
+          <Link to={`/groups/${groupId}`} className='page-return'>
+            <h3>Visit This Group</h3>
+          </Link>
+        </div>
       </BottomNav>
     </>
   )

@@ -1,28 +1,44 @@
 .bottom-nav-wrapper {
   width: 100vw;
   height: 90px;
-  background: #2F363F;
+  background: #48505c;
   position: relative;
   bottom: 0;
   display: flex;
   align-items: center;
   margin-top: auto;
+  justify-content: center;
 }
 
 .page-return {
-  margin-left: 60px;
   display: flex;
   flex-direction: row;
   align-items: center;
 }
 
-.page-return>i {
-  font-size: 20pt;
+.page-return>h3>i {
   margin-right: 10px;
-  color: lightgray;
 }
 
 .page-return>h3 {
   font-size: 15pt;
   color: lightgray;
+  transition: 0.3s;
+}
+
+.page-return>h3:hover {
+  color: grey;
+  transition: 0.3s;
+}
+
+.groups-bottom-nav-wrapper {
+  display: flex;
+  width: 1100px;
+  justify-content: space-between;
+}
+
+.events-bottom-nav-wrapper {
+  display: flex;
+  width: 1150px;
+  justify-content: space-between;
 }

@@ -93,7 +93,7 @@ async function getEvents(events) {
   const eventsArr = events.map(event => event.toJSON());
   for (let event of eventsArr) {
     // manipulate each json object
-    const { venueId, groupId, id } = event;
+    const { venueId, id } = event;
     event.numAttending = await getNumAttendees(id);
     const venue = await Venue.findOne({
       attributes: {
@@ -686,7 +686,7 @@ eventsRouter.get('/', async (req, res, next) => {
     order: [ [ 'name' ], [ 'type' ] ],
     include: {
       model: Group,
-      attributes: [ 'id', 'name', 'city', 'state' ]
+      attributes: [ 'id', 'name', 'city', 'state', 'organizerId' ]
     },
     ...pagination
   });

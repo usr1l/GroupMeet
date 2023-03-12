@@ -11,7 +11,7 @@ import NotFoundPage from "./components/NotFoundPage";
 import HomePage from "./components/HomePage";
 import MessagesPage from "./components/Messages";
 import CreateEventForm from './components/Events/CreateEventForm';
-import MembershipsPage from "./components/MembershipsPage";
+// import MembershipsPage from "./components/MembershipsPage";
 import CreateGroupForm from './components/Groups/CreateGroupForm';
 import EditEventPage from "./components/Events/EditEvent";
 import EditGroupPage from "./components/Groups/EditGroup";
@@ -20,6 +20,7 @@ import SingleGroupPage from "./components/Groups/ShowSingleGroup";
 import { thunkLoadEvents } from "./store/events";
 import { thunkLoadGroups } from "./store/groups";
 import SplashPage from "./components/SplashPage";
+import BottomNav from "./components/BottomNav";
 
 function App() {
 
@@ -58,6 +59,7 @@ function App() {
           </Switch>
         </>
       )}
+      {/* <BottomNav ></BottomNav> */}
     </>
   );
 }

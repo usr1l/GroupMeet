@@ -11,7 +11,9 @@ import App from './App';
 
 import configureStore from './store';
 import { restoreCSRF, csrfFetch } from "./store/csrf";
+import BottomNav from './components/BottomNav';
 import * as sessionActions from './store/session';
+
 
 const store = configureStore();
 
@@ -34,6 +36,7 @@ function Root() {
         <BrowserRouter>
           <App />
           <Modal />
+          <BottomNav />
         </BrowserRouter>
       </Provider>
     </ModalProvider>

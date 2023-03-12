@@ -191,23 +191,14 @@ const SingleGroupPage = ({ groupData }) => {
         <div className="group-property-page-wrapper">
           <Switch>
             <Route exact path={`/groups/${groupId}/events`}>
-              <>
-                <div id='group-events-page-wrapper'>
-                  <div id='group-events-header-wrapper'>
-                    <h2>{`Events for this group (${events.length})`}:</h2>
-                  </div>
-                  <EventsList events={events} />
+
+              <div id='group-events-page-wrapper'>
+                <div id='group-events-header-wrapper'>
+                  <h2>{`Events for this group (${events.length})`}:</h2>
                 </div>
-                {organizerBool && (
-                  <section className="group-events-page-sticky-div">
-                    <div className="group-events-page-icon-card-section">
-                      <Link to={`/groups/${groupId}/events/new`}>
-                        <Button onClick={(e) => e.preventDefault} buttonStyle='btn--delete'>Create Event</Button>
-                      </Link>
-                    </div>
-                  </section>
-                )}
-              </>
+                <EventsList events={events} />
+              </div>
+
             </Route>
             <Route path={`/groups/${groupId}/members`}>
               <MembershipsPage members={members} />
@@ -219,10 +210,18 @@ const SingleGroupPage = ({ groupData }) => {
         </div>
       </div>
       <BottomNav>
-        <Link to={`/groups`} className="page-return groups-bottom-nav">
-          <i class="fa-solid fa-angle-left"></i>
-          <h3>Back to More Groups</h3>
-        </Link>
+        <div className="groups-bottom-nav-wrapper">
+          <Link to={`/groups`} className="page-return">
+            <h3>
+              <i class="fa-solid fa-angle-left" /> Back to More Groups
+            </h3>
+          </Link>
+          {organizerBool && (
+            <Link to={`/groups/${groupId}/events/new`} className='page-return'>
+              <h3>Create An Event</h3>
+            </Link>
+          )}
+        </div>
       </BottomNav>
     </>
   )

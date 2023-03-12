@@ -3,6 +3,7 @@ import { csrfFetch } from "./csrf";
 
 const LOGIN_USER = 'user/LOGIN_USER';
 const LOGOUT_USER = 'user/LOGOUT_USER';
+const LOAD_USER_MEMBERSHIPS = 'user/LOAD_USER_MEMBERSHIPS';
 
 const actionLogin = (user) => {
   return {
@@ -14,6 +15,13 @@ const actionLogin = (user) => {
 const actionLogout = () => {
   return {
     type: LOGOUT_USER,
+  };
+};
+
+const actionLoadUserMemberships = (memberships) => {
+  return {
+    type: LOAD_USER_MEMBERSHIPS,
+    payload: memberships
   };
 };
 
@@ -69,7 +77,7 @@ export const thunkLogout = () => async (dispatch) => {
 };
 
 
-const initialState = { user: null };
+const initialState = { user: null, memberships: {} };
 
 
 const sessionReducer = (state = initialState, action) => {

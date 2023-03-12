@@ -21,6 +21,8 @@ export const thunkLoadGroups = () => async (dispatch) => {
     dispatch(actionLoadGroups(data));
     return data;
   }
+
+  return response;
 };
 
 export const thunkLoadGroupEvents = (groupId) => async (dispatch) => {
@@ -32,6 +34,8 @@ export const thunkLoadGroupEvents = (groupId) => async (dispatch) => {
     dispatch(actionLoadGroupEvents(Events));
     return Events;
   }
+
+  return;
 };
 
 export const thunkLoadGroupMembers = (groupId) => async (dispatch) => {
