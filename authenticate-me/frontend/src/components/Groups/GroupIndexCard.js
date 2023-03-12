@@ -20,9 +20,7 @@ function GroupIndexCard({ group }) {
 
     dispatch(thunkLoadSingleGroup(id))
       .then(() => dispatch(thunkLoadGroupEvents(id)))
-      .then(() => dispatch(thunkLoadGroupMembers(id)))
-      .then(() => dispatch(thunkLoadUserStatus(id)));
-
+      .then(() => dispatch(thunkLoadGroupMembers(id)));
     return;
   };
 

@@ -35,7 +35,7 @@ const CreateEventForm = (event) => {
 
     const { currDateTime } = getCurrTime();
     if (!name || (name.length < 5)) validationErrors.push('Please provide a name at least 5 characters long');
-    if ((!description)) validationErrors.push('A description is required');
+    if ((!description || description.length < 30)) validationErrors.push('A description is required (30 characters min.');
     if (!type) validationErrors.push('Please specify if event is \'In person\' or \'Online\'');
 
     if (`${startDate} ${startTime}` <= currDateTime) validationErrors.push('Please provide a start date, must be in the future');
@@ -81,8 +81,6 @@ const CreateEventForm = (event) => {
     return;
   };
 
-
-
   return (
     <div id='create-event-page'>
       <h2 id="event-form__title">CREATE AN EVENT</h2>
@@ -92,7 +90,7 @@ const CreateEventForm = (event) => {
         ))}
       </ul>
       <form id="event-form" onSubmit={onSubmit}>
-        <InputDiv divStyle="event-form__block" labelStyle="event-form__label" labelFor='eventName' label='Name: '>
+        <InputDiv divStyle="event-form__block" labelStyle="event-form__label" labelFor='eventName' label='What is the name of your event?'>
           <input
             id="eventName"
             type="text"
@@ -101,7 +99,7 @@ const CreateEventForm = (event) => {
             placeholder='Name (min 5 characters)'
           />
         </InputDiv>
-        <InputDiv divStyle="event-form__block" labelStyle="event-form__label" labelFor='Type' label='Type: '>
+        <InputDiv divStyle="event-form__block" labelStyle="event-form__label" labelFor='Type' label='Is this an in-person or online event?'>
           <select
             name="Type"
             onChange={(e) => setType(e.target.value)}
@@ -114,7 +112,7 @@ const CreateEventForm = (event) => {
             <option value='Online'>Online</option>
           </select>
         </InputDiv>
-        <InputDiv divStyle="event-form__block" labelStyle="event-form__label" labelFor='price' label='Price: '>
+        <InputDiv divStyle="event-form__block" labelStyle="event-form__label" labelFor='price' label='What is the price for your event?'>
           <input
             type="number"
             name="price"
@@ -130,7 +128,7 @@ const CreateEventForm = (event) => {
             value={capacity}
             onChange={(e) => setCapacity(e.target.value)} />
         </InputDiv>
-        <InputDiv divStyle="date-time__block" labelStyle="event-form__label" labelFor='startDate-Time' label='Start Date: '>
+        <InputDiv divStyle="date-time__block" labelStyle="event-form__label" labelFor='startDate-Time' label='When does your event start?'>
           <input
             name='startDate-Time'
             type='date'
@@ -145,7 +143,7 @@ const CreateEventForm = (event) => {
             onChange={(e) => setStartTime(e.target.value)}
           />
         </InputDiv>
-        <InputDiv divStyle="date-time__block" labelStyle="event-form__label" labelFor='endDate-Time' label='End Date: '>
+        <InputDiv divStyle="date-time__block" labelStyle="event-form__label" labelFor='endDate-Time' label='When does your event end?'>
           <input
             name="endDate-Time"
             type='date'
@@ -160,16 +158,16 @@ const CreateEventForm = (event) => {
             onChange={(e) => setEndTime(e.target.value)}
           />
         </InputDiv>
-        <InputDiv divStyle="event-form__block" labelStyle="event-form__label" labelFor="description" label='Description: '>
+        <InputDiv divStyle="event-form__block" labelStyle="event-form__label" labelFor="description" label='Please describe your event'>
           <textarea
             id="description"
             name="description"
             onChange={(e) => setDescription(e.target.value)}
             value={description}
-            placeholder='What is your event about'
+            placeholder='What is your event about (30 characters min.)'
           />
         </InputDiv>
-        <InputDiv divStyle="event-form__block" labelStyle="event-form__label" labelFor="event-profile-img" label='Event Image: '>
+        <InputDiv divStyle="event-form__block" labelStyle="event-form__label" labelFor="event-profile-img" label='Event Profile Image: '>
           <input
             name="event-profile-img"
             type='url'

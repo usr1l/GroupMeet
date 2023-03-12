@@ -1,5 +1,5 @@
 import React, { useEffect } from "react"
-import { useParams, NavLink } from "react-router-dom";
+import { useParams, NavLink, Link, Redirect } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { thunkDeleteEvent, thunkLoadSingleEvent } from "../../store/events";
 import { useHistory } from "react-router-dom";
@@ -7,11 +7,16 @@ import errorPageHandler from "../ErrorPage";
 import IconDescriptionCard from "../IconDescriptionCard";
 import Button from "../Button";
 import NotFoundPage from "../NotFoundPage";
-import './SingleEventPage.css';
+import BottomNav from "../BottomNav";
 import convertDate from '../HelperFns/ConvertDate';
-
+import './SingleEventPage.css';
 
 const SingleEventPage = ({ eventData }) => {
+  const { user } = useSelector(state => state.session);
+  // if (!user) return <Redirect to='/events' />
+
+  const event = useSelector(state => state.events.event);
+  const group = useSelector(state => state.groups.groups[ groupId ]);
 
   const { eventId } = useParams();
   if (isNaN(parseInt(eventId))) return (<NotFoundPage />)
@@ -21,8 +26,6 @@ const SingleEventPage = ({ eventData }) => {
     dispatch(thunkLoadSingleEvent(eventId));
   }, [ dispatch, eventId ]);
 
-  const { user } = useSelector(state => state.session);
-  const event = useSelector(state => state.events.event);
 
   let groupType;
   let groupName;
@@ -35,7 +38,6 @@ const SingleEventPage = ({ eventData }) => {
 
   const history = useHistory();
 
-  const group = useSelector(state => state.groups.groups[ groupId ]);
   const organizerId = group ? group.organizerId : null;
 
   const organizerFn = () => {
@@ -130,6 +132,19 @@ const SingleEventPage = ({ eventData }) => {
           </div>
         </div>
       </div>
+      <BottomNav>
+        <div className="events-bottom-nav-wrapper">
+          <Link to={`/events`} className="page-return">
+            <h3>
+              <i class="fa-solid fa-angle-left" /> Back to More Events
+            </h3>
+          </Link>
+          <Link to={`/groups/${groupId}`} className='page-return'>
+            <h3>Visit This Group <i class="fa-solid fa-angle-right"></i>
+            </h3>
+          </Link>
+        </div>
+      </BottomNav>
     </>
   )
 }

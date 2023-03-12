@@ -5,8 +5,8 @@
   display: none;
 } */
 :root {
-  --site-blue: #008294;
-  --site-red: #f65858;
+  --site-green: #96C832;
+  --site-red: #B8143A;
 }
 
 body {
@@ -25,7 +25,8 @@ body {
   display: flex;
   flex-direction: column;
   width: 100vw;
-  height: 100%;
+  /* height: 100vh; */
+  min-height: 100vh;
   background-size: cover;
 
 }

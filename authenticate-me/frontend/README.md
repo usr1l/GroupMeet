@@ -31,6 +31,7 @@ GitHub Repo: https://github.com/usr1l/project1
 - Postman
 - GitHub
 - Visual Studio Code
+- Redux Developer Tools
 
 
 ## Features
@@ -52,6 +53,7 @@ View all events.
 ![This is an image](../../README/assets/events2.png)
 ## React Components
 
+- Bottom Navbar
 - Button
 - ErrorPage
 - Events About Page
@@ -69,6 +71,7 @@ View all events.
 - Image Preview
 - Input Div
 - Login Form
+- Group Memberships Page
 - Navigation Bar
 - Open Modal Button
 - Preview Card
@@ -89,6 +92,7 @@ View all events.
 - /events/:eventId
 - /groups/:groupId/edit
 - /groups/:groupId/events
+- /groups/:groupId/members
 - /events/:eventId/edit
 
 ## API Routes
@@ -98,7 +102,14 @@ View all events.
 ## Redux Store Tree
 ```
 store = {
-  session: {},
+  session: {
+    user: {
+      userData
+    },
+    memberships: {
+      [groupId]: membershipData
+    },
+  },
   groups: {
     allGroups: {
       [groupId]: {
@@ -127,7 +138,7 @@ store = {
       },
       Venues: [venuesData],
       // To be completed
-      Members: [membersData],
+      Members: {membersData},
     },
   },
   events: {
@@ -152,7 +163,7 @@ store = {
       },
       EventImages: [imagesData],
       // To be completed
-      Attendees: [attendeeData],
+      Attendees: {attendeeData},
     },
   },
 };

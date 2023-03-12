@@ -81,11 +81,17 @@ h1 {
   width: 450px;
 }
 
-
 .content-row-image {
   border-radius: 40px;
   height: 220px;
   width: auto;
+}
+
+#splash-page-buttons-container {
+  display: flex;
+  width: 500px;
+  justify-content: space-between;
+  padding-bottom: 60px;
 }
 
 
