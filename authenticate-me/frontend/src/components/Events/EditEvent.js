@@ -64,7 +64,7 @@ const EditEventPage = () => {
     return validationErrors;
   };
 
-  const onSubmit = async (e) => {
+  const onSubmit = (e) => {
     e.preventDefault();
 
     const validationErrors = validate();
@@ -82,7 +82,7 @@ const EditEventPage = () => {
       previewImage
     };
 
-    const response = await dispatch(thunkUpdateEvent(eventInfo, eventId));
+    const response = dispatch(thunkUpdateEvent(eventInfo, eventId));
 
     if (response.ok) {
       history.push(`/events/${eventId}`);

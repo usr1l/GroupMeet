@@ -60,7 +60,7 @@ const EditGroupPage = () => {
     return validationErrors;
   };
 
-  const onSubmit = async (e) => {
+  const onSubmit = (e) => {
     e.preventDefault();
 
     const validationErrors = validate();
@@ -77,7 +77,7 @@ const EditGroupPage = () => {
       previewImage
     };
 
-    const response = await dispatch(thunkUpdateGroup(groupInfo, groupId));
+    const response = dispatch(thunkUpdateGroup(groupInfo, groupId));
 
     if (response.ok) {
       history.push(`/groups/${groupId}`);
@@ -91,11 +91,9 @@ const EditGroupPage = () => {
         <div id='create-group-page'>
           <h2 id="group-form__title" className="edit-form">EDIT GROUP</h2>
           <ul id='group-form__error-list'>
-            {!!errors.length && (
-              errors.map((error) => (
-                <li key={error}>{error}</li>
-              ))
-            )}
+            {errors.map((error) => (
+              <li key={error}>{error}</li>
+            ))}
           </ul>
           <form id="group-form" onSubmit={onSubmit}>
             <InputDiv divStyle="group-form__block" labelStyle="group-form__label" labelFor="name" label='Name: '>
