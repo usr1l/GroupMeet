@@ -60,7 +60,7 @@ const EditGroupPage = () => {
     return validationErrors;
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
 
     const validationErrors = validate();
@@ -77,7 +77,7 @@ const EditGroupPage = () => {
       previewImage
     };
 
-    const response = dispatch(thunkUpdateGroup(groupInfo, groupId));
+    const response = await dispatch(thunkUpdateGroup(groupInfo, groupId));
 
     if (response.ok) {
       history.push(`/groups/${groupId}`);

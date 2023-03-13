@@ -107,9 +107,9 @@ const SingleGroupPage = ({ groupData }) => {
     };
   };
 
-  const handleDelete = (e) => {
+  const handleDelete = async (e) => {
     e.preventDefault();
-    const data = dispatch(thunkDeleteGroup({ groupId }));
+    const data = await dispatch(thunkDeleteGroup({ groupId }));
 
     if (data.ok === true) {
       history.push(`/groups`);

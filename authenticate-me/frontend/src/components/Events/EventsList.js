@@ -9,13 +9,7 @@ const EventsList = ({
   return (
     <div className="events-index-page-wrapper">
       <div className="events-index-container">
-        {
-          events.map((event) => {
-            return (
-              <EventIndexCard event={event} />
-            )
-          })
-        }
+        {events.map((event) => (<EventIndexCard event={event} />))}
       </div>
     </div>
   )

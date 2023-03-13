@@ -45,7 +45,7 @@ const CreateGroupForm = () => {
     return validationErrors;
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
 
     const validationErrors = validate();
@@ -63,13 +63,13 @@ const CreateGroupForm = () => {
       previewImage
     };
 
-    const data = dispatch(thunkCreateGroup(groupInfo));
+    const data = await dispatch(thunkCreateGroup(groupInfo));
 
     if (data.statusCode === 409) {
       return setErrors([ data.message ]);
     };
 
-    thunkLoadGroups();
+    await thunkLoadGroups();
     history.push(`/groups/${data.id}`);
     return;
   };

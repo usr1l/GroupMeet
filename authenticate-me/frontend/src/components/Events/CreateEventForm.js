@@ -53,7 +53,7 @@ const CreateEventForm = (event) => {
     return validationErrors;
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
 
     const validationErrors = validate();
@@ -73,14 +73,14 @@ const CreateEventForm = (event) => {
       venueId: null
     };
 
-    const data = dispatch(thunkCreateEvent(eventInfo));
+    const data = await dispatch(thunkCreateEvent(eventInfo));
 
     if (data.statusCode === 409) {
       setErrors([ data.message ]);
       return errors;
     };
 
-    thunkLoadEvents();
+    await thunkLoadEvents();
 
     history.push(`/events/${data.id}`);
     return;
