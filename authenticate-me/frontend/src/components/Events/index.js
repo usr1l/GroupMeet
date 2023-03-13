@@ -15,7 +15,7 @@ const AllEventsPage = () => {
     const startA = new Date(a.startDate);
     const startB = new Date(b.startDate);
     if (startA < currDate) return startB - startA;
-    if (startA > currDate) return startA - startB;
+    return startA - startB;
   });
 
   return (

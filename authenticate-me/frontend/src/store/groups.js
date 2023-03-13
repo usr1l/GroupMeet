@@ -1,6 +1,7 @@
 import { csrfFetch } from "./csrf";
 import normalizeFn from "../components/HelperFns/NormalizeFn";
 import objDeepCopyFn from "../components/HelperFns/ObjDeepCopyFn";
+import { thunkLoadUserMemberships } from "./session";
 
 
 const LOAD_GROUPS = 'groups/LOAD';
@@ -10,7 +11,7 @@ const LOAD_GROUP_MEMBERS = 'group/members/LOAD';
 const DELETE_GROUP = 'groups/DELETE';
 const CREATE_GROUP = 'groups/CREATE';
 const UPDATE_GROUP = 'groups/EDIT';
-const JOIN_GROUP = 'group/membership/CREATE';
+// const JOIN_GROUP = 'group/membership/CREATE';
 
 export const thunkLoadGroups = () => async (dispatch) => {
   const response = await csrfFetch('/api/groups/');
@@ -77,6 +78,7 @@ export const thunkCreateGroup = (groupInfo) => async (dispatch) => {
   if (response.ok) {
     dispatch(actionCreateGroup(data));
     dispatch(thunkLoadGroups());
+    dispatch(thunkLoadUserMemberships());
   };
 
   return data;
@@ -199,7 +201,11 @@ export const actionCreateGroup = (group) => {
   };
 };
 
-const initialState = { groups: {}, group: {}, isLoading: true };
+const initialState = {
+  groups: {},
+  group: { Events: {}, GroupImages: {}, Organizer: {}, Venues: {}, Members: {} },
+  isLoading: true
+};
 
 
 const groupReducer = (state = initialState, action) => {
@@ -221,7 +227,14 @@ const groupReducer = (state = initialState, action) => {
       const groups = normalizeFn(action.payload.Groups);
       return { ...state, groups: groups, isLoading: false };
     case LOAD_GROUP:
-      return { ...state, group: { ...action.payload } };
+      return {
+        ...state,
+        group: {
+          ...action.payload,
+          Venues: normalizeFn(action.payload.Venues),
+          GroupImages: normalizeFn(action.payload.GroupImages)
+        }
+      };
     case LOAD_GROUP_EVENTS:
       const events = normalizeFn(action.payload);
       return { ...state, group: { ...state.group, Events: events } };

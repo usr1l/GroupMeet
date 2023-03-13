@@ -3,12 +3,15 @@ import './BottomNav.css';
 
 const BottomNav = ({
   children,
-  navStyle
+  navStyle,
+  pageType
 }) => {
   return (
     <div className={`bottom-nav-wrapper ${navStyle}`}>
-      {children}
-    </div>
+      <div className={`page-bottom-nav-wrapper ${pageType}-bottom-nav-wrapper`}>
+        {children}
+      </div>
+    </div >
   )
 }
 

@@ -2,7 +2,7 @@ import React from "react";
 import './IconDescriptionCard.css'
 
 const IconDescriptionCard = ({
-  style,
+  cardStyle,
   iconClass,
   iconId,
   heading,
@@ -10,7 +10,7 @@ const IconDescriptionCard = ({
 }) => {
 
   const STYLES = [ '', 'group-page-oragnizer-element', 'membership-page-member-cards' ];
-  const checkDivStyle = STYLES.includes(style) ? style : STYLES[ 0 ];
+  const checkDivStyle = STYLES.includes(cardStyle) ? cardStyle : STYLES[ 0 ];
 
   return (
     <div className="icon-description-card-container" id={checkDivStyle}>

@@ -1,5 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
+import './Messages.css';
 
 const MessagesPage = () => {
 
@@ -7,11 +8,11 @@ const MessagesPage = () => {
 
   if (!sessionUser)
     return (
-      <div>Login to view your messages.</div>
+      <div id="messages-page-wrapper">Login to view your messages.</div>
     )
   else
     return (
-      <div>Messages Page</div>
+      <div id="messages-page-wrapper">Messages Page</div>
     );
 };
 

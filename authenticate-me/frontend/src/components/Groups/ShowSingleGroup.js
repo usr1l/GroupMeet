@@ -32,6 +32,7 @@ const SingleGroupPage = ({ groupData }) => {
   const dispatch = useDispatch();
 
   const [ membershipState, setMembershipState ] = useState('...');
+  const [ organizerBool, setOrganizerBool ] = useState(false);
 
   function membershipButtonDisplay(status) {
     switch (status) {
@@ -50,24 +51,29 @@ const SingleGroupPage = ({ groupData }) => {
     dispatch(thunkLoadSingleGroup(groupId))
       .then(() => dispatch(thunkLoadGroupEvents(groupId)))
       .then(() => dispatch(thunkLoadGroupMembers(groupId)));
+    return;
   }, [ dispatch, groupId ]);
 
   useEffect(() => {
     if (memberships[ groupId ]) {
-      setMembershipState(membershipButtonDisplay(memberships[ groupId ].status));
+      return setMembershipState(membershipButtonDisplay(memberships[ groupId ].status));
     } else {
-      setMembershipState('Join Group');
+      return setMembershipState('Join Group');
     };
-  }, [ dispatch, memberships ])
+  }, [ dispatch, memberships ]);
+
+  useEffect(() => {
+    if (membershipState === 'Co-Host') return setOrganizerBool(true);
+    else setOrganizerBool(false);
+  }, [ dispatch, membershipState ]);
 
   const history = useHistory();
 
-  let {
+  const {
     name,
     about,
     city,
     state,
-    organizerId,
     previewImage,
     numMembers,
     Organizer,
@@ -75,33 +81,10 @@ const SingleGroupPage = ({ groupData }) => {
     Members
   } = group;
 
-  let events = [];
-  let members = [];
-
-  if (Events && Object.values(Events).length) {
-    events = Object.values(Events);
-  };
-
-  if (Members && Object.values(Members).length) {
-    members = Object.values(Members);
-  };
-
-  let hostName;
-  if (Organizer && Organizer.id) {
-    hostName = `${Organizer.firstName} ${Organizer.lastName}`;
-  };
-
+  const events = Events ? Object.values(Events) : [];
+  const members = Members ? Object.values(Members) : [];
+  const hostName = Organizer ? `${Organizer.firstName} ${Organizer.lastName}` : null;
   const isPrivate = group.private === true ? 'Private' : 'Public';
-  const userId = user.id;
-
-  const organizerFn = () => {
-    if (userId) {
-      return organizerId === userId;
-    };
-    return false;
-  };
-
-  const organizerBool = organizerFn();
 
   // need to work on not allowing single host to leave a group
   const handleMemberClick = (e) => {
@@ -116,7 +99,7 @@ const SingleGroupPage = ({ groupData }) => {
       case 'Requested':
         dispatch(thunkSessionDeleteMembership({ groupId, memberId: user.id }))
         return;
-      case 'co-host':
+      case 'Co-Host':
         window.alert('Hosts are not able to leave their groups.')
         return;
       default:
@@ -209,19 +192,17 @@ const SingleGroupPage = ({ groupData }) => {
         </div>
       </div>
       <BottomNav>
-        <div className="groups-bottom-nav-wrapper">
-          <Link to={`/groups`} className="page-return">
-            <h3>
-              <i class="fa-solid fa-angle-left" /> Back to More Groups
+        <Link to={`/groups`} className="page-return">
+          <h3>
+            <i class="fa-solid fa-angle-left" /> Back to More Groups
+          </h3>
+        </Link>
+        {organizerBool && (
+          <Link to={`/groups/${groupId}/events/new`} className='page-return'>
+            <h3>Create An Event <i class="fa-solid fa-angle-right"></i>
             </h3>
           </Link>
-          {organizerBool && (
-            <Link to={`/groups/${groupId}/events/new`} className='page-return'>
-              <h3>Create An Event <i class="fa-solid fa-angle-right"></i>
-              </h3>
-            </Link>
-          )}
-        </div>
+        )}
       </BottomNav>
     </>
   )

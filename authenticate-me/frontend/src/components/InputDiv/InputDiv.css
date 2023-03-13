@@ -12,7 +12,10 @@
 
 .group-form__label {
   margin: 0;
-  height: 22px;
+  height: 18px;
+  box-sizing: border-box;
+  font-size: 11pt;
+  margin-top: 5px;
   box-sizing: border-box;
 }
 
@@ -25,8 +28,6 @@
 .group-form__block.group-form__private {
   display: flex;
   flex-direction: row;
-  /* border: 1px solid black;
-  margin-bottom: 15px; */
 }
 
 

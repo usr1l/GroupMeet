@@ -165,3 +165,9 @@ h2#single-group-page-name {
   padding-top: 20px;
   padding-bottom: 5px;
 }
+
+#group-about-header {
+  margin: 20px 0 50px;
+  font-size: 20pt;
+  font-weight: 500;
+}

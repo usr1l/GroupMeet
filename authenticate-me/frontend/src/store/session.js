@@ -1,5 +1,4 @@
 import { csrfFetch } from "./csrf";
-import { thunkLoadGroupMembers } from "./groups";
 
 const LOGIN_USER = 'user/LOGIN_USER';
 const LOGOUT_USER = 'user/LOGOUT_USER';

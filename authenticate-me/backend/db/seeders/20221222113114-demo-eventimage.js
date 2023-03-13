@@ -22,7 +22,10 @@ module.exports = {
       { url: imgURL, preview: true, eventId: 6 },
       { url: imgURL, preview: true, eventId: 7 },
       { url: imgURL, preview: true, eventId: 8 },
-      { url: imgURL, preview: true, eventId: 9 }
+      { url: imgURL, preview: true, eventId: 9 },
+      { url: imgURL, preview: true, eventId: 10 },
+      { url: imgURL, preview: true, eventId: 11 },
+      { url: imgURL, preview: true, eventId: 12 },
     ], {})
   },
 

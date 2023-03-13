@@ -6,12 +6,11 @@ const NotificationPage = () => {
 
   if (!sessionUser)
     return (
-      <div>Login to view your notifications.</div>
+      <div id='notifications-page-wrapper'>Login to view your notifications.</div>
     )
   else
-
     return (
-      <div>Notifications Page</div>
+      <div id='notifications-page-wrapper'>Notifications Page</div>
     );
 };
 

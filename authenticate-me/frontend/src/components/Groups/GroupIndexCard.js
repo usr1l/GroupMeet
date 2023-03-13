@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import ImagePreview from "../ImagePreview";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { thunkLoadSingleGroup, thunkLoadGroupMembers, thunkLoadGroupEvents, thunkLoadUserStatus } from "../../store/groups";
+import { thunkLoadSingleGroup, thunkLoadGroupMembers, thunkLoadGroupEvents } from "../../store/groups";
 import './GroupsPage.css';
 
 
@@ -13,7 +13,7 @@ function GroupIndexCard({ group }) {
   const dispatch = useDispatch();
 
   const loginAlert = (e) => {
-    if (!user.id) {
+    if (!user) {
       e.preventDefault();
       return alert('Please login to see more.');
     };

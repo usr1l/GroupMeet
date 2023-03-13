@@ -10,7 +10,7 @@ const MembershipsPage = ({ members }) => {
         {members.map((member) => (
           <IconDescriptionCard
             iconClass="fas fa-user-circle"
-            style='membership-page-member-cards'
+            cardStyle={'membership-page-member-cards'}
             heading={`${member.firstName} ${member.lastName}`}
             subHeading={`${member.memberStatus}`}
           />

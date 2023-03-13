@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { useParams, NavLink, Link, Redirect } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { thunkDeleteEvent, thunkLoadSingleEvent } from "../../store/events";
@@ -12,58 +12,41 @@ import convertDate from '../HelperFns/ConvertDate';
 import './SingleEventPage.css';
 
 const SingleEventPage = ({ eventData }) => {
-  const { user } = useSelector(state => state.session);
-  // if (!user) return <Redirect to='/events' />
+  const { user, memberships } = useSelector(state => state.session);
+  if (!user) return <Redirect to='/events' />
 
   const event = useSelector(state => state.events.event);
-  const group = useSelector(state => state.groups.groups[ groupId ]);
 
   const { eventId } = useParams();
   if (isNaN(parseInt(eventId))) return (<NotFoundPage />)
+
+  const [ organizerBool, setOrganizerBool ] = useState(false);
+  const { name, startDate, endDate, groupId, description, previewImage, Group } = event;
+
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(thunkLoadSingleEvent(eventId));
   }, [ dispatch, eventId ]);
 
-
-  let groupType;
-  let groupName;
-  const { name, startDate, endDate, groupId, description, previewImage, Group } = event;
-
-  if (Group && Group.name) {
-    groupType = Group.private === true ? 'Public group' : 'Private group';
-    groupName = Group.name;
-  };
+  useEffect(() => {
+    if (memberships[ groupId ]) {
+      return setOrganizerBool(memberships[ groupId ].status === 'co-host');
+    }
+    else return setOrganizerBool(false);
+  }, [ dispatch, memberships, event, groupId ]);
 
   const history = useHistory();
-
-  const organizerId = group ? group.organizerId : null;
-
-  const organizerFn = () => {
-    if (user) {
-      return organizerId === user.id
-    };
-    return false;
-  };
-
-  const organizerBool = organizerFn(user);
-
-  let startDateSlice;
-  let endDateSlice;
-  if (startDate) {
-    startDateSlice = convertDate(startDate);
-  };
-
-  if (endDate) {
-    endDateSlice = convertDate(endDate);
-  };
+  const groupType = Group ? (Group.private === true ? 'Public group' : 'Private group') : null;
+  const groupName = Group ? Group.name : null;
+  const startDateSlice = startDate ? convertDate(startDate) : null;
+  const endDateSlice = endDate ? convertDate(endDate) : null;
 
   const handleDelete = async (e) => {
     e.preventDefault();
     const data = await dispatch(thunkDeleteEvent({ eventId }))
     if (data.ok === true) {
-      history.push('/events');
+      history.push(`/events`);
     };
 
     if (data.ok === false) {
@@ -132,18 +115,16 @@ const SingleEventPage = ({ eventData }) => {
           </div>
         </div>
       </div>
-      <BottomNav>
-        <div className="events-bottom-nav-wrapper">
-          <Link to={`/events`} className="page-return">
-            <h3>
-              <i class="fa-solid fa-angle-left" /> Back to More Events
-            </h3>
-          </Link>
-          <Link to={`/groups/${groupId}`} className='page-return'>
-            <h3>Visit This Group <i class="fa-solid fa-angle-right"></i>
-            </h3>
-          </Link>
-        </div>
+      <BottomNav pageType={'events'}>
+        <Link to={`/events`} className="page-return">
+          <h3>
+            <i class="fa-solid fa-angle-left" /> Back to More Events
+          </h3>
+        </Link>
+        <Link to={`/groups/${groupId}`} className='page-return'>
+          <h3>Visit This Group <i class="fa-solid fa-angle-right"></i>
+          </h3>
+        </Link>
       </BottomNav>
     </>
   )

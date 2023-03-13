@@ -49,7 +49,7 @@ function ProfileButton({ user }) {
       <ul className={ulClassName} ref={ulRef}>
         {user ? (
           <div id='profile-menu'>
-            <li className='modal-menu-item'>Hello, {user.firstName}!</li>
+            <li className='modal-menu-item' id='modal-menu-item-greeting'>Hello, {user.firstName}!</li>
             <li className='modal-menu-item'>{user.username}</li>
             <li className='modal-menu-item'>{user.email}</li>
             <div className="menu-div"></div>

@@ -1,7 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import FeaturesBar from "../FeaturesBar";
-import GroupIndexCard from "./GroupIndexCard";
 import GroupsList from "./GroupsList";
 import './GroupsPage.css'
 

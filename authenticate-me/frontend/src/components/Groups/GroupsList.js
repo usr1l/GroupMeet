@@ -8,13 +8,7 @@ const GroupsList = ({
   return (
     <div className="groups-index-page-wrapper">
       <div className="groups-index-container">
-        {
-          groups.map((group) => {
-            return (
-              <GroupIndexCard group={group} />
-            )
-          })
-        }
+        {groups.map((group) => (<GroupIndexCard group={group} />))}
       </div>
     </div>
   )
