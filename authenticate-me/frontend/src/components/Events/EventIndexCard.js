@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 import ImagePreview from "../ImagePreview";
 import convertDate from "../HelperFns/ConvertDate";
 import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
-import { thunkLoadSingleEvent } from "../../store/events";
+// import { useDispatch } from "react-redux";
+// import { thunkLoadSingleEvent } from "../../store/events";
 import './EventsPage.css';
 
 
@@ -15,7 +15,7 @@ function EventIndexCard({ event }) {
   const state = Group ? Group.state : null;
   const city = Group ? Group.city : null;
 
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   const loginAlert = (e) => {
     if (!user) {
@@ -23,8 +23,7 @@ function EventIndexCard({ event }) {
       return alert('Please login to see more.');
     };
 
-    dispatch(thunkLoadSingleEvent(id));
-
+    // await dispatch(thunkLoadSingleEvent(id));
     return;
   };
 
