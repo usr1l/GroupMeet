@@ -95,6 +95,11 @@ h1 {
 
 
 @media screen and (max-width: 1060px) {
+  .splashpage-container {
+    height: 100%;
+    padding-bottom: 70px;
+  }
+
   #content-images {
     display: flex;
     flex-direction: column;

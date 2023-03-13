@@ -2,15 +2,15 @@ import React from "react";
 import { Link } from "react-router-dom";
 import ImagePreview from "../ImagePreview";
 import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
-import { thunkLoadSingleGroup, thunkLoadGroupMembers, thunkLoadGroupEvents } from "../../store/groups";
+// import { useDispatch } from "react-redux";
+// import { thunkLoadSingleGroup, thunkLoadGroupMembers, thunkLoadGroupEvents } from "../../store/groups";
 import './GroupsPage.css';
 
 
 function GroupIndexCard({ group }) {
   const { id, name, about, state, type, numMembers, previewImage, city } = group;
   const { user } = useSelector(state => state.session);
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   const loginAlert = (e) => {
     if (!user) {
@@ -18,9 +18,9 @@ function GroupIndexCard({ group }) {
       return alert('Please login to see more.');
     };
 
-    dispatch(thunkLoadSingleGroup(id))
-      .then(() => dispatch(thunkLoadGroupEvents(id)))
-      .then(() => dispatch(thunkLoadGroupMembers(id)));
+    // await dispatch(thunkLoadSingleGroup(id));
+    // await dispatch(thunkLoadGroupEvents(id));
+    // await dispatch(thunkLoadGroupMembers(id));
     return;
   };
 
