@@ -156,8 +156,14 @@ const eventReducer = (state = initialState, action) => {
       const events = normalizeFn(action.payload.Events);
       return { ...state, events: events, isLoading: false };
     case LOAD_EVENT:
-      const event = objDeepCopyFn(action.payload.Event);
-      return { ...state, event: event };
+      return {
+        ...state, event: {
+          ...action.payload.Event,
+          Group: { ...action.payload.Event.Group },
+          Venue: { ...action.payload.Event.Venue },
+          EventImages: [ ...action.payload.Event.EventImages ]
+        }
+      };
     case CREATE_EVENT:
       const newEventId = action.payload.id;
       const newEvent = { ...action.payload, Group: { ...action.payload.Group }, Venue: { ...action.payload.Venue } };

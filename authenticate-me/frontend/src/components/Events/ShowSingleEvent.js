@@ -37,7 +37,6 @@ const SingleEventPage = ({ eventData }) => {
 
   useEffect(() => {
     if (memberships && memberships[ groupId ]) {
-      console.log(memberships[ groupId ].status)
       userStatus = memberships[ groupId ].status === 'co-host' ? true : false;
       setOrganizerBool(userStatus || false);
     };

@@ -9,7 +9,12 @@ const GroupAboutPage = ({
   return (
     <>
       <div className="group-propery-page-element">
-        {about}
+        <h2 id='group-about-header'>
+          What we're about:
+        </h2>
+        <div id='group-about-text'>
+          {about}
+        </div>
       </div>
       <section className="group-property-page-section">
         <div className="group-property-page-section-header">Organizer</div>
