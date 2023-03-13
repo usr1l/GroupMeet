@@ -201,6 +201,10 @@
   transition: 0.3s;
 }
 
+#modal-menu-item-greeting {
+  margin-top: 6px;
+}
+
 @media screen and (max-width: 650px) {
   .nav-buttons-wrapper {
     width: 80px;

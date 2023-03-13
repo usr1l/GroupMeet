@@ -23,11 +23,6 @@ const SingleEventPage = ({ eventData }) => {
   const [ organizerBool, setOrganizerBool ] = useState(false);
   const { name, startDate, endDate, groupId, description, previewImage, Group } = event;
 
-  let groupType;
-  let groupName;
-  let startDateSlice;
-  let endDateSlice;
-
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -41,26 +36,17 @@ const SingleEventPage = ({ eventData }) => {
     else return setOrganizerBool(false);
   }, [ dispatch, memberships, event, groupId ]);
 
-  if (Group && Group.name) {
-    groupType = Group.private === true ? 'Public group' : 'Private group';
-    groupName = Group.name;
-  };
-
   const history = useHistory();
-
-  if (startDate) {
-    startDateSlice = convertDate(startDate);
-  };
-
-  if (endDate) {
-    endDateSlice = convertDate(endDate);
-  };
+  const groupType = Group ? (Group.private === true ? 'Public group' : 'Private group') : null;
+  const groupName = Group ? Group.name : null;
+  const startDateSlice = startDate ? convertDate(startDate) : null;
+  const endDateSlice = endDate ? convertDate(endDate) : null;
 
   const handleDelete = async (e) => {
     e.preventDefault();
     const data = await dispatch(thunkDeleteEvent({ eventId }))
     if (data.ok === true) {
-      history.push('/events');
+      history.push(`/events`);
     };
 
     if (data.ok === false) {

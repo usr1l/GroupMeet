@@ -10,8 +10,10 @@ import './EventsPage.css';
 
 function EventIndexCard({ event }) {
   const { id, name, type, previewImage, startDate, numAttending, Group } = event;
-  const newDate = convertDate(startDate);
+  const newDate = startDate ? convertDate(startDate) : null;
   const { user } = useSelector(state => state.session);
+  const state = Group ? Group.state : null;
+  const city = Group ? Group.city : null;
   const dispatch = useDispatch();
 
   const loginAlert = (e) => {
@@ -33,7 +35,7 @@ function EventIndexCard({ event }) {
           <ul className='event-index-card-component'>
             <li className='event-index-card-item' id='event-index-card-item-startDate'>{`${newDate}`}</li>
             <h2 className='event-index-card-item'>{name}</h2>
-            <li className='event-index-card-item'>{Group.state}, {Group.city}</li>
+            <li className='event-index-card-item'>{state}, {city}</li>
           </ul>
           <div className='event-index-card-component'>
             <div className='event-index-card-item' id='num-attending'>{numAttending} Attendees</div>

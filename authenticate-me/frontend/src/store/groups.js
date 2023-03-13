@@ -1,6 +1,7 @@
 import { csrfFetch } from "./csrf";
 import normalizeFn from "../components/HelperFns/NormalizeFn";
 import objDeepCopyFn from "../components/HelperFns/ObjDeepCopyFn";
+import { thunkLoadUserMemberships } from "./session";
 
 
 const LOAD_GROUPS = 'groups/LOAD';
@@ -77,6 +78,7 @@ export const thunkCreateGroup = (groupInfo) => async (dispatch) => {
   if (response.ok) {
     dispatch(actionCreateGroup(data));
     dispatch(thunkLoadGroups());
+    dispatch(thunkLoadUserMemberships());
   };
 
   return data;

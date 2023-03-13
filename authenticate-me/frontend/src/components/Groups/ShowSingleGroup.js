@@ -69,7 +69,7 @@ const SingleGroupPage = ({ groupData }) => {
 
   const history = useHistory();
 
-  let {
+  const {
     name,
     about,
     city,
@@ -81,22 +81,9 @@ const SingleGroupPage = ({ groupData }) => {
     Members
   } = group;
 
-  let events = [];
-  let members = [];
-
-  if (Events && Object.values(Events).length) {
-    events = Object.values(Events);
-  };
-
-  if (Members && Object.values(Members).length) {
-    members = Object.values(Members);
-  };
-
-  let hostName;
-  if (Organizer && Organizer.id) {
-    hostName = `${Organizer.firstName} ${Organizer.lastName}`;
-  };
-
+  const events = Events ? Object.values(Events) : [];
+  const members = Members ? Object.values(Members) : [];
+  const hostName = Organizer ? `${Organizer.firstName} ${Organizer.lastName}` : null;
   const isPrivate = group.private === true ? 'Private' : 'Public';
 
   // need to work on not allowing single host to leave a group
