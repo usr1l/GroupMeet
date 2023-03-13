@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { thunkCreateGroup, thunkLoadGroups } from "../../store/groups";
 import { useHistory, Link } from "react-router-dom";
@@ -25,7 +25,12 @@ const CreateGroupForm = () => {
   const [ state, setState ] = useState("");
   const [ previewImage, setPreviewImage ] = useState("");
   const [ errors, setErrors ] = useState([]);
+  const [ disableSubmit, setDisableSubmit ] = useState(true);
 
+  useEffect(() => {
+    if (!name || !about || !type || !city || !state) return setDisableSubmit(true);
+    else return setDisableSubmit(false);
+  }, [ name, about, type, city, state ]);
 
   const validate = () => {
     const validationErrors = [];
@@ -163,7 +168,7 @@ const CreateGroupForm = () => {
             </InputDiv>
             <div id='create-group-button-div'>
               <ImagePreview imgSrc={previewImage}></ImagePreview>
-              <Button type='submit' buttonStyle='btn--delete' buttonSize='btn--large'>Create Group</Button>
+              <Button type='submit' disableButton={disableSubmit} buttonStyle='btn--delete' buttonSize='btn--large'>Create Group</Button>
             </div>
           </form>
         </div>

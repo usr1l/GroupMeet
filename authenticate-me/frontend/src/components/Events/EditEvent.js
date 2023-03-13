@@ -27,6 +27,7 @@ const EditEventPage = () => {
   const [ errors, setErrors ] = useState([]);
   const [ previewImage, setPreviewImage ] = useState('');
 
+
   useEffect(() => {
     dispatch(thunkLoadSingleEvent(eventId))
       .then((data) => {
@@ -95,13 +96,9 @@ const EditEventPage = () => {
         <div id='create-event-page'>
           <h2 className='edit-form' id="event-form__title">EDIT AN EVENT</h2>
           <ul id='event-form__error-list'>
-            {!!errors.length && (
-              <div>
-                {errors.map((error) => (
-                  <li key={error}>{error}</li>
-                ))}
-              </div>
-            )}
+            {errors.map((error) => (
+              <li key={error}>{error}</li>
+            ))}
           </ul>
           <form id="event-form" onSubmit={onSubmit}>
             <InputDiv divStyle="event-form__block" labelStyle="event-form__label" labelFor='eventName' label='Name: '>
@@ -195,7 +192,7 @@ const EditEventPage = () => {
             </div>
           </form>
         </div >
-      </div>
+      </div >
       <BottomNav>
         <Link to={`/events/${eventId}`} className="page-return">
           <h3>

@@ -14,6 +14,7 @@ function EventIndexCard({ event }) {
   const { user } = useSelector(state => state.session);
   const state = Group ? Group.state : null;
   const city = Group ? Group.city : null;
+
   const dispatch = useDispatch();
 
   const loginAlert = (e) => {

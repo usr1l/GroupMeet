@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { thunkCreateEvent, thunkLoadEvents } from "../../store/events";
 import { useHistory, useParams, Link } from "react-router-dom";
@@ -17,7 +17,6 @@ const CreateEventForm = (event) => {
 
   const { currTime, currDate } = getCurrTime();
 
-
   const [ name, setName ] = useState("");
   const [ description, setDescription ] = useState("");
   const [ type, setType ] = useState("");
@@ -29,7 +28,12 @@ const CreateEventForm = (event) => {
   const [ price, setPrice ] = useState(null);
   const [ previewImage, setPreviewImage ] = useState('')
   const [ errors, setErrors ] = useState([]);
+  const [ disableSubmit, setDisableSubmit ] = useState(true);
 
+  useEffect(() => {
+    if (!name || !description || !type) return setDisableSubmit(true);
+    else return setDisableSubmit(false);
+  }, [ name, description, type ]);
 
   const validate = () => {
     const validationErrors = [];
@@ -180,7 +184,7 @@ const CreateEventForm = (event) => {
             </InputDiv>
             <div id='create-event-button-div'>
               <ImagePreview imgSrc={previewImage}></ImagePreview>
-              <Button type='submit' buttonStyle='btn--delete' buttonSize='btn--large'>Create Event</Button>
+              <Button type='submit' disableButton={disableSubmit} buttonStyle='btn--delete' buttonSize='btn--large'>Create Event</Button>
             </div>
           </form>
         </div >
