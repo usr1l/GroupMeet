@@ -74,7 +74,6 @@ const SingleGroupPage = ({ groupData }) => {
     about,
     city,
     state,
-    organizerId,
     previewImage,
     numMembers,
     Organizer,
@@ -99,16 +98,6 @@ const SingleGroupPage = ({ groupData }) => {
   };
 
   const isPrivate = group.private === true ? 'Private' : 'Public';
-  // const userId = user.id;
-
-  // const organizerFn = () => {
-  //   if (userId) {
-  //     return organizerId === userId;
-  //   };
-  //   return false;
-  // };
-
-  // const organizerBool = organizerFn();
 
   // need to work on not allowing single host to leave a group
   const handleMemberClick = (e) => {

@@ -138,7 +138,11 @@ export const actionCreateEvent = (event) => {
 };
 
 
-const initialState = { events: {}, event: {}, isLoading: true };
+const initialState = {
+  events: { Group: {}, Venue: {} },
+  event: { Group: {}, Venue: {}, EventImages: {} },
+  isLoading: true
+};
 
 const eventReducer = (state = initialState, action) => {
   // const updatedState = {
@@ -161,7 +165,7 @@ const eventReducer = (state = initialState, action) => {
           ...action.payload.Event,
           Group: { ...action.payload.Event.Group },
           Venue: { ...action.payload.Event.Venue },
-          EventImages: [ ...action.payload.Event.EventImages ]
+          EventImages: normalizeFn(action.payload.Event.EventImages)
         }
       };
     case CREATE_EVENT:

@@ -199,7 +199,11 @@ export const actionCreateGroup = (group) => {
   };
 };
 
-const initialState = { groups: {}, group: {}, isLoading: true };
+const initialState = {
+  groups: {},
+  group: { Events: {}, GroupImages: {}, Organizer: {}, Venues: {}, Members: {} },
+  isLoading: true
+};
 
 
 const groupReducer = (state = initialState, action) => {
@@ -221,7 +225,14 @@ const groupReducer = (state = initialState, action) => {
       const groups = normalizeFn(action.payload.Groups);
       return { ...state, groups: groups, isLoading: false };
     case LOAD_GROUP:
-      return { ...state, group: { ...action.payload } };
+      return {
+        ...state,
+        group: {
+          ...action.payload,
+          Venues: normalizeFn(action.payload.Venues),
+          GroupImages: normalizeFn(action.payload.GroupImages)
+        }
+      };
     case LOAD_GROUP_EVENTS:
       const events = normalizeFn(action.payload);
       return { ...state, group: { ...state.group, Events: events } };
