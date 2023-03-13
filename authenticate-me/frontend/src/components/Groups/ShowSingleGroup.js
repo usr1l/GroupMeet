@@ -32,6 +32,7 @@ const SingleGroupPage = ({ groupData }) => {
   const dispatch = useDispatch();
 
   const [ membershipState, setMembershipState ] = useState('...');
+  const [ organizerBool, setOrganizerBool ] = useState(false);
 
   function membershipButtonDisplay(status) {
     switch (status) {
@@ -50,15 +51,21 @@ const SingleGroupPage = ({ groupData }) => {
     dispatch(thunkLoadSingleGroup(groupId))
       .then(() => dispatch(thunkLoadGroupEvents(groupId)))
       .then(() => dispatch(thunkLoadGroupMembers(groupId)));
+    return;
   }, [ dispatch, groupId ]);
 
   useEffect(() => {
     if (memberships[ groupId ]) {
-      setMembershipState(membershipButtonDisplay(memberships[ groupId ].status));
+      return setMembershipState(membershipButtonDisplay(memberships[ groupId ].status));
     } else {
-      setMembershipState('Join Group');
+      return setMembershipState('Join Group');
     };
-  }, [ dispatch, memberships ])
+  }, [ dispatch, memberships ]);
+
+  useEffect(() => {
+    if (membershipState === 'Co-Host') return setOrganizerBool(true);
+    else setOrganizerBool(false);
+  }, [ dispatch, membershipState ]);
 
   const history = useHistory();
 
@@ -92,16 +99,16 @@ const SingleGroupPage = ({ groupData }) => {
   };
 
   const isPrivate = group.private === true ? 'Private' : 'Public';
-  const userId = user.id;
+  // const userId = user.id;
 
-  const organizerFn = () => {
-    if (userId) {
-      return organizerId === userId;
-    };
-    return false;
-  };
+  // const organizerFn = () => {
+  //   if (userId) {
+  //     return organizerId === userId;
+  //   };
+  //   return false;
+  // };
 
-  const organizerBool = organizerFn();
+  // const organizerBool = organizerFn();
 
   // need to work on not allowing single host to leave a group
   const handleMemberClick = (e) => {

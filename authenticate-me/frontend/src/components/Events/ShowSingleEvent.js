@@ -25,7 +25,6 @@ const SingleEventPage = ({ eventData }) => {
 
   let groupType;
   let groupName;
-  let userStatus;
   let startDateSlice;
   let endDateSlice;
 
@@ -36,11 +35,11 @@ const SingleEventPage = ({ eventData }) => {
   }, [ dispatch, eventId ]);
 
   useEffect(() => {
-    if (memberships && memberships[ groupId ]) {
-      userStatus = memberships[ groupId ].status === 'co-host' ? true : false;
-      setOrganizerBool(userStatus || false);
-    };
-  }, [ dispatch, memberships, groupId, event, userStatus ])
+    if (memberships[ groupId ]) {
+      return setOrganizerBool(memberships[ groupId ].status === 'co-host');
+    }
+    else return setOrganizerBool(false);
+  }, [ dispatch, memberships, event, groupId ]);
 
   if (Group && Group.name) {
     groupType = Group.private === true ? 'Public group' : 'Private group';
