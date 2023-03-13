@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
-import { useDispatch } from "react-redux";
-import { useHistory, useParams, Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory, useParams, Link, Redirect } from "react-router-dom";
 import { thunkLoadSingleGroup, thunkUpdateGroup } from "../../store/groups";
 import Button from '../Button';
 import InputDiv from "../InputDiv";
@@ -11,14 +11,15 @@ import './GroupForm.css';
 const EditGroupPage = () => {
   const { groupId } = useParams();
 
-  // const userId = useSelector(state => state.session.user.id);
-  // const groups = useSelector(state => state.groups.groups);
+  const { user } = useSelector(state => state.session);
+  const { groups } = useSelector(state => state.groups);
 
-  // if (groups[ groupId ]) {
-  //   if (groups[ groupId ].organizerId !== userId) {
-  //     return <Redirect to={`/groups/${groupId}`} />
-  //   };
-  // };
+  const userId = user ? user.id : null;
+  const organizerId = groups[ groupId ] ? groups[ groupId ] : null;
+
+  if (organizerId !== userId) {
+    return <Redirect to={`/groups/${groupId}`} />
+  };
 
   const states = [ "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY" ];
   const dispatch = useDispatch();
