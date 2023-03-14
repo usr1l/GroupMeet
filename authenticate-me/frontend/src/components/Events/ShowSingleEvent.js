@@ -15,28 +15,29 @@ const SingleEventPage = ({ eventData }) => {
   const { user, memberships } = useSelector(state => state.session);
   if (!user) return <Redirect to='/events' />
 
-  const event = useSelector(state => state.events.event);
-
   const { eventId } = useParams();
-  if (isNaN(parseInt(eventId))) return (<NotFoundPage />)
+  const event = useSelector(state => state.events.event);
+  const allEventsObj = useSelector(state => state.events.events);
+
+  if (allEventsObj[ eventId ] === undefined) return (<NotFoundPage />);
+  if (isNaN(parseInt(eventId))) return (<NotFoundPage />);
 
   const [ organizerBool, setOrganizerBool ] = useState(false);
   const { name, startDate, endDate, groupId, description, previewImage, Group } = event;
 
+  const history = useHistory();
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(thunkLoadSingleEvent(eventId));
   }, [ dispatch, eventId ]);
 
-  useEffect(() => {
-    if (memberships[ groupId ]) {
-      return setOrganizerBool(memberships[ groupId ].status === 'co-host');
-    }
-    else return setOrganizerBool(false);
-  }, [ dispatch, memberships, event, groupId ]);
 
-  const history = useHistory();
+  useEffect(() => {
+    if (memberships[ groupId ]) setOrganizerBool(memberships[ groupId ].status === 'co-host');
+    else setOrganizerBool(false);
+  }, [ dispatch, memberships, groupId ]);
+
   const groupType = Group ? (Group.private === true ? 'Public group' : 'Private group') : null;
   const groupName = Group ? Group.name : null;
   const startDateSlice = startDate ? convertDate(startDate) : null;
@@ -44,7 +45,7 @@ const SingleEventPage = ({ eventData }) => {
 
   const handleDelete = async (e) => {
     e.preventDefault();
-    const data = await dispatch(thunkDeleteEvent({ eventId }))
+    const data = await dispatch(thunkDeleteEvent({ eventId }));
     if (data.ok === true) {
       history.push(`/events`);
     };

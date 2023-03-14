@@ -46,7 +46,7 @@ const EditEventPage = () => {
         setCapacity(capacity);
         setPreviewImage(previewImage || '');
       });
-  }, []);
+  }, [ dispatch ]);
 
   const validate = () => {
     const validationErrors = [];

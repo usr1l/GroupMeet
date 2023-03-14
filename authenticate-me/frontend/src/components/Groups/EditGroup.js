@@ -15,7 +15,7 @@ const EditGroupPage = () => {
   const { groups } = useSelector(state => state.groups);
 
   const userId = user ? user.id : null;
-  const organizerId = groups[ groupId ] ? groups[ groupId ] : null;
+  const organizerId = groups[ groupId ] ? groups[ groupId ].organizerId : null;
 
   if (organizerId !== userId) {
     return <Redirect to={`/groups/${groupId}`} />
@@ -47,7 +47,7 @@ const EditGroupPage = () => {
         setState(state);
         setPreviewImage(previewImage || '')
       });
-  }, []);
+  }, [ dispatch ]);
 
 
   const validate = () => {

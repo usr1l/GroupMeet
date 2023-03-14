@@ -75,6 +75,7 @@ function App() {
             )}
             <Route path='/events/:eventId' component={SingleEventPage} />
             <Route path='/groups/:groupId' component={SingleGroupPage} />
+            <Route exact path='/not-found' component={NotFoundPage} />
             <Route component={NotFoundPage} />
           </Switch>
         </>

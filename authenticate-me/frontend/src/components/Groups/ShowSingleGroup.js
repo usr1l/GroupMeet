@@ -23,12 +23,15 @@ import { thunkSessionDeleteMembership, thunkSessionRequestMembership } from "../
 const SingleGroupPage = ({ groupData }) => {
   const { user } = useSelector(state => state.session);
   if (!user) return <Redirect to='/groups' />
+  const { groupId } = useParams();
 
   const group = useSelector(state => state.groups.group);
+  const allGroupsObj = useSelector(state => state.groups.groups);
   const { memberships } = useSelector(state => state.session);
 
-  const { groupId } = useParams();
-  if (isNaN(parseInt(groupId))) return (<NotFoundPage />)
+  if (allGroupsObj[ groupId ] === undefined) return (<NotFoundPage />);
+  if (isNaN(parseInt(groupId))) return (<NotFoundPage />);
+
   const dispatch = useDispatch();
 
   const [ membershipState, setMembershipState ] = useState('...');
@@ -51,15 +54,12 @@ const SingleGroupPage = ({ groupData }) => {
     dispatch(thunkLoadSingleGroup(groupId))
       .then(() => dispatch(thunkLoadGroupEvents(groupId)))
       .then(() => dispatch(thunkLoadGroupMembers(groupId)));
-    return;
   }, [ dispatch, groupId ]);
 
   useEffect(() => {
-    if (memberships[ groupId ]) {
-      return setMembershipState(membershipButtonDisplay(memberships[ groupId ].status));
-    } else {
-      return setMembershipState('Join Group');
-    };
+    if (memberships[ groupId ]) setMembershipState(membershipButtonDisplay(memberships[ groupId ].status));
+    else setMembershipState('Join Group');
+
   }, [ dispatch, memberships ]);
 
   useEffect(() => {
@@ -137,7 +137,7 @@ const SingleGroupPage = ({ groupData }) => {
               </div>
             </div>
             <div id='group-page-description-card-bottom'>
-              {/* <i id='group-index-card-component-bottom-share' class="fa-regular fa-share-from-square"></i>
+              {/* <i id='group-index-card-component-bottom-share' className="fa-regular fa-share-from-square"></i>
               <div className='group-index-card-item'>{window.location.href}</div> */}
               <Button buttonStyle='btn--delete' buttonSize='btn--large' onClick={handleMemberClick}>{membershipState}</Button>
             </div>
@@ -194,12 +194,12 @@ const SingleGroupPage = ({ groupData }) => {
       <BottomNav>
         <Link to={`/groups`} className="page-return">
           <h3>
-            <i class="fa-solid fa-angle-left" /> Back to More Groups
+            <i className="fa-solid fa-angle-left" /> Back to More Groups
           </h3>
         </Link>
         {organizerBool && (
           <Link to={`/groups/${groupId}/events/new`} className='page-return'>
-            <h3>Create An Event <i class="fa-solid fa-angle-right"></i>
+            <h3>Create An Event <i className="fa-solid fa-angle-right"></i>
             </h3>
           </Link>
         )}
