@@ -33,7 +33,7 @@ const validateEventData = [
     .withMessage('Capacity must be a positive integer'),
   check('price')
     .custom(price => {
-      if ((!isNaN(price)) && price > 0) {
+      if ((!isNaN(price)) && price >= 0) {
         const newPrice = parseFloat(price).toFixed(2);
         const newPriceParsed = parseFloat(newPrice);
         const bool = newPriceParsed === price;

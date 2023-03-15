@@ -250,6 +250,7 @@ const groupReducer = (state = initialState, action) => {
       const id = action.payload;
       const updatedState = objDeepCopyFn(state);
       delete updatedState[ 'groups' ][ id ];
+      updatedState[ 'group' ] = { Events: {}, GroupImages: {}, Organizer: {}, Venues: {}, Members: {} };
       return updatedState;
     case UPDATE_GROUP:
       const updateGroup = { ...action.payload };

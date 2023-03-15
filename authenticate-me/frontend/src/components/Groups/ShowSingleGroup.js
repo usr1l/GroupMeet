@@ -29,8 +29,8 @@ const SingleGroupPage = ({ groupData }) => {
   const allGroupsObj = useSelector(state => state.groups.groups);
   const { memberships } = useSelector(state => state.session);
 
-  if (allGroupsObj[ groupId ] === undefined) return (<NotFoundPage />);
   if (isNaN(parseInt(groupId))) return (<NotFoundPage />);
+  // if (allGroupsObj[ groupId ] === undefined) return (<NotFoundPage />);
 
   const dispatch = useDispatch();
 

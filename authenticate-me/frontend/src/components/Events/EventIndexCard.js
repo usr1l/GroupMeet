@@ -31,11 +31,11 @@ function EventIndexCard({ event }) {
     <Link to={`/events/${id}`} onClick={loginAlert}>
       <div className='event-index-cards-click'>
         <ImagePreview imgSrc={previewImage} imgWrapperStyle='event-index-card-image-container' imgClassName='event-index-card-image' />
-        <div key={`${name}-${id}`} className='event-index-card'>
+        <div className='event-index-card'>
           <ul className='event-index-card-component'>
-            <li className='event-index-card-item' id='event-index-card-item-startDate'>{`${newDate}`}</li>
+            <li key={`event-index-card-${id}`} className='event-index-card-item' id='event-index-card-item-startDate'>{`${newDate}`}</li>
             <h2 className='event-index-card-item'>{name}</h2>
-            <li className='event-index-card-item'>{state}, {city}</li>
+            <li key={`event-index-card--${id}${state}-${city}`} className='event-index-card-item'>{state}, {city}</li>
           </ul>
           <div className='event-index-card-component'>
             <div className='event-index-card-item' id='num-attending'>{numAttending} Attendees</div>

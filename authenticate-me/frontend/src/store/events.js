@@ -47,7 +47,6 @@ export const thunkCreateEvent = (eventInfo) => async (dispatch) => {
     groupId
   } = eventInfo;
 
-
   const response = await csrfFetch(`/api/groups/${groupId}/events`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -70,6 +69,8 @@ export const thunkCreateEvent = (eventInfo) => async (dispatch) => {
     await dispatch(thunkLoadEvents());
     return data;
   };
+
+  return response;
 };
 
 export const thunkLoadSingleEvent = (eventId) => async (dispatch) => {
@@ -139,7 +140,7 @@ export const actionCreateEvent = (event) => {
 
 
 const initialState = {
-  events: { Group: {}, Venue: {} },
+  events: {},
   event: { Group: {}, Venue: {}, EventImages: {} },
   isLoading: true
 };
@@ -176,6 +177,7 @@ const eventReducer = (state = initialState, action) => {
       const id = action.payload;
       const updatedState = objDeepCopyFn(state);
       delete updatedState[ 'events' ][ id ];
+      updatedState[ 'event' ] = { Group: {}, Venue: {}, EventImages: {} };
       return updatedState;
     case UPDATE_EVENT:
       const updateEvent = objDeepCopyFn(action.payload);

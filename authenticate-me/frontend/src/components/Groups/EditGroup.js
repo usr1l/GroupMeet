@@ -180,7 +180,7 @@ const EditGroupPage = () => {
       <BottomNav>
         <Link to={`/groups/${groupId}`} className="page-return">
           <h3>
-            <i class="fa-solid fa-angle-left" /> Back to Group
+            <i className="fa-solid fa-angle-left" /> Back to Group
           </h3>
         </Link>
       </BottomNav>

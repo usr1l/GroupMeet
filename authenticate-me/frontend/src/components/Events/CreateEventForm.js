@@ -24,8 +24,8 @@ const CreateEventForm = (event) => {
   const [ startTime, setStartTime ] = useState(currTime);
   const [ endDate, setEndDate ] = useState(currDate);
   const [ endTime, setEndTime ] = useState(currTime);
-  const [ capacity, setCapacity ] = useState(null);
-  const [ price, setPrice ] = useState(null);
+  const [ capacity, setCapacity ] = useState('');
+  const [ price, setPrice ] = useState('');
   const [ previewImage, setPreviewImage ] = useState('')
   const [ errors, setErrors ] = useState([]);
   const [ disableSubmit, setDisableSubmit ] = useState(true);

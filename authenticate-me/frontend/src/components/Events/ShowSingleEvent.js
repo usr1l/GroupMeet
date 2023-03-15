@@ -14,12 +14,14 @@ import './SingleEventPage.css';
 const SingleEventPage = ({ eventData }) => {
   const { user, memberships } = useSelector(state => state.session);
   if (!user) return <Redirect to='/events' />
-
   const { eventId } = useParams();
+
   const event = useSelector(state => state.events.event);
   const allEventsObj = useSelector(state => state.events.events);
+  const eventIdArr = Object.keys(allEventsObj);
+  // console.log('event', eventIdArr)
 
-  if (allEventsObj[ eventId ] === undefined) return (<NotFoundPage />);
+  // if (allEventsObj[ 0 ] && allEventsObj[ eventId ] === undefined) return <Redirect to='/not-found' />
   if (isNaN(parseInt(eventId))) return (<NotFoundPage />);
 
   const [ organizerBool, setOrganizerBool ] = useState(false);
@@ -31,7 +33,6 @@ const SingleEventPage = ({ eventData }) => {
   useEffect(() => {
     dispatch(thunkLoadSingleEvent(eventId));
   }, [ dispatch, eventId ]);
-
 
   useEffect(() => {
     if (memberships[ groupId ]) setOrganizerBool(memberships[ groupId ].status === 'co-host');
@@ -119,11 +120,11 @@ const SingleEventPage = ({ eventData }) => {
       <BottomNav pageType={'events'}>
         <Link to={`/events`} className="page-return">
           <h3>
-            <i class="fa-solid fa-angle-left" /> Back to More Events
+            <i className="fa-solid fa-angle-left" /> Back to More Events
           </h3>
         </Link>
         <Link to={`/groups/${groupId}`} className='page-return'>
-          <h3>Visit This Group <i class="fa-solid fa-angle-right"></i>
+          <h3>Visit This Group <i className="fa-solid fa-angle-right"></i>
           </h3>
         </Link>
       </BottomNav>

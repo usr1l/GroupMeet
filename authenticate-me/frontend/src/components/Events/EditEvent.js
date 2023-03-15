@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
-import { useDispatch } from "react-redux";
-import { useParams, useHistory, Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams, useHistory, Link, Redirect } from "react-router-dom";
 import { thunkUpdateEvent, thunkLoadSingleEvent } from "../../store/events";
 import getCurrTime from "../HelperFns/GetCurrTime";
 import Button from '../Button';
@@ -12,7 +12,11 @@ import './EventForm.css';
 const EditEventPage = () => {
   const { eventId } = useParams();
 
-
+  // const { memberships } = useSelector(state => state.session);
+  // const allEventsObj = useSelector(state => state.events.events);
+  // const groupId = allEventsObj[ eventId ] ? allEventsObj[ eventId ][ groupId ] : null;
+  // const membershipBool = groupId ? memberships[ groupId ] === 'co-host' : false;
+  // if (membershipBool === false) return <div>Access Denied</div>
 
   const dispatch = useDispatch();
 
@@ -25,8 +29,8 @@ const EditEventPage = () => {
   const [ startTime, setStartTime ] = useState('');
   const [ endDate, setEndDate ] = useState('');
   const [ endTime, setEndTime ] = useState('');
-  const [ capacity, setCapacity ] = useState(null);
-  const [ price, setPrice ] = useState(null);
+  const [ capacity, setCapacity ] = useState('');
+  const [ price, setPrice ] = useState('');
   const [ errors, setErrors ] = useState([]);
   const [ previewImage, setPreviewImage ] = useState('');
 
@@ -42,8 +46,8 @@ const EditEventPage = () => {
         setStartTime(startDate.slice(11));
         setEndDate(endDate.slice(0, 10));
         setEndTime(endDate.slice(11));
-        setPrice(price || 0);
-        setCapacity(capacity);
+        setPrice(price || '');
+        setCapacity(capacity || '');
         setPreviewImage(previewImage || '');
       });
   }, [ dispatch ]);
@@ -199,11 +203,11 @@ const EditEventPage = () => {
       <BottomNav>
         <Link to={`/events/${eventId}`} className="page-return">
           <h3>
-            <i class="fa-solid fa-angle-left" /> Back to This Event
+            <i className="fa-solid fa-angle-left" /> Back to This Event
           </h3>
         </Link>
         <Link to={`/events`} className='page-return'>
-          <h3>More Events <i class="fa-solid fa-angle-right"></i>
+          <h3>More Events <i className="fa-solid fa-angle-right"></i>
           </h3>
         </Link>
       </BottomNav>

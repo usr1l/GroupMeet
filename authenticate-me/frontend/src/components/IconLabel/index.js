@@ -10,9 +10,9 @@ const IconLabel = ({
   return (
     <div className="icon-label-component">
       <div className="icon-label-item-image-container">
-        <i className="icon-label-item-image" class={iconClass}></i>
+        <i className={`icon-label-item-image ${iconClass}`}></i>
       </div>
-      <text className="icon-label-item-text">{labelText}</text>
+      <span className="icon-label-item-text">{labelText}</span>
     </div>
   )
 }
