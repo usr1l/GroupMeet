@@ -7,17 +7,18 @@ import Button from '../Button';
 import InputDiv from "../InputDiv";
 import ImagePreview from "../ImagePreview";
 import BottomNav from "../BottomNav";
-import './EventForm.css';
 import NotFoundPage from "../NotFoundPage";
+import ErrorPage from "../UnauthorizedPage";
+import './EventForm.css';
 
 const EditEventPage = () => {
   const { eventId } = useParams();
   if (isNaN(parseInt(eventId))) return (<NotFoundPage />);
 
-  const { memberships } = useSelector(state => state.session);
+  const { user } = useSelector(state => state.session);
   const { events, isLoading } = useSelector(state => state.events);
 
-  const groupId = events[ eventId ] ? events[ eventId ][ groupId ] : null;
+  // const groupId = events[ eventId ] ? events[ eventId ][ groupId ] : null;
   // const membershipBool = groupId ? memberships[ groupId ] === 'co-host' : false;
 
   const dispatch = useDispatch();
@@ -56,14 +57,10 @@ const EditEventPage = () => {
 
   useEffect(() => {
     if (!isLoading && !events[ eventId ]) history.push('/not-found');
-  }, [ isLoading, eventId, events ]);
-
-  useEffect(() => {
     if (!isLoading && events[ eventId ]) {
-      const { groupId } = events[ eventId ];
-      if (!memberships[ groupId ] || memberships[ groupId ].status !== 'co-host') history.push(<div>Not Authorized</div>)
-    }
-  }, [ isLoading, memberships, groupId ]);
+      if (user.id !== events[ eventId ][ 'Group' ][ 'organizerId' ]) history.push('/not-authorized');
+    };
+  }, [ isLoading, eventId, events, user, user.id ]);
 
   useEffect(() => {
     if (!name || !description || !type || (!price && price !== 0)) return setDisableSubmit(true);

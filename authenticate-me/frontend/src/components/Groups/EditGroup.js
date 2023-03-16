@@ -48,12 +48,10 @@ const EditGroupPage = () => {
       });
   }, [ dispatch ]);
 
-  useEffect(() => {
-    if (!isLoading && organizerId !== userId) history.push(`/groups/${groupId}`);
-  }, [ isLoading, userId ]);
 
   useEffect(() => {
     if (!isLoading && !groups[ groupId ]) history.push('/not-found');
+    if (!isLoading && organizerId !== userId) history.push(`/not-authorized`);
   }, [ isLoading, groupId, groups ]);
 
   useEffect(() => {
