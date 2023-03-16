@@ -21,16 +21,15 @@ import "./SingleGroupPage.css";
 import { thunkSessionDeleteMembership, thunkSessionRequestMembership } from "../../store/session";
 
 const SingleGroupPage = ({ groupData }) => {
-  const { user } = useSelector(state => state.session);
-  if (!user) return <Redirect to='/groups' />
   const { groupId } = useParams();
+  if (isNaN(parseInt(groupId))) return (<NotFoundPage />);
+
+  const { user } = useSelector(state => state.session);
+  if (!user) return (<Redirect to='/groups' />);
 
   const group = useSelector(state => state.groups.group);
-  const allGroupsObj = useSelector(state => state.groups.groups);
+  const { groups, isLoading } = useSelector(state => state.groups);
   const { memberships } = useSelector(state => state.session);
-
-  if (isNaN(parseInt(groupId))) return (<NotFoundPage />);
-  // if (allGroupsObj[ groupId ] === undefined) return (<NotFoundPage />);
 
   const dispatch = useDispatch();
 
@@ -57,10 +56,13 @@ const SingleGroupPage = ({ groupData }) => {
   }, [ dispatch, groupId ]);
 
   useEffect(() => {
+    if (!isLoading && !groups[ groupId ]) history.push(`/not-found`);
+  }, [ isLoading, groupId, groups ])
+
+  useEffect(() => {
     if (memberships[ groupId ]) setMembershipState(membershipButtonDisplay(memberships[ groupId ].status));
     else setMembershipState('Join Group');
-
-  }, [ dispatch, memberships ]);
+  }, [ dispatch, memberships, groupId ]);
 
   useEffect(() => {
     if (membershipState === 'Co-Host') return setOrganizerBool(true);
@@ -148,7 +150,7 @@ const SingleGroupPage = ({ groupData }) => {
         <div className="single-group-page-navbar-container">
           <div className="single-group-page-navbar-wrapper">
             <div className="single-group-page-navbar">
-              <NavLink to={`/groups/${groupId}`} className="single-group-page-navbar-item" activeClassName='group-navbar-navlink-active'>
+              <NavLink exact to={`/groups/${groupId}`} className="single-group-page-navbar-item" activeClassName='group-navbar-navlink-active'>
                 About
               </NavLink>
               <NavLink to={`/groups/${groupId}/events`} className="single-group-page-navbar-item" activeClassName='group-navbar-navlink-active'>

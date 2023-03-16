@@ -132,7 +132,7 @@ export const thunkLogout = () => async (dispatch) => {
 };
 
 
-const initialState = { user: null, memberships: {} };
+const initialState = { user: null, memberships: {}, isLoading: true };
 
 
 const sessionReducer = (state = initialState, action) => {
@@ -156,6 +156,7 @@ const sessionReducer = (state = initialState, action) => {
         memberships[ ele.groupId ] = ele;
       });
       newState.memberships = memberships;
+      newState.isLoading = false;
       return newState;
     case DELETE_MEMBERSHIP:
       newState = { ...state, memberships: { ...state.memberships } };

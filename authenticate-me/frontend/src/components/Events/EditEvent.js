@@ -8,15 +8,17 @@ import InputDiv from "../InputDiv";
 import ImagePreview from "../ImagePreview";
 import BottomNav from "../BottomNav";
 import './EventForm.css';
+import NotFoundPage from "../NotFoundPage";
 
 const EditEventPage = () => {
   const { eventId } = useParams();
+  if (isNaN(parseInt(eventId))) return (<NotFoundPage />);
 
-  // const { memberships } = useSelector(state => state.session);
-  // const allEventsObj = useSelector(state => state.events.events);
-  // const groupId = allEventsObj[ eventId ] ? allEventsObj[ eventId ][ groupId ] : null;
+  const { memberships } = useSelector(state => state.session);
+  const { events, isLoading } = useSelector(state => state.events);
+
+  const groupId = events[ eventId ] ? events[ eventId ][ groupId ] : null;
   // const membershipBool = groupId ? memberships[ groupId ] === 'co-host' : false;
-  // if (membershipBool === false) return <div>Access Denied</div>
 
   const dispatch = useDispatch();
 
@@ -33,7 +35,7 @@ const EditEventPage = () => {
   const [ price, setPrice ] = useState('');
   const [ errors, setErrors ] = useState([]);
   const [ previewImage, setPreviewImage ] = useState('');
-
+  const [ disableSubmit, setDisableSubmit ] = useState(true);
 
   useEffect(() => {
     dispatch(thunkLoadSingleEvent(eventId))
@@ -46,11 +48,28 @@ const EditEventPage = () => {
         setStartTime(startDate.slice(11));
         setEndDate(endDate.slice(0, 10));
         setEndTime(endDate.slice(11));
-        setPrice(price || '');
+        setPrice(price || 0);
         setCapacity(capacity || '');
         setPreviewImage(previewImage || '');
       });
   }, [ dispatch ]);
+
+  useEffect(() => {
+    if (!isLoading && !events[ eventId ]) history.push('/not-found');
+  }, [ isLoading, eventId, events ]);
+
+  useEffect(() => {
+    if (!isLoading && events[ eventId ]) {
+      const { groupId } = events[ eventId ];
+      if (!memberships[ groupId ] || memberships[ groupId ].status !== 'co-host') history.push(<div>Not Authorized</div>)
+    }
+  }, [ isLoading, memberships, groupId ]);
+
+  useEffect(() => {
+    if (!name || !description || !type || (!price && price !== 0)) return setDisableSubmit(true);
+    else return setDisableSubmit(false);
+  }, [ name, description, type, price ]);
+
 
   const validate = () => {
     const validationErrors = [];
@@ -64,7 +83,7 @@ const EditEventPage = () => {
     if (`${endDate} ${endTime}` <= `${startDate} ${startTime}`) validationErrors.push('Please provide an end date, must be after start date');
     if (!type) validationErrors.push('Please specify the type');
 
-    if ((price && parseFloat(price) < 0) || (!Number.isInteger(100 * parseFloat(price)))) validationErrors.push('Invalid Price');
+    if ((price && parseFloat(price) < 0) || (!Number.isInteger(100 * parseFloat(price)))) validationErrors.push('Please enter a valid price');
     if (capacity && parseFloat(capacity) <= 0) validationErrors.push('Invalid Capacity');
 
 
@@ -144,7 +163,9 @@ const EditEventPage = () => {
                 type="number"
                 name="capactiy"
                 value={capacity}
-                onChange={(e) => setCapacity(e.target.value)} />
+                onChange={(e) => setCapacity(e.target.value)}
+                placeholder={'Max # of occupants (not required)'}
+              />
             </InputDiv>
             <InputDiv divStyle="date-time__block" labelStyle="event-form__label" labelFor='startDate-Time' label='Start Date: '>
               <input
@@ -195,7 +216,7 @@ const EditEventPage = () => {
             </InputDiv>
             <div id='create-event-button-div'>
               <ImagePreview imgSrc={previewImage}></ImagePreview>
-              <Button type='submit' buttonStyle='btn--delete' buttonSize='btn--large'>Update</Button>
+              <Button type='submit' disableButton={disableSubmit} buttonStyle='btn--delete' buttonSize='btn--large'>Update</Button>
             </div>
           </form>
         </div >

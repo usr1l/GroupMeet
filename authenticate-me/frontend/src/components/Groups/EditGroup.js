@@ -1,25 +1,23 @@
 import React, { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory, useParams, Link, Redirect } from "react-router-dom";
+import { useHistory, useParams, Link } from "react-router-dom";
 import { thunkLoadSingleGroup, thunkUpdateGroup } from "../../store/groups";
 import Button from '../Button';
 import InputDiv from "../InputDiv";
 import ImagePreview from "../ImagePreview";
 import BottomNav from "../BottomNav";
 import './GroupForm.css';
+import NotFoundPage from "../NotFoundPage";
 
 const EditGroupPage = () => {
   const { groupId } = useParams();
+  if (isNaN(parseInt(groupId))) return (<NotFoundPage />);
 
   const { user } = useSelector(state => state.session);
-  const { groups } = useSelector(state => state.groups);
+  const { groups, isLoading } = useSelector(state => state.groups);
 
   const userId = user ? user.id : null;
   const organizerId = groups[ groupId ] ? groups[ groupId ].organizerId : null;
-
-  if (organizerId !== userId) {
-    return <Redirect to={`/groups/${groupId}`} />
-  };
 
   const states = [ "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY" ];
   const dispatch = useDispatch();
@@ -34,6 +32,7 @@ const EditGroupPage = () => {
   const [ state, setState ] = useState('');
   const [ errors, setErrors ] = useState([]);
   const [ previewImage, setPreviewImage ] = useState('');
+  const [ disableSubmit, setDisableSubmit ] = useState(true);
 
   useEffect(() => {
     dispatch(thunkLoadSingleGroup(groupId))
@@ -49,6 +48,18 @@ const EditGroupPage = () => {
       });
   }, [ dispatch ]);
 
+  useEffect(() => {
+    if (!isLoading && organizerId !== userId) history.push(`/groups/${groupId}`);
+  }, [ isLoading, userId ]);
+
+  useEffect(() => {
+    if (!isLoading && !groups[ groupId ]) history.push('/not-found');
+  }, [ isLoading, groupId, groups ]);
+
+  useEffect(() => {
+    if (!name || !about || !type || !city || !state) return setDisableSubmit(true);
+    else return setDisableSubmit(false);
+  }, [ name, about, type, city, state ]);
 
   const validate = () => {
     const validationErrors = [];
@@ -172,7 +183,7 @@ const EditGroupPage = () => {
             </InputDiv>
             <div id='create-group-button-div'>
               <ImagePreview imgSrc={previewImage}></ImagePreview>
-              <Button type='submit' buttonStyle='btn--wide'>Update</Button>
+              <Button type='submit' disableButton={disableSubmit} buttonStyle='btn--wide'>Update</Button>
             </div>
           </form>
         </div>

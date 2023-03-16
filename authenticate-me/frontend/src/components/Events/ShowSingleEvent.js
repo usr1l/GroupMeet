@@ -12,17 +12,14 @@ import convertDate from '../HelperFns/ConvertDate';
 import './SingleEventPage.css';
 
 const SingleEventPage = ({ eventData }) => {
-  const { user, memberships } = useSelector(state => state.session);
-  if (!user) return <Redirect to='/events' />
   const { eventId } = useParams();
+  if (isNaN(parseInt(eventId))) return (<NotFoundPage />);
+
+  const { user, memberships } = useSelector(state => state.session);
+  if (!user) return (<Redirect to='/events' />);
 
   const event = useSelector(state => state.events.event);
-  const allEventsObj = useSelector(state => state.events.events);
-  const eventIdArr = Object.keys(allEventsObj);
-  // console.log('event', eventIdArr)
-
-  // if (allEventsObj[ 0 ] && allEventsObj[ eventId ] === undefined) return <Redirect to='/not-found' />
-  if (isNaN(parseInt(eventId))) return (<NotFoundPage />);
+  const { events, isLoading } = useSelector(state => state.events);
 
   const [ organizerBool, setOrganizerBool ] = useState(false);
   const { name, startDate, endDate, groupId, description, previewImage, Group } = event;
@@ -33,6 +30,10 @@ const SingleEventPage = ({ eventData }) => {
   useEffect(() => {
     dispatch(thunkLoadSingleEvent(eventId));
   }, [ dispatch, eventId ]);
+
+  useEffect(() => {
+    if (!isLoading && !events[ eventId ]) history.push('/not-found');
+  }, [ isLoading, eventId, events ])
 
   useEffect(() => {
     if (memberships[ groupId ]) setOrganizerBool(memberships[ groupId ].status === 'co-host');

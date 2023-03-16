@@ -31,9 +31,9 @@ const CreateEventForm = (event) => {
   const [ disableSubmit, setDisableSubmit ] = useState(true);
 
   useEffect(() => {
-    if (!name || !description || !type) return setDisableSubmit(true);
+    if (!name || !description || !type || (!price && price !== 0)) return setDisableSubmit(true);
     else return setDisableSubmit(false);
-  }, [ name, description, type ]);
+  }, [ name, description, type, price ]);
 
   const validate = () => {
     const validationErrors = [];
@@ -46,7 +46,7 @@ const CreateEventForm = (event) => {
     if (`${startDate} ${startTime}` <= currDateTime) validationErrors.push('Please provide a start date, must be in the future');
     if (`${endDate} ${endTime}` <= `${startDate} ${startTime}`) validationErrors.push('Please provide an end date, must be after start date');
     if (!type) validationErrors.push('Please specify the type');
-    if (price && parseFloat(price) < 0) validationErrors.push('Invalid Price');
+    if ((price && parseFloat(price) < 0) || (!Number.isInteger(100 * parseFloat(price)))) validationErrors.push('Please enter a valid price');
     if (capacity && capacity < 0) validationErrors.push('Invalid Capacity');
 
 
@@ -64,8 +64,8 @@ const CreateEventForm = (event) => {
       name,
       description,
       type,
-      price: parseFloat(price),
-      capacity: parseFloat(capacity),
+      price: price ? parseFloat(price) : null,
+      capacity: capacity ? parseFloat(capacity) : null,
       startDate: `${startDate} ${startTime}`,
       endDate: `${endDate} ${endTime}`,
       previewImage,
@@ -133,7 +133,9 @@ const CreateEventForm = (event) => {
                 type="number"
                 name="capactiy"
                 value={capacity}
-                onChange={(e) => setCapacity(e.target.value)} />
+                placeholder={'Max # of occupants (not required)'}
+                onChange={(e) => setCapacity(e.target.value)}
+              />
             </InputDiv>
             <InputDiv divStyle="date-time__block" labelStyle="event-form__label" labelFor='startDate-Time' label='When does your event start?'>
               <input
