@@ -2,7 +2,7 @@ import React from "react";
 import IconDescriptionCard from "../IconDescriptionCard";
 import './MembershipsPage.css';
 
-const MembershipsPage = ({ members }) => {
+const MembershipsPage = ({ members, organizerBool }) => {
 
   return (
     <div className="membership-page-background">

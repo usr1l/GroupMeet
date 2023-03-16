@@ -1,12 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams, Link, NavLink, Switch, Route, Redirect } from "react-router-dom";
-import {
-  thunkDeleteGroup,
-  thunkLoadSingleGroup,
-  thunkLoadGroupEvents,
-  thunkLoadGroupMembers
-} from "../../store/groups";
+import { thunkDeleteGroup, thunkLoadSingleGroup, thunkLoadGroupEvents, thunkLoadGroupMembers } from "../../store/groups";
 import { useHistory } from "react-router-dom";
 import errorPageHandler from "../ErrorPage";
 import ImagePreview from "../ImagePreview";
@@ -17,8 +12,8 @@ import EventsList from "../Events/EventsList";
 import GroupAboutPage from "./GroupAboutPage";
 import MembershipsPage from "../MembershipsPage";
 import BottomNav from "../BottomNav";
-import "./SingleGroupPage.css";
 import { thunkSessionDeleteMembership, thunkSessionRequestMembership } from "../../store/session";
+import "./SingleGroupPage.css";
 
 const SingleGroupPage = ({ groupData }) => {
   const { groupId } = useParams();
@@ -57,7 +52,7 @@ const SingleGroupPage = ({ groupData }) => {
 
   useEffect(() => {
     if (!isLoading && !groups[ groupId ]) history.push(`/not-found`);
-  }, [ isLoading, groupId, groups ])
+  }, [ isLoading, groupId, groups ]);
 
   useEffect(() => {
     if (memberships[ groupId ]) setMembershipState(membershipButtonDisplay(memberships[ groupId ].status));
@@ -65,7 +60,7 @@ const SingleGroupPage = ({ groupData }) => {
   }, [ dispatch, memberships, groupId ]);
 
   useEffect(() => {
-    if (membershipState === 'Co-Host') return setOrganizerBool(true);
+    if (membershipState === 'Co-Host') setOrganizerBool(true);
     else setOrganizerBool(false);
   }, [ dispatch, membershipState ]);
 
@@ -93,16 +88,16 @@ const SingleGroupPage = ({ groupData }) => {
     e.preventDefault();
     switch (membershipState) {
       case 'Join Group':
-        dispatch(thunkSessionRequestMembership(groupId))
+        dispatch(thunkSessionRequestMembership(groupId));
         return;
       case 'Member':
-        dispatch(thunkSessionDeleteMembership({ groupId, memberId: user.id }))
+        dispatch(thunkSessionDeleteMembership({ groupId, memberId: user.id }));
         return;
       case 'Requested':
-        dispatch(thunkSessionDeleteMembership({ groupId, memberId: user.id }))
+        dispatch(thunkSessionDeleteMembership({ groupId, memberId: user.id }));
         return;
       case 'Co-Host':
-        window.alert('Hosts are not able to leave their groups.')
+        window.alert('Hosts are not able to leave their groups.');
         return;
       default:
         return;
@@ -185,10 +180,10 @@ const SingleGroupPage = ({ groupData }) => {
               </div>
             </Route>
             <Route path={`/groups/${groupId}/members`}>
-              <MembershipsPage members={members} />
+              <MembershipsPage members={members} organizerBool={organizerBool} />
             </Route>
             <Route path={`/groups/${groupId}`}>
-              <GroupAboutPage about={about} user={user} />
+              <GroupAboutPage about={about} hostName={hostName} />
             </Route>
           </Switch>
         </div>
