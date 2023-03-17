@@ -45,7 +45,7 @@ function SignupFormModal() {
 
     <div className="sign-up">
       <i onClick={closeModal} className="fa-solid fa-xmark"></i>
-      <img src={icon} id='icon'></img>
+      <img src={icon} id='icon' alt={'group-me'}></img>
       <h1 id="sign-up__title">Sign Up</h1>
       <form className="sign-up__form" onSubmit={handleSubmit}>
         <ul className="sign-up__error-list">

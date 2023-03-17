@@ -3,4 +3,8 @@
   width: 1100px;
 }
 
-#groups-images-wrapper {}
+#groups-images-container {
+  display: flex;
+  width: 900px;
+  border: 1px solid purple;
+}

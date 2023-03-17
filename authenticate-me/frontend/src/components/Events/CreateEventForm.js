@@ -75,7 +75,7 @@ const CreateEventForm = (event) => {
 
     const data = await dispatch(thunkCreateEvent(eventInfo));
 
-    if (data.statusCode === 409) {
+    if (data.statusCode >= 400) {
       setErrors([ data.message ]);
       return errors;
     };

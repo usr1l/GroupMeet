@@ -735,6 +735,23 @@ router.put('/:groupId', requireAuth, async (req, res, next) => {
     return next(err);
   };
 
+  const groupExists = await Group.findOne({
+    where: {
+      "name": name ? name : group.name,
+      "about": about ? about : group.about,
+      "type": type ? type : group.type,
+      "private": private,
+      "city": city ? city : group.city,
+      "state": state ? state : group.state,
+    }
+  });
+
+  if (groupExists) {
+    const newError = new Error('Failed: This group already exists');
+    newError.status = 409;
+    return next(newError);
+  };
+
   await group.update({
     "name": name ? name : group.name,
     "about": about ? about : group.about,

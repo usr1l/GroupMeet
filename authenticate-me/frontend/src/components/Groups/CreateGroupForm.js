@@ -65,7 +65,7 @@ const CreateGroupForm = () => {
 
     const data = await dispatch(thunkCreateGroup(groupInfo));
 
-    if (data.statusCode === 409) {
+    if (data.statusCode >= 400) {
       return setErrors([ data.message ]);
     };
 

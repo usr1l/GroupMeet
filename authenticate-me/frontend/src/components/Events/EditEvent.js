@@ -14,12 +14,17 @@ const EditEventPage = () => {
   const { eventId } = useParams();
   if (isNaN(parseInt(eventId))) return (<NotFoundPage />);
 
-  const { user } = useSelector(state => state.session);
+  const { memberships } = useSelector(state => state.session);
   const { events, isLoading } = useSelector(state => state.events);
+  if (!isLoading && !events[ eventId ]) history.push('/not-found');
 
   const dispatch = useDispatch();
-
   const history = useHistory();
+
+  const groupId = events[ eventId ] ? events[ eventId ].groupId : null;
+  const memStatus = memberships[ groupId ] ? memberships[ groupId ].status : null;
+  if (memStatus !== 'co-host') history.push('/notAuthorized');
+
 
   const [ name, setName ] = useState('');
   const [ description, setDescription ] = useState('');
@@ -49,20 +54,12 @@ const EditEventPage = () => {
         setCapacity(capacity || '');
         setPreviewImage(previewImage || '');
       });
-  }, [ dispatch ]);
-
-  useEffect(() => {
-    if (!isLoading && !events[ eventId ]) history.push('/not-found');
-    if (!isLoading && events[ eventId ]) {
-      if (user.id !== events[ eventId ][ 'Group' ][ 'organizerId' ]) history.push('/not-authorized');
-    };
-  }, [ isLoading, eventId, events, user, user.id ]);
+  }, [ dispatch, eventId ]);
 
   useEffect(() => {
     if (!name || !description || !type || (!price && price !== 0)) return setDisableSubmit(true);
     else return setDisableSubmit(false);
   }, [ name, description, type, price ]);
-
 
   const validate = () => {
     const validationErrors = [];
@@ -102,6 +99,10 @@ const EditEventPage = () => {
     };
 
     const response = await dispatch(thunkUpdateEvent(eventInfo, eventId));
+
+    if (response.statusCode >= 400) {
+      return setErrors([ response.message ]);
+    };
 
     if (response.ok) {
       history.push(`/events/${eventId}`);

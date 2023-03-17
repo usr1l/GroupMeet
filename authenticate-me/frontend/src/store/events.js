@@ -94,12 +94,14 @@ export const thunkUpdateEvent = (eventInfo, eventId) => async (dispatch) => {
   })
     .catch(err => err)
 
+  const data = await response.json();
   if (response.ok) {
-    const data = await response.json();
     dispatch(actionUpdateEvent(data));
     dispatch(thunkLoadEvents());
     return response;
   };
+
+  return data;
 };
 
 export const actionLoadEvents = (events) => {
@@ -184,7 +186,8 @@ const eventReducer = (state = initialState, action) => {
       const updateEventId = updateEvent.id;
       return { ...state, events: { ...state.events, [ updateEventId ]: updateEvent } };
     default:
-      return { ...state };
+      return state;
+    // break;
   };
 };
 

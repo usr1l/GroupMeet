@@ -1,3 +1,4 @@
+import React from 'react';
 import './GroupImagesPage.css';
 
 function GroupImagesPage({ images }) {
