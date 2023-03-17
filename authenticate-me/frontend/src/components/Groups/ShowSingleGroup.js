@@ -12,6 +12,7 @@ import EventsList from "../Events/EventsList";
 import GroupAboutPage from "./GroupAboutPage";
 import MembershipsPage from "../MembershipsPage";
 import BottomNav from "../BottomNav";
+import GroupImagesPage from "./GroupImagesPage";
 import { thunkSessionDeleteMembership, thunkSessionRequestMembership } from "../../store/session";
 import "./SingleGroupPage.css";
 
@@ -195,7 +196,7 @@ const SingleGroupPage = ({ groupData }) => {
               <MembershipsPage members={members} organizerBool={organizerBool} groupId={groupId} />
             </Route>
             <Route path={`/groups/${groupId}/images`}>
-
+              <GroupImagesPage images={images} />
             </Route>
             <Route path={`/groups/${groupId}`}>
               <GroupAboutPage about={about} hostName={hostName} status={membershipState} />
