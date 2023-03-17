@@ -63,6 +63,9 @@ function App() {
               <Route path='/groups/:groupId/members' component={SingleGroupPage} />
             )}
             {sessionUser && (
+              <Route path='/groups/:groupId/images' component={SingleGroupPage} />
+            )}
+            {sessionUser && (
               <Route path='/groups/:groupId/events' component={SingleGroupPage} />
             )}
             {sessionUser && (

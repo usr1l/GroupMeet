@@ -11,7 +11,7 @@ const GroupAboutPage = ({
     <>
       <div className="group-propery-page-element">
         <h2 id='group-about-header'>
-          What we're about:
+          What we're about
         </h2>
         <div id='group-about-text'>
           {about}
