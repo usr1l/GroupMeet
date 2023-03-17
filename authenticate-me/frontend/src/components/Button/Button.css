@@ -155,6 +155,15 @@
   width: 80px;
 }
 
+.btn--remove {
+  background: white;
+  color: rgb(181, 21, 48);
+  font-size: 12pt;
+  transition: 0.3s ease-in-out;
+  border-radius: 0.25em;
+  border: 2px solid rgb(181, 21, 48);
+}
+
 .btn--wide:hover:enabled {
   background-color: var(--site-blue-hover);
   transition: 0.3s
@@ -192,11 +201,6 @@
   color: white;
 }
 
-.btn[disabled] {
-  opacity: 0.5;
-  cursor: default;
-}
-
 .btn--accept:hover:enabled {
   background: rgb(27, 139, 27);
   transition: 0.2s ease-in-out;
@@ -219,7 +223,13 @@
   transform: translateY(2px);
 }
 
-/* .btn--accept:hover:enabled {
-  background: rgb(18, 117, 5);
-  transition: 0.3s;
-} */
+.btn--remove.btn--medium:hover {
+  background: rgb(181, 21, 48);
+  color: white;
+  transition: 0.3s ease-in-out;
+}
+
+.btn[disabled] {
+  opacity: 0.5;
+  cursor: default;
+}

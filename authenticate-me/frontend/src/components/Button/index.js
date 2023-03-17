@@ -1,8 +1,25 @@
 import React from 'react';
 import './Button.css';
 
-const STYLES = [ 'btn--primary', 'btn--outline', 'btn--demo', 'btn--wide', 'btn--menu-item', 'btn--big', 'btn--delete', 'btn--accept', 'btn--reject' ];
-const SIZES = [ 'btn--medium', 'btn--large', 'btn--modal', 'btn--menu', 'btn--small' ];
+const STYLES = [
+  'btn--primary',
+  'btn--outline',
+  'btn--demo',
+  'btn--wide',
+  'btn--menu-item',
+  'btn--big',
+  'btn--delete',
+  'btn--accept',
+  'btn--reject',
+  'btn--remove'
+];
+const SIZES = [
+  'btn--medium',
+  'btn--large',
+  'btn--modal',
+  'btn--menu',
+  'btn--small'
+];
 
 const Button = ({
   children,

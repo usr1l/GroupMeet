@@ -137,7 +137,7 @@ export const thunkUpdateGroup = (groupInfo, groupId) => async (dispatch) => {
 // };
 
 
-export const thunkGroupDeleteMembership = ({ groupId, memberId }) => async (dispatch) => {
+export const thunkGroupDeleteMembership = ({ groupId, memberId, removeBool }) => async (dispatch) => {
   const response = await csrfFetch(`/api/groups/${groupId}/membership`, {
     method: 'DELETE',
     headers: { "Content-Type": "application/json" },
@@ -146,7 +146,7 @@ export const thunkGroupDeleteMembership = ({ groupId, memberId }) => async (disp
     .catch(err => err);
 
   if (response.ok) {
-    dispatch(actionGroupDeleteMembership(memberId));
+    dispatch(actionGroupDeleteMembership({ groupId, memberId, removeBool }));
     return;
   }
 
@@ -175,10 +175,10 @@ export const thunkGroupAcceptMembership = ({ groupId, memberId, statusChange }) 
   return response;
 };
 
-const actionGroupDeleteMembership = (memberId) => {
+const actionGroupDeleteMembership = (deleteData) => {
   return {
     type: DELETE_MEMBERSHIP,
-    payload: memberId
+    payload: deleteData
   }
 }
 
@@ -316,8 +316,21 @@ const groupReducer = (state = initialState, action) => {
         }
       };
     case DELETE_MEMBERSHIP:
-      const memberId = action.payload;
-      updatedState = { ...state, group: { ...state.group, Members: { ...state.group.Members } } };
+      const { groupId, removeBool, memberId } = action.payload;
+      updatedState = {
+        ...state,
+        groups: {
+          ...state.groups,
+          [ groupId ]: {
+            ...state.groups[ groupId ],
+            numMembers: removeBool ? --state.groups[ groupId ].numMembers : state.groups[ groupId ].numMembers
+          }
+        },
+        group: {
+          ...state.group,
+          Members: { ...state.group.Members }
+        }
+      };
       delete updatedState.group.Members[ memberId ];
       return updatedState;
     default:
