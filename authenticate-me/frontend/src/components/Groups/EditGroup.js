@@ -12,10 +12,8 @@ import NotFoundPage from "../NotFoundPage";
 const EditGroupPage = () => {
   const { groupId } = useParams();
   if (isNaN(parseInt(groupId))) return (<NotFoundPage />);
-
-  const dispatch = useDispatch();
-
   const history = useHistory();
+
   const { user } = useSelector(state => state.session);
   const { groups, isLoading } = useSelector(state => state.groups);
   if (!isLoading && !groups[ groupId ]) history.push('/not-found');
@@ -25,6 +23,8 @@ const EditGroupPage = () => {
   if (!isLoading && organizerId !== userId) history.push(`/not-authorized`);
 
   const states = [ "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY" ];
+
+  const dispatch = useDispatch();
 
   const [ name, setName ] = useState('');
   const [ about, setAbout ] = useState('');

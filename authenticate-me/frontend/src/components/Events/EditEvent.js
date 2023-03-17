@@ -13,18 +13,17 @@ import './EventForm.css';
 const EditEventPage = () => {
   const { eventId } = useParams();
   if (isNaN(parseInt(eventId))) return (<NotFoundPage />);
+  const history = useHistory();
 
   const { memberships } = useSelector(state => state.session);
   const { events, isLoading } = useSelector(state => state.events);
   if (!isLoading && !events[ eventId ]) history.push('/not-found');
 
-  const dispatch = useDispatch();
-  const history = useHistory();
-
   const groupId = events[ eventId ] ? events[ eventId ].groupId : null;
   const memStatus = memberships[ groupId ] ? memberships[ groupId ].status : null;
   if (memStatus !== 'co-host') history.push('/notAuthorized');
 
+  const dispatch = useDispatch();
 
   const [ name, setName ] = useState('');
   const [ description, setDescription ] = useState('');
