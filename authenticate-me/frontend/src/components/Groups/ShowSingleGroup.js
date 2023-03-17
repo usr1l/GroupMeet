@@ -79,13 +79,13 @@ const SingleGroupPage = ({ groupData }) => {
   } = group;
 
   const events = Events ? Object.values(Events) : [];
-  const membersArr = Members ? Object.values(Members) : [];
-  const members = membersArr.sort((a, b) =>
-    a.memberStatus === b.memberStatus ?
-      (a.lastName === b.lastName ? b.firstName.localeCompare(a.firstName)
-        : b.lastName.localeCompare(a.lastName))
-      : a.memberStatus.localeCompare(b.memberStatus
-      ));
+  const members = Members ? Object.values(Members) : [];
+  // const members = membersArr.sort((a, b) =>
+  //   a.memberStatus === b.memberStatus ?
+  //     (a.lastName === b.lastName ? b.firstName.localeCompare(a.firstName)
+  //       : b.lastName.localeCompare(a.lastName))
+  //     : a.memberStatus.localeCompare(b.memberStatus
+  //     ));
 
   const hostName = Organizer ? `${Organizer.firstName} ${Organizer.lastName}` : null;
   const isPrivate = group.private === true ? 'Private' : 'Public';
@@ -187,7 +187,7 @@ const SingleGroupPage = ({ groupData }) => {
               </div>
             </Route>
             <Route path={`/groups/${groupId}/members`}>
-              <MembershipsPage members={members} organizerBool={organizerBool} />
+              <MembershipsPage members={members} organizerBool={organizerBool} groupId={groupId} />
             </Route>
             <Route path={`/groups/${groupId}`}>
               <GroupAboutPage about={about} hostName={hostName} status={membershipState} />
