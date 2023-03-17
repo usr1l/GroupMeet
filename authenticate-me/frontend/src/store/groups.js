@@ -12,6 +12,8 @@ const LOAD_GROUP_MEMBERS = 'group/members/LOAD';
 const DELETE_GROUP = 'groups/DELETE';
 const CREATE_GROUP = 'groups/CREATE';
 const UPDATE_GROUP = 'groups/EDIT';
+const UPDATE_MEMBERSHIP = 'groups/membership/UPDATE';
+const DELETE_MEMBERSHIP = 'groups/membership/DELETE';
 // const JOIN_GROUP = 'group/membership/CREATE';
 
 export const thunkLoadGroups = () => async (dispatch) => {
@@ -154,14 +156,41 @@ export const thunkUpdateGroup = (groupInfo, groupId) => async (dispatch) => {
 // };
 
 
-export const actionLoadGroups = (groups) => {
+export const thunkUpdateMembership = ({ groupId, memberUserId, statusChange }) => async (dispatch) => {
+  const response = await csrfFetch(`/api/${groupId}/membership`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      memberId: memberUserId,
+      status: statusChange
+    })
+  })
+    .catch(err => err);
+
+  const membershipData = await response.json();
+  if (response.ok) {
+    dispatch(actionUpdateMembership(membershipData));
+    return membershipData;
+  };
+
+  return response;
+};
+
+const actionUpdateMembership = (membershipData) => {
+  return {
+    type: UPDATE_GROUP,
+    payload: membershipData
+  }
+};
+
+const actionLoadGroups = (groups) => {
   return {
     type: LOAD_GROUPS,
     payload: groups
   };
 };
 
-export const actionLoadGroupEvents = (events) => {
+const actionLoadGroupEvents = (events) => {
   return {
     type: LOAD_GROUP_EVENTS,
     payload: events
@@ -256,6 +285,31 @@ const groupReducer = (state = initialState, action) => {
       const updateGroup = { ...action.payload };
       const updateGroupId = updateGroup.id;
       return { ...state, groups: { ...state.groups, [ updateGroupId ]: updateGroup } };
+    case UPDATE_MEMBERSHIP:
+      const membershipData = action.payload;
+      return {
+        ...state,
+        groups: {
+          ...state.groups,
+          groups: {
+            ...state.groups.groups,
+            [ membershipData.groupId ]: {
+              ...state.groups.groups[ membershipData.groupId ],
+              numMembers: this.memberStatus === 'pending' ? ++this.numMembers : this.numMembers
+            }
+          },
+          Group: {
+            ...state.groups.Group,
+            Members: {
+              ...state.groups.Group.Members,
+              [ membershipData.memberId ]: {
+                ...state.groups.Group.Members[ membershipData.memberId ],
+                memberStatus: membershipData.status
+              }
+            }
+          }
+        }
+      }
     default:
       return { ...state };
   };

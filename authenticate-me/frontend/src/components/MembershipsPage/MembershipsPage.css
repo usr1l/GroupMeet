@@ -1,17 +1,52 @@
-.membership-page-background {
+#membership-page-background {
   width: 660px;
   height: auto;
-  background: white;
 }
 
 
-.membership-page-container {
+#membership-page-wrapper {
   display: flex;
   flex-direction: column;
   max-width: 100vw;
   height: auto;
-  /* background: white; */
-
   justify-content: center;
   align-content: center;
+}
+
+#memberships-page-button-wrapper {
+  height: 100%;
+  width: 250px;
+  margin-left: auto;
+  display: flex;
+}
+
+#membership-page-card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  /* border: 1px solid black; */
+  margin-top: 20px;
+  background: white;
+  border-radius: 0.75rem;
+  box-shadow: -3px 3px 10px 1px #888888;
+  box-sizing: border-box;
+}
+
+#membership-page-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.button-container {
+  height: 50px;
+  width: 110px;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+div.membership-button-wrapper {
+  display: flex;
+  place-content: center;
+  border-radius: 0.5rem;
 }

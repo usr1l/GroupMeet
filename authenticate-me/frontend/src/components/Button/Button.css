@@ -8,6 +8,7 @@
   outline: none;
   border: none;
   cursor: pointer;
+  letter-spacing: 1px;
 }
 
 .btn--primary {
@@ -44,10 +45,10 @@
 
 .btn--wide {
   border: none;
-  background-color: var(--site-red);
+  background-color: var(--site-blue);
   color: white;
   border-radius: 8px;
-  border: 1px solid var(--site-red);
+  border: 1px solid var(--site-blue);
 }
 
 .btn--menu-item {
@@ -58,11 +59,11 @@
 }
 
 .btn--delete {
-  background-color: var(--site-red);
+  background-color: var(--site-blue);
   border-radius: 8px;
   font-size: 10pt;
   color: white;
-  border: 1px solid var(--site-red);
+  border: 1px solid var(--site-blue);
   transition: 0.3s ease-out;
 }
 
@@ -81,8 +82,8 @@
 }
 
 .btn--large {
-  padding: 12px 26px;
-  font-size: 20px;
+  padding: 10px 20px;
+  font-size: 16px;
 }
 
 
@@ -100,8 +101,62 @@
   text-decoration: none;
 }
 
+.btn--accept {
+  transform: translateY(-2px);
+  background: rgb(18, 120, 5);
+  position: absolute;
+  font-size: 10pt;
+  z-index: 1;
+  color: white;
+  border-radius: 0.5rem;
+  transition: 0.2s ease-in-out;
+}
+
+.btn--accept-shadow {
+  background: linear-gradient(to left,
+      rgb(0, 36, 0) 0%,
+      rgb(8, 94, 8) 10%,
+      rgb(8, 94, 8) 90%,
+      rgb(0, 36, 0) 100%);
+  height: 30px;
+  width: 80px;
+  position: absolute;
+  transform: translateY(-13px);
+  border-radius: 0.5rem;
+}
+
+.btn--reject {
+  transform: translateY(-2px);
+  background: rgb(181, 21, 48);
+  position: absolute;
+  font-size: 10pt;
+  z-index: 1;
+  color: white;
+  border-radius: 0.5rem;
+  transition: 0.2s ease-in-out;
+}
+
+.btn--reject-shadow {
+  background: linear-gradient(to left,
+      rgb(63, 1, 1) 0%,
+      rgb(136, 5, 5) 10%,
+      rgb(136, 5, 5) 90%,
+      rgb(63, 1, 1) 100%);
+  height: 30px;
+  width: 80px;
+  position: absolute;
+  transform: translateY(-13px);
+  border-radius: 0.5rem;
+}
+
+.btn--small {
+  padding: 0;
+  height: 30px;
+  width: 80px;
+}
+
 .btn--wide:hover:enabled {
-  background-color: #fa8282;
+  background-color: var(--site-blue-hover);
   transition: 0.3s
 }
 
@@ -132,7 +187,7 @@
 }
 
 .btn--delete:hover:enabled {
-  background-color: #fa8282;
+  background-color: var(--site-blue-hover);
   transition: 0.3s ease-out;
   color: white;
 }
@@ -141,3 +196,30 @@
   opacity: 0.5;
   cursor: default;
 }
+
+.btn--accept:hover:enabled {
+  background: rgb(27, 139, 27);
+  transition: 0.2s ease-in-out;
+}
+
+.btn--accept:active:enabled {
+  background: rgb(27, 139, 27);
+  transition: 0.2s ease-in-out;
+  transform: translateY(2px);
+}
+
+.btn--reject:hover:enabled {
+  background: rgb(210, 43, 43);
+  transition: 0.2s ease-in-out;
+}
+
+.btn--reject:active:enabled {
+  background: rgb(223, 43, 43);
+  transition: 0.2s ease-in-out;
+  transform: translateY(2px);
+}
+
+/* .btn--accept:hover:enabled {
+  background: rgb(18, 117, 5);
+  transition: 0.3s;
+} */

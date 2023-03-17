@@ -112,9 +112,9 @@ const SingleEventPage = ({ eventData }) => {
               {organizerBool && (
                 <section className="event-page-footer-buttons">
                   <NavLink to={`/events/${eventId}/edit`} id='event-edit-navlink'>
-                    <Button buttonStyle='btn--big' buttonSize='btn--large' onClick={(e) => e.preventDefault} >Edit</Button>
+                    <Button buttonStyle='btn--big' buttonSize='btn--large' onClick={(e) => e.preventDefault} >Edit Details</Button>
                   </NavLink>
-                  <Button buttonStyle='btn--delete' buttonSize='btn--large' onClick={handleDelete}>Delete</Button>
+                  <Button buttonStyle='btn--delete' buttonSize='btn--large' onClick={handleDelete}>Delete Event</Button>
                 </section>
               )}
             </div>

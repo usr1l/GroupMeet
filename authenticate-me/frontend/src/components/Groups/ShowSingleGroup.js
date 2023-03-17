@@ -79,7 +79,14 @@ const SingleGroupPage = ({ groupData }) => {
   } = group;
 
   const events = Events ? Object.values(Events) : [];
-  const members = Members ? Object.values(Members) : [];
+  const membersArr = Members ? Object.values(Members) : [];
+  const members = membersArr.sort((a, b) =>
+    a.memberStatus === b.memberStatus ?
+      (a.lastName === b.lastName ? b.firstName.localeCompare(a.firstName)
+        : b.lastName.localeCompare(a.lastName))
+      : a.memberStatus.localeCompare(b.memberStatus
+      ));
+
   const hostName = Organizer ? `${Organizer.firstName} ${Organizer.lastName}` : null;
   const isPrivate = group.private === true ? 'Private' : 'Public';
 
@@ -160,9 +167,9 @@ const SingleGroupPage = ({ groupData }) => {
             {organizerBool && (
               <>
                 <Link to={`/groups/${groupId}/edit`}>
-                  <Button buttonStyle='btn--big' buttonSize='btn--large' onClick={(e) => e.preventDefault}>Edit</Button>
+                  <Button buttonStyle='btn--big' buttonSize='btn--large' onClick={(e) => e.preventDefault}>Edit Details</Button>
                 </Link>
-                <Button buttonStyle='btn--delete' buttonSize='btn--large' onClick={handleDelete}>Delete</Button>
+                <Button buttonStyle='btn--delete' buttonSize='btn--large' onClick={handleDelete}>Delete Group</Button>
               </>
             )}
           </div>
@@ -183,7 +190,7 @@ const SingleGroupPage = ({ groupData }) => {
               <MembershipsPage members={members} organizerBool={organizerBool} />
             </Route>
             <Route path={`/groups/${groupId}`}>
-              <GroupAboutPage about={about} hostName={hostName} />
+              <GroupAboutPage about={about} hostName={hostName} status={membershipState} />
             </Route>
           </Switch>
         </div>

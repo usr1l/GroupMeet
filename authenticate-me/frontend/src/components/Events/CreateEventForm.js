@@ -194,7 +194,7 @@ const CreateEventForm = (event) => {
       <BottomNav>
         <Link to={`/groups/${groupId}`} className="page-return">
           <h3>
-            <i class="fa-solid fa-angle-left" /> Back to This Group
+            <i className="fa-solid fa-angle-left" /> Back to This Group
           </h3>
         </Link>
       </BottomNav>

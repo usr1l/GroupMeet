@@ -5,8 +5,9 @@
   display: none;
 } */
 :root {
-  --site-green: #96C832;
-  --site-red: #B8143A;
+  --site-green: #97bb4e;
+  --site-blue: #5a90d6;
+  --site-blue-hover: #99b8e0;
 }
 
 body {
@@ -14,10 +15,8 @@ body {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  /* position: relative; */
   overflow-x: hidden;
   overflow-y: scroll;
-  /* height: 100%; */
 }
 
 #root {
@@ -25,7 +24,6 @@ body {
   display: flex;
   flex-direction: column;
   width: 100vw;
-  /* height: 100vh; */
   min-height: 100vh;
   background-size: cover;
 

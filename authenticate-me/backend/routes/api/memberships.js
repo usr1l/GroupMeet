@@ -54,6 +54,4 @@ membershipRouter.get('/current', requireAuth, async (req, res) => {
   return res.json(memberships);
 });
 
-
-
 module.exports = { validateMembershipData, validateMembershipDataDelete, membershipRouter }

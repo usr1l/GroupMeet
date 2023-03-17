@@ -147,7 +147,7 @@ const EditGroupPage = () => {
                   select:
                 </option>
                 {states.map(state => (
-                  <option value={state}>{state}</option>
+                  <option key={`group-edit-${state}`} value={state}>{state}</option>
                 ))}
               </select>
             </InputDiv>
