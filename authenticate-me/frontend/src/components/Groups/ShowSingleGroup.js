@@ -75,7 +75,8 @@ const SingleGroupPage = ({ groupData }) => {
     numMembers,
     Organizer,
     Events,
-    Members
+    Members,
+    GroupImages
   } = group;
 
   const events = Events ? Object.values(Events) : [];
@@ -86,6 +87,7 @@ const SingleGroupPage = ({ groupData }) => {
         : b.lastName.localeCompare(a.lastName))
       : a.memberStatus.localeCompare(b.memberStatus
       ));
+  const images = GroupImages ? Object.values(GroupImages) : [];
 
   const hostName = Organizer ? `${Organizer.firstName} ${Organizer.lastName}` : null;
   const isPrivate = group.private === true ? 'Private' : 'Public';
@@ -161,6 +163,9 @@ const SingleGroupPage = ({ groupData }) => {
               <NavLink to={`/groups/${groupId}/members`} className="single-group-page-navbar-item" activeClassName='group-navbar-navlink-active'>
                 Members
               </NavLink>
+              <NavLink to={`/groups/${groupId}/images`} className="single-group-page-navbar-item" activeClassName='group-navbar-navlink-active'>
+                Photos
+              </NavLink>
             </div>
           </div>
           <div className="single-group-page-navbar-functions">
@@ -181,13 +186,16 @@ const SingleGroupPage = ({ groupData }) => {
             <Route exact path={`/groups/${groupId}/events`}>
               <div id='group-events-page-wrapper'>
                 <div id='group-events-header-wrapper'>
-                  <h2>{`Events for this group (${events.length})`}:</h2>
+                  <h2>{`Events for this group (${events.length})`}</h2>
                 </div>
                 <EventsList events={events} />
               </div>
             </Route>
             <Route path={`/groups/${groupId}/members`}>
               <MembershipsPage members={members} organizerBool={organizerBool} groupId={groupId} />
+            </Route>
+            <Route path={`/groups/${groupId}/images`}>
+
             </Route>
             <Route path={`/groups/${groupId}`}>
               <GroupAboutPage about={about} hostName={hostName} status={membershipState} />

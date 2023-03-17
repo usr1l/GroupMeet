@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux";
-import { useParams, useHistory, Link, Redirect } from "react-router-dom";
+import { useParams, useHistory, Link } from "react-router-dom";
 import { thunkUpdateEvent, thunkLoadSingleEvent } from "../../store/events";
 import getCurrTime from "../HelperFns/GetCurrTime";
 import Button from '../Button';
@@ -8,7 +8,6 @@ import InputDiv from "../InputDiv";
 import ImagePreview from "../ImagePreview";
 import BottomNav from "../BottomNav";
 import NotFoundPage from "../NotFoundPage";
-import ErrorPage from "../UnauthorizedPage";
 import './EventForm.css';
 
 const EditEventPage = () => {
@@ -17,9 +16,6 @@ const EditEventPage = () => {
 
   const { user } = useSelector(state => state.session);
   const { events, isLoading } = useSelector(state => state.events);
-
-  // const groupId = events[ eventId ] ? events[ eventId ][ groupId ] : null;
-  // const membershipBool = groupId ? memberships[ groupId ] === 'co-host' : false;
 
   const dispatch = useDispatch();
 

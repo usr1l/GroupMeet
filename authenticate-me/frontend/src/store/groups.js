@@ -12,7 +12,7 @@ const LOAD_GROUP_MEMBERS = 'group/members/LOAD';
 const DELETE_GROUP = 'groups/DELETE';
 const CREATE_GROUP = 'groups/CREATE';
 const UPDATE_GROUP = 'groups/EDIT';
-const UPDATE_MEMBERSHIP = 'groups/membership/UPDATE';
+// const UPDATE_MEMBERSHIP = 'groups/membership/UPDATE';
 const CREATE_MEMBERSHIP = 'groups/membership/CREATE';
 const DELETE_MEMBERSHIP = 'groups/membership/DELETE';
 // const JOIN_GROUP = 'group/membership/CREATE';
@@ -299,7 +299,6 @@ const groupReducer = (state = initialState, action) => {
         groups: {
           ...state.groups,
           [ membershipData.groupId ]: {
-
             ...state.groups[ membershipData.groupId ],
             numMembers: ++state.groups[ membershipData.groupId ].numMembers
           }
