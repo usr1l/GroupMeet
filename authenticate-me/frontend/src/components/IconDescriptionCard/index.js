@@ -6,7 +6,8 @@ const IconDescriptionCard = ({
   iconClass,
   iconId,
   heading,
-  subHeading
+  subHeading,
+  children
 }) => {
 
   const STYLES = [ '', 'group-page-oragnizer-element', 'membership-page-member-cards' ];
@@ -20,6 +21,7 @@ const IconDescriptionCard = ({
           <div className="icon-description-card-element-heading">{heading}</div>
           <div className="icon-description-card-element-subheading">{subHeading}</div>
         </div>
+        {children}
       </div>
     </div>
   )

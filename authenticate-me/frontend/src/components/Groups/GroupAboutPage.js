@@ -4,7 +4,8 @@ import IconDescriptionCard from "../IconDescriptionCard";
 
 const GroupAboutPage = ({
   about,
-  user
+  hostName,
+  status
 }) => {
   return (
     <>
@@ -21,8 +22,8 @@ const GroupAboutPage = ({
         <IconDescriptionCard
           cardStyle='group-page-oragnizer-element'
           iconClass="fas fa-user-circle"
-          heading='Hosted By'
-          subHeading={`${user.firstName} ${user.lastName[ 0 ]}.`}
+          heading={hostName}
+          subHeading={'Co-Host'}
         />
       </section>
     </>

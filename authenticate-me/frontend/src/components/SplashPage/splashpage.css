@@ -31,7 +31,12 @@ h1 {
   justify-content: center;
 }
 
-#content-welcome>text {
+
+#content-welcome span {
+  font-size: 14pt;
+  line-height: 26px;
+  letter-spacing: 1px;
+  width: 450px;
   max-width: 500px;
   align-self: center;
   font-size: 15pt;
@@ -74,12 +79,6 @@ h1 {
   letter-spacing: 1px;
 }
 
-#content-welcome>text {
-  font-size: 14pt;
-  line-height: 26px;
-  letter-spacing: 1px;
-  width: 450px;
-}
 
 .content-row-image {
   border-radius: 40px;

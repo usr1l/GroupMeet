@@ -1,17 +1,73 @@
-.membership-page-background {
+#membership-page-background {
   width: 660px;
   height: auto;
-  background: white;
 }
 
+#membership-page-background>h2 {
+  display: flex;
+  font-size: 20pt;
+  font-weight: 500;
+  margin: 40px 0;
+  align-items: center;
+}
 
-.membership-page-container {
+#membership-page-background>h2>.btn-mobile {
+  display: flex;
+  margin-left: auto;
+}
+
+#membership-page-background>h2>.btn-mobile>.btn--remove {
+  font-size: 12pt;
+}
+
+#membership-page-wrapper {
   display: flex;
   flex-direction: column;
   max-width: 100vw;
   height: auto;
-  /* background: white; */
-
   justify-content: center;
   align-content: center;
+}
+
+#memberships-page-button-wrapper {
+  height: 100%;
+  width: 250px;
+  display: flex;
+}
+
+#membership-page-card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  /* border: 1px solid black; */
+  margin-bottom: 20px;
+  background: white;
+  border-radius: 0.75rem;
+  box-shadow: -3px 3px 10px 1px #888888;
+  box-sizing: border-box;
+}
+
+#membership-page-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.button-container {
+  height: 50px;
+  width: 110px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  /* margin-left: auto; */
+}
+
+div.membership-button-wrapper {
+  display: flex;
+  place-content: center;
+  border-radius: 0.5rem;
+}
+
+div.button-container.membership-remove {
+  display: flex;
+  margin-left: auto;
 }

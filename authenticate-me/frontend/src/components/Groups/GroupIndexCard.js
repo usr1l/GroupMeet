@@ -31,14 +31,14 @@ function GroupIndexCard({ group }) {
         <div key={`${name}-${id}`} className='group-index-card'>
           <ul className='group-index-card-component'>
             <h2 className='group-index-card-item'>{name}</h2>
-            <li className='group-index-card-item' id='group-index-card-item-location'>{state}, {city}</li>
+            <li key={`event-index-card-${id}-${state}-${city}`} className='group-index-card-item' id='group-index-card-item-location'>{state}, {city}</li>
           </ul>
           <div className='group-index-card-component'>
             <div className='group-index-card-item' id="group-index-card-item-about">{about}</div>
           </div>
           <div className='group-index-card-component' id='group-index-card-component-bottom'>
             <div className='group-index-card-item'>{numMembers} members</div>
-            <i className='group-index-card-item' class="fa-solid fa-circle"></i>
+            <i className='group-index-card-item fa-solid fa-circle'></i>
             <div className='group-index-card-item'>{type}</div>
           </div>
         </div>

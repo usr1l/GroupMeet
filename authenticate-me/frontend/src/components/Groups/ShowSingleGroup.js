@@ -1,12 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams, Link, NavLink, Switch, Route, Redirect } from "react-router-dom";
-import {
-  thunkDeleteGroup,
-  thunkLoadSingleGroup,
-  thunkLoadGroupEvents,
-  thunkLoadGroupMembers
-} from "../../store/groups";
+import { thunkDeleteGroup, thunkLoadSingleGroup, thunkLoadGroupEvents, thunkLoadGroupMembers } from "../../store/groups";
 import { useHistory } from "react-router-dom";
 import errorPageHandler from "../ErrorPage";
 import ImagePreview from "../ImagePreview";
@@ -17,18 +12,20 @@ import EventsList from "../Events/EventsList";
 import GroupAboutPage from "./GroupAboutPage";
 import MembershipsPage from "../MembershipsPage";
 import BottomNav from "../BottomNav";
-import "./SingleGroupPage.css";
 import { thunkSessionDeleteMembership, thunkSessionRequestMembership } from "../../store/session";
+import "./SingleGroupPage.css";
 
 const SingleGroupPage = ({ groupData }) => {
+  const { groupId } = useParams();
+  if (isNaN(parseInt(groupId))) return (<NotFoundPage />);
+
   const { user } = useSelector(state => state.session);
-  if (!user) return <Redirect to='/groups' />
+  if (!user) return (<Redirect to='/groups' />);
 
   const group = useSelector(state => state.groups.group);
+  const { groups, isLoading } = useSelector(state => state.groups);
   const { memberships } = useSelector(state => state.session);
 
-  const { groupId } = useParams();
-  if (isNaN(parseInt(groupId))) return (<NotFoundPage />)
   const dispatch = useDispatch();
 
   const [ membershipState, setMembershipState ] = useState('...');
@@ -51,19 +48,19 @@ const SingleGroupPage = ({ groupData }) => {
     dispatch(thunkLoadSingleGroup(groupId))
       .then(() => dispatch(thunkLoadGroupEvents(groupId)))
       .then(() => dispatch(thunkLoadGroupMembers(groupId)));
-    return;
   }, [ dispatch, groupId ]);
 
   useEffect(() => {
-    if (memberships[ groupId ]) {
-      return setMembershipState(membershipButtonDisplay(memberships[ groupId ].status));
-    } else {
-      return setMembershipState('Join Group');
-    };
-  }, [ dispatch, memberships ]);
+    if (!isLoading && !groups[ groupId ]) history.push(`/not-found`);
+  }, [ isLoading, groupId, groups ]);
 
   useEffect(() => {
-    if (membershipState === 'Co-Host') return setOrganizerBool(true);
+    if (memberships[ groupId ]) setMembershipState(membershipButtonDisplay(memberships[ groupId ].status));
+    else setMembershipState('Join Group');
+  }, [ dispatch, memberships, groupId ]);
+
+  useEffect(() => {
+    if (membershipState === 'Co-Host') setOrganizerBool(true);
     else setOrganizerBool(false);
   }, [ dispatch, membershipState ]);
 
@@ -82,7 +79,14 @@ const SingleGroupPage = ({ groupData }) => {
   } = group;
 
   const events = Events ? Object.values(Events) : [];
-  const members = Members ? Object.values(Members) : [];
+  const membersArr = Members ? Object.values(Members) : [];
+  const members = membersArr.sort((a, b) =>
+    a.memberStatus === b.memberStatus ?
+      (a.lastName === b.lastName ? b.firstName.localeCompare(a.firstName)
+        : b.lastName.localeCompare(a.lastName))
+      : a.memberStatus.localeCompare(b.memberStatus
+      ));
+
   const hostName = Organizer ? `${Organizer.firstName} ${Organizer.lastName}` : null;
   const isPrivate = group.private === true ? 'Private' : 'Public';
 
@@ -91,16 +95,16 @@ const SingleGroupPage = ({ groupData }) => {
     e.preventDefault();
     switch (membershipState) {
       case 'Join Group':
-        dispatch(thunkSessionRequestMembership(groupId))
+        dispatch(thunkSessionRequestMembership(groupId));
         return;
       case 'Member':
-        dispatch(thunkSessionDeleteMembership({ groupId, memberId: user.id }))
+        dispatch(thunkSessionDeleteMembership({ groupId, memberId: user.id }));
         return;
       case 'Requested':
-        dispatch(thunkSessionDeleteMembership({ groupId, memberId: user.id }))
+        dispatch(thunkSessionDeleteMembership({ groupId, memberId: user.id }));
         return;
       case 'Co-Host':
-        window.alert('Hosts are not able to leave their groups.')
+        window.alert('Hosts are not able to leave their groups.');
         return;
       default:
         return;
@@ -137,7 +141,7 @@ const SingleGroupPage = ({ groupData }) => {
               </div>
             </div>
             <div id='group-page-description-card-bottom'>
-              {/* <i id='group-index-card-component-bottom-share' class="fa-regular fa-share-from-square"></i>
+              {/* <i id='group-index-card-component-bottom-share' className="fa-regular fa-share-from-square"></i>
               <div className='group-index-card-item'>{window.location.href}</div> */}
               <Button buttonStyle='btn--delete' buttonSize='btn--large' onClick={handleMemberClick}>{membershipState}</Button>
             </div>
@@ -148,7 +152,7 @@ const SingleGroupPage = ({ groupData }) => {
         <div className="single-group-page-navbar-container">
           <div className="single-group-page-navbar-wrapper">
             <div className="single-group-page-navbar">
-              <NavLink to={`/groups/${groupId}`} className="single-group-page-navbar-item" activeClassName='group-navbar-navlink-active'>
+              <NavLink exact to={`/groups/${groupId}`} className="single-group-page-navbar-item" activeClassName='group-navbar-navlink-active'>
                 About
               </NavLink>
               <NavLink to={`/groups/${groupId}/events`} className="single-group-page-navbar-item" activeClassName='group-navbar-navlink-active'>
@@ -163,9 +167,9 @@ const SingleGroupPage = ({ groupData }) => {
             {organizerBool && (
               <>
                 <Link to={`/groups/${groupId}/edit`}>
-                  <Button buttonStyle='btn--big' buttonSize='btn--large' onClick={(e) => e.preventDefault}>Edit</Button>
+                  <Button buttonStyle='btn--big' buttonSize='btn--large' onClick={(e) => e.preventDefault}>Edit Details</Button>
                 </Link>
-                <Button buttonStyle='btn--delete' buttonSize='btn--large' onClick={handleDelete}>Delete</Button>
+                <Button buttonStyle='btn--delete' buttonSize='btn--large' onClick={handleDelete}>Delete Group</Button>
               </>
             )}
           </div>
@@ -183,10 +187,10 @@ const SingleGroupPage = ({ groupData }) => {
               </div>
             </Route>
             <Route path={`/groups/${groupId}/members`}>
-              <MembershipsPage members={members} />
+              <MembershipsPage members={members} organizerBool={organizerBool} groupId={groupId} />
             </Route>
             <Route path={`/groups/${groupId}`}>
-              <GroupAboutPage about={about} user={user} />
+              <GroupAboutPage about={about} hostName={hostName} status={membershipState} />
             </Route>
           </Switch>
         </div>
@@ -194,12 +198,12 @@ const SingleGroupPage = ({ groupData }) => {
       <BottomNav>
         <Link to={`/groups`} className="page-return">
           <h3>
-            <i class="fa-solid fa-angle-left" /> Back to More Groups
+            <i className="fa-solid fa-angle-left" /> Back to More Groups
           </h3>
         </Link>
         {organizerBool && (
           <Link to={`/groups/${groupId}/events/new`} className='page-return'>
-            <h3>Create An Event <i class="fa-solid fa-angle-right"></i>
+            <h3>Create An Event <i className="fa-solid fa-angle-right"></i>
             </h3>
           </Link>
         )}

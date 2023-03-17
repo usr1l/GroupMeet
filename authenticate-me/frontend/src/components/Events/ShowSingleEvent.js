@@ -10,41 +10,47 @@ import NotFoundPage from "../NotFoundPage";
 import BottomNav from "../BottomNav";
 import convertDate from '../HelperFns/ConvertDate';
 import './SingleEventPage.css';
+import { thunkLoadSingleGroup } from "../../store/groups";
 
 const SingleEventPage = ({ eventData }) => {
-  const { user, memberships } = useSelector(state => state.session);
-  if (!user) return <Redirect to='/events' />
-
-  const event = useSelector(state => state.events.event);
-
   const { eventId } = useParams();
-  if (isNaN(parseInt(eventId))) return (<NotFoundPage />)
+  if (isNaN(parseInt(eventId))) return (<NotFoundPage />);
+
+  const { user, memberships } = useSelector(state => state.session);
+  if (!user) return (<Redirect to='/events' />);
+
+  const { events, isLoading, event } = useSelector(state => state.events);
+  const { group } = useSelector(state => state.groups);
 
   const [ organizerBool, setOrganizerBool ] = useState(false);
   const { name, startDate, endDate, groupId, description, previewImage, Group } = event;
 
+  const history = useHistory();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(thunkLoadSingleEvent(eventId));
+    dispatch(thunkLoadSingleEvent(eventId))
+      .then(({ Event }) => dispatch(thunkLoadSingleGroup(Event.groupId)));
   }, [ dispatch, eventId ]);
 
   useEffect(() => {
-    if (memberships[ groupId ]) {
-      return setOrganizerBool(memberships[ groupId ].status === 'co-host');
-    }
-    else return setOrganizerBool(false);
-  }, [ dispatch, memberships, event, groupId ]);
+    if (!isLoading && !events[ eventId ]) history.push('/not-found');
+  }, [ isLoading, eventId, events ]);
 
-  const history = useHistory();
+  useEffect(() => {
+    if (memberships[ groupId ]) setOrganizerBool(memberships[ groupId ].status === 'co-host');
+    else setOrganizerBool(false);
+  }, [ memberships, groupId, user ]);
+
   const groupType = Group ? (Group.private === true ? 'Public group' : 'Private group') : null;
   const groupName = Group ? Group.name : null;
   const startDateSlice = startDate ? convertDate(startDate) : null;
   const endDateSlice = endDate ? convertDate(endDate) : null;
+  const organizerName = group.id ? `${group.Organizer.firstName} ${group.Organizer.lastName[ 0 ]}.` : null;
 
   const handleDelete = async (e) => {
     e.preventDefault();
-    const data = await dispatch(thunkDeleteEvent({ eventId }))
+    const data = await dispatch(thunkDeleteEvent({ eventId }));
     if (data.ok === true) {
       history.push(`/events`);
     };
@@ -62,7 +68,7 @@ const SingleEventPage = ({ eventData }) => {
           <IconDescriptionCard
             iconClass="fas fa-user-circle"
             heading='Hosted By'
-            subHeading={`${user.firstName} ${user.lastName[ 0 ]}.`}
+            subHeading={organizerName}
           />
         </div>
       </div>
@@ -106,9 +112,9 @@ const SingleEventPage = ({ eventData }) => {
               {organizerBool && (
                 <section className="event-page-footer-buttons">
                   <NavLink to={`/events/${eventId}/edit`} id='event-edit-navlink'>
-                    <Button buttonStyle='btn--big' buttonSize='btn--large' onClick={(e) => e.preventDefault} >Edit</Button>
+                    <Button buttonStyle='btn--big' buttonSize='btn--large' onClick={(e) => e.preventDefault} >Edit Details</Button>
                   </NavLink>
-                  <Button buttonStyle='btn--delete' buttonSize='btn--large' onClick={handleDelete}>Delete</Button>
+                  <Button buttonStyle='btn--delete' buttonSize='btn--large' onClick={handleDelete}>Delete Event</Button>
                 </section>
               )}
             </div>
@@ -118,11 +124,11 @@ const SingleEventPage = ({ eventData }) => {
       <BottomNav pageType={'events'}>
         <Link to={`/events`} className="page-return">
           <h3>
-            <i class="fa-solid fa-angle-left" /> Back to More Events
+            <i className="fa-solid fa-angle-left" /> Back to More Events
           </h3>
         </Link>
         <Link to={`/groups/${groupId}`} className='page-return'>
-          <h3>Visit This Group <i class="fa-solid fa-angle-right"></i>
+          <h3>Visit This Group <i className="fa-solid fa-angle-right"></i>
           </h3>
         </Link>
       </BottomNav>

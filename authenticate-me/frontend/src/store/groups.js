@@ -12,6 +12,9 @@ const LOAD_GROUP_MEMBERS = 'group/members/LOAD';
 const DELETE_GROUP = 'groups/DELETE';
 const CREATE_GROUP = 'groups/CREATE';
 const UPDATE_GROUP = 'groups/EDIT';
+const UPDATE_MEMBERSHIP = 'groups/membership/UPDATE';
+const CREATE_MEMBERSHIP = 'groups/membership/CREATE';
+const DELETE_MEMBERSHIP = 'groups/membership/DELETE';
 // const JOIN_GROUP = 'group/membership/CREATE';
 
 export const thunkLoadGroups = () => async (dispatch) => {
@@ -134,34 +137,66 @@ export const thunkUpdateGroup = (groupInfo, groupId) => async (dispatch) => {
 // };
 
 
-// export const thunkGroupDeleteMembership = ({ groupId, memberId }) => async (dispatch) => {
-//   const response = await csrfFetch(`/api/groups/${groupId}/membership`, {
-//     method: 'DELETE',
-//     headers: { "Content-Type": "application/json" },
-//     body: JSON.stringify({ memberId })
-//   })
-//     .catch(err => err);
+export const thunkGroupDeleteMembership = ({ groupId, memberId, removeBool }) => async (dispatch) => {
+  const response = await csrfFetch(`/api/groups/${groupId}/membership`, {
+    method: 'DELETE',
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ memberId })
+  })
+    .catch(err => err);
 
-//   if (response.ok) {
-//     dispatch(thunkLoadGroupMembers(groupId));
-//     dispatch(actionLoadUserStatus(''));
-//     return '';
-//   }
+  if (response.ok) {
+    dispatch(actionGroupDeleteMembership({ groupId, memberId, removeBool }));
+    return;
+  }
 
-//   // const data = await response.json();
-
-//   return response;
-// };
+  return response;
+};
 
 
-export const actionLoadGroups = (groups) => {
+export const thunkGroupAcceptMembership = ({ groupId, memberId, statusChange }) => async (dispatch) => {
+  const response = await csrfFetch(`/api/groups/${groupId}/membership`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      memberId: memberId,
+      status: statusChange
+    })
+  })
+    .catch(err => err);
+
+
+  if (response.ok) {
+    const membershipData = await response.json();
+    dispatch(actionGroupAcceptMembership(membershipData));
+    return membershipData;
+  };
+
+  return response;
+};
+
+const actionGroupDeleteMembership = (deleteData) => {
+  return {
+    type: DELETE_MEMBERSHIP,
+    payload: deleteData
+  }
+}
+
+const actionGroupAcceptMembership = (membershipData) => {
+  return {
+    type: CREATE_MEMBERSHIP,
+    payload: membershipData
+  };
+};
+
+const actionLoadGroups = (groups) => {
   return {
     type: LOAD_GROUPS,
     payload: groups
   };
 };
 
-export const actionLoadGroupEvents = (events) => {
+const actionLoadGroupEvents = (events) => {
   return {
     type: LOAD_GROUP_EVENTS,
     payload: events
@@ -224,6 +259,7 @@ const groupReducer = (state = initialState, action) => {
   //   }
   // };
 
+  let updatedState;
   switch (action.type) {
     case LOAD_GROUPS:
       const groups = normalizeFn(action.payload.Groups);
@@ -248,13 +284,55 @@ const groupReducer = (state = initialState, action) => {
       return { ...state, groups: { ...state.groups, [ newGroupId ]: { ...action.payload } } };
     case DELETE_GROUP:
       const id = action.payload;
-      const updatedState = objDeepCopyFn(state);
+      updatedState = objDeepCopyFn(state);
       delete updatedState[ 'groups' ][ id ];
+      updatedState[ 'group' ] = { Events: {}, GroupImages: {}, Organizer: {}, Venues: {}, Members: {} };
       return updatedState;
     case UPDATE_GROUP:
       const updateGroup = { ...action.payload };
       const updateGroupId = updateGroup.id;
       return { ...state, groups: { ...state.groups, [ updateGroupId ]: updateGroup } };
+    case CREATE_MEMBERSHIP:
+      const membershipData = action.payload;
+      return {
+        ...state,
+        groups: {
+          ...state.groups,
+          [ membershipData.groupId ]: {
+
+            ...state.groups[ membershipData.groupId ],
+            numMembers: ++state.groups[ membershipData.groupId ].numMembers
+          }
+        },
+        group: {
+          ...state.group,
+          Members: {
+            ...state.group.Members,
+            [ membershipData.memberId ]: {
+              ...state.group.Members[ membershipData.memberId ],
+              memberStatus: membershipData.status
+            }
+          }
+        }
+      };
+    case DELETE_MEMBERSHIP:
+      const { groupId, removeBool, memberId } = action.payload;
+      updatedState = {
+        ...state,
+        groups: {
+          ...state.groups,
+          [ groupId ]: {
+            ...state.groups[ groupId ],
+            numMembers: removeBool ? --state.groups[ groupId ].numMembers : state.groups[ groupId ].numMembers
+          }
+        },
+        group: {
+          ...state.group,
+          Members: { ...state.group.Members }
+        }
+      };
+      delete updatedState.group.Members[ memberId ];
+      return updatedState;
     default:
       return { ...state };
   };

@@ -50,7 +50,7 @@ function SignupFormModal() {
       <form className="sign-up__form" onSubmit={handleSubmit}>
         <ul className="sign-up__error-list">
           {errors.map((error, idx) => (
-            <li class="sign-up__error" key={idx}>
+            <li className="sign-up__error" key={idx}>
               {error}
             </li>
           ))}
@@ -59,7 +59,7 @@ function SignupFormModal() {
           Email
         </label>
         <input
-          class="sign-up__input"
+          className="sign-up__input"
           type="text"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
@@ -69,7 +69,7 @@ function SignupFormModal() {
           Username
         </label>
         <input
-          class="sign-up__input"
+          className="sign-up__input"
           type="text"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
@@ -79,7 +79,7 @@ function SignupFormModal() {
           First Name
         </label>
         <input
-          class="sign-up__input"
+          className="sign-up__input"
           type="text"
           value={firstName}
           onChange={(e) => setFirstName(e.target.value)}
@@ -89,7 +89,7 @@ function SignupFormModal() {
           Last Name
         </label>
         <input
-          class="sign-up__input"
+          className="sign-up__input"
           type="text"
           value={lastName}
           onChange={(e) => setLastName(e.target.value)}
@@ -99,7 +99,7 @@ function SignupFormModal() {
           Password
         </label>
         <input
-          class="sign-up__input"
+          className="sign-up__input"
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
@@ -109,7 +109,7 @@ function SignupFormModal() {
           Confirm Password
         </label>
         <input
-          class="sign-up__input"
+          className="sign-up__input"
           type="password"
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}

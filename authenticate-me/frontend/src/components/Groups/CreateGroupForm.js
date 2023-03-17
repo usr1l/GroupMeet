@@ -130,7 +130,7 @@ const CreateGroupForm = () => {
                   select:
                 </option>
                 {states.map(state => (
-                  <option value={state}>{state}</option>
+                  <option key={`group-form-${state}`} value={state}>{state}</option>
                 ))}
               </select>
             </InputDiv>
@@ -173,7 +173,7 @@ const CreateGroupForm = () => {
       <BottomNav>
         <Link to={`/groups/`} className="page-return">
           <h3>
-            <i class="fa-solid fa-angle-left" /> Back to More Groups
+            <i className="fa-solid fa-angle-left" /> Back to More Groups
           </h3>
         </Link>
       </BottomNav>

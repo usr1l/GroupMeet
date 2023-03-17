@@ -26,12 +26,13 @@ const SplashPage = () => {
       <div id='content-welcome-block'>
         <div id="content-welcome">
           <h1>Welcome to GroupMeet!</h1>
-          <text>
+          <span>
             Whatever your interest, from hiking and reading to networking and skill sharing, there are thousands of people who share it on GroupMeet.
-            <br></br>
-            <br></br>
+          </span>
+          <br></br>
+          <span>
             Your next adventure is just a click away—sign up today and join the fun.
-          </text>
+          </span>
         </div>
         <img src={selfie} id='selfie-image'></img>
       </div>

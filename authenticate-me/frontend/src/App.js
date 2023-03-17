@@ -20,6 +20,7 @@ import SingleGroupPage from "./components/Groups/ShowSingleGroup";
 import { thunkLoadEvents } from "./store/events";
 import { thunkLoadGroups } from "./store/groups";
 import SplashPage from "./components/SplashPage";
+import UnauthorizedPage from "./components/UnauthorizedPage";
 // import BottomNav from "./components/BottomNav";
 
 function App() {
@@ -75,6 +76,8 @@ function App() {
             )}
             <Route path='/events/:eventId' component={SingleEventPage} />
             <Route path='/groups/:groupId' component={SingleGroupPage} />
+            <Route exact path='/not-authorized' component={UnauthorizedPage} />
+            <Route exact path='/not-found' component={NotFoundPage} />
             <Route component={NotFoundPage} />
           </Switch>
         </>

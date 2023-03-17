@@ -1,8 +1,25 @@
 import React from 'react';
 import './Button.css';
 
-const STYLES = [ 'btn--primary', 'btn--outline', 'btn--demo', 'btn--wide', 'btn--menu-item', 'btn--big', 'btn--delete' ];
-const SIZES = [ 'btn--medium', 'btn--large', 'btn--modal', 'btn--menu' ];
+const STYLES = [
+  'btn--primary',
+  'btn--outline',
+  'btn--demo',
+  'btn--wide',
+  'btn--menu-item',
+  'btn--big',
+  'btn--delete',
+  'btn--accept',
+  'btn--reject',
+  'btn--remove'
+];
+const SIZES = [
+  'btn--medium',
+  'btn--large',
+  'btn--modal',
+  'btn--menu',
+  'btn--small'
+];
 
 const Button = ({
   children,
@@ -10,7 +27,8 @@ const Button = ({
   onClick,
   buttonStyle,
   buttonSize,
-  disableButton
+  disableButton,
+  value
 }) => {
   const checkButtonStyle = STYLES.includes(buttonStyle) ? buttonStyle : STYLES[ 0 ];
   const checkButtonSize = SIZES.includes(buttonSize) ? buttonSize : SIZES[ 0 ];
@@ -22,6 +40,7 @@ const Button = ({
         onClick={onClick}
         type={type}
         disabled={disableButton || false}
+        value={value}
       >
         {children}
       </button>

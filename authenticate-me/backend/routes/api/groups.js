@@ -7,7 +7,7 @@ const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 const { validateVenueData } = require('./venues');
 const { validateEventData, getEvents } = require('./events');
-const { inputToDate, getDisplayDate, toJSONDisplay, checkUserId, updateGroupPreviewImage, membershipArrToObj } = require('../../utils/helpers')
+const { getDisplayDate, toJSONDisplay, checkUserId, updateGroupPreviewImage, membershipArrToObj } = require('../../utils/helpers')
 const { venueDoesNotExist } = require('./venues');
 const { validateMembershipData, validateMembershipDataDelete } = require('./memberships');
 
@@ -92,8 +92,9 @@ function membershipDoesNotExist(next) {
   return next(err);
 };
 
+
 // get currUser membershipStatus
-router.get('/:groupId/membership/status', requireAuth, async (req, res, next) => {
+router.get('/:groupId/membership/status', requireAuth, async (req, res) => {
   const userId = req.user.id;
   const { groupId } = req.params;
 
@@ -155,7 +156,6 @@ router.delete('/:groupId/membership', requireAuth, validateMembershipDataDelete,
   res.status = 200;
   return res.json({ message: res.message, statusCode: res.status });
 });
-
 
 
 // get all members of a group specified by its id
@@ -342,7 +342,7 @@ router.post('/:groupId/membership', requireAuth, async (req, res, next) => {
     groupId,
     userId,
     status: 'pending'
-  })
+  });
 
   const newMembership = await Membership.findOne({
     where: {
@@ -353,7 +353,7 @@ router.post('/:groupId/membership', requireAuth, async (req, res, next) => {
     attributes: {
       exclude: [ 'id' ]
     }
-  })
+  });
 
   return res.json(newMembership);
 });
@@ -441,7 +441,7 @@ router.post('/:groupId/events', requireAuth, validateEventData, async (req, res,
       price: price ? price : null,
       startDate,
       endDate,
-      // venueId,zz
+      // venueId,
       groupId
     }
   });

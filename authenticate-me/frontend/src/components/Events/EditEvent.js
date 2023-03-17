@@ -1,18 +1,25 @@
 import React, { useState, useEffect } from "react"
-import { useDispatch } from "react-redux";
-import { useParams, useHistory, Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams, useHistory, Link, Redirect } from "react-router-dom";
 import { thunkUpdateEvent, thunkLoadSingleEvent } from "../../store/events";
 import getCurrTime from "../HelperFns/GetCurrTime";
 import Button from '../Button';
 import InputDiv from "../InputDiv";
 import ImagePreview from "../ImagePreview";
 import BottomNav from "../BottomNav";
+import NotFoundPage from "../NotFoundPage";
+import ErrorPage from "../UnauthorizedPage";
 import './EventForm.css';
 
 const EditEventPage = () => {
   const { eventId } = useParams();
+  if (isNaN(parseInt(eventId))) return (<NotFoundPage />);
 
+  const { user } = useSelector(state => state.session);
+  const { events, isLoading } = useSelector(state => state.events);
 
+  // const groupId = events[ eventId ] ? events[ eventId ][ groupId ] : null;
+  // const membershipBool = groupId ? memberships[ groupId ] === 'co-host' : false;
 
   const dispatch = useDispatch();
 
@@ -25,11 +32,11 @@ const EditEventPage = () => {
   const [ startTime, setStartTime ] = useState('');
   const [ endDate, setEndDate ] = useState('');
   const [ endTime, setEndTime ] = useState('');
-  const [ capacity, setCapacity ] = useState(null);
-  const [ price, setPrice ] = useState(null);
+  const [ capacity, setCapacity ] = useState('');
+  const [ price, setPrice ] = useState('');
   const [ errors, setErrors ] = useState([]);
   const [ previewImage, setPreviewImage ] = useState('');
-
+  const [ disableSubmit, setDisableSubmit ] = useState(true);
 
   useEffect(() => {
     dispatch(thunkLoadSingleEvent(eventId))
@@ -43,10 +50,23 @@ const EditEventPage = () => {
         setEndDate(endDate.slice(0, 10));
         setEndTime(endDate.slice(11));
         setPrice(price || 0);
-        setCapacity(capacity);
+        setCapacity(capacity || '');
         setPreviewImage(previewImage || '');
       });
-  }, []);
+  }, [ dispatch ]);
+
+  useEffect(() => {
+    if (!isLoading && !events[ eventId ]) history.push('/not-found');
+    if (!isLoading && events[ eventId ]) {
+      if (user.id !== events[ eventId ][ 'Group' ][ 'organizerId' ]) history.push('/not-authorized');
+    };
+  }, [ isLoading, eventId, events, user, user.id ]);
+
+  useEffect(() => {
+    if (!name || !description || !type || (!price && price !== 0)) return setDisableSubmit(true);
+    else return setDisableSubmit(false);
+  }, [ name, description, type, price ]);
+
 
   const validate = () => {
     const validationErrors = [];
@@ -60,7 +80,7 @@ const EditEventPage = () => {
     if (`${endDate} ${endTime}` <= `${startDate} ${startTime}`) validationErrors.push('Please provide an end date, must be after start date');
     if (!type) validationErrors.push('Please specify the type');
 
-    if ((price && parseFloat(price) < 0) || (!Number.isInteger(100 * parseFloat(price)))) validationErrors.push('Invalid Price');
+    if ((price && parseFloat(price) < 0) || (!Number.isInteger(100 * parseFloat(price)))) validationErrors.push('Please enter a valid price');
     if (capacity && parseFloat(capacity) <= 0) validationErrors.push('Invalid Capacity');
 
 
@@ -140,7 +160,9 @@ const EditEventPage = () => {
                 type="number"
                 name="capactiy"
                 value={capacity}
-                onChange={(e) => setCapacity(e.target.value)} />
+                onChange={(e) => setCapacity(e.target.value)}
+                placeholder={'Max # of occupants (not required)'}
+              />
             </InputDiv>
             <InputDiv divStyle="date-time__block" labelStyle="event-form__label" labelFor='startDate-Time' label='Start Date: '>
               <input
@@ -191,7 +213,7 @@ const EditEventPage = () => {
             </InputDiv>
             <div id='create-event-button-div'>
               <ImagePreview imgSrc={previewImage}></ImagePreview>
-              <Button type='submit' buttonStyle='btn--delete' buttonSize='btn--large'>Update</Button>
+              <Button type='submit' disableButton={disableSubmit} buttonStyle='btn--delete' buttonSize='btn--large'>Update</Button>
             </div>
           </form>
         </div >
@@ -199,11 +221,11 @@ const EditEventPage = () => {
       <BottomNav>
         <Link to={`/events/${eventId}`} className="page-return">
           <h3>
-            <i class="fa-solid fa-angle-left" /> Back to This Event
+            <i className="fa-solid fa-angle-left" /> Back to This Event
           </h3>
         </Link>
         <Link to={`/events`} className='page-return'>
-          <h3>More Events <i class="fa-solid fa-angle-right"></i>
+          <h3>More Events <i className="fa-solid fa-angle-right"></i>
           </h3>
         </Link>
       </BottomNav>
