@@ -54,8 +54,6 @@ export const thunkLoadGroupMembers = (groupId) => async (dispatch) => {
 };
 
 
-
-
 export const thunkDeleteGroup = ({ groupId }) => async (dispatch) => {
   const response = await csrfFetch(`/api/groups/${groupId}`, {
     method: 'DELETE'
@@ -103,6 +101,7 @@ export const thunkLoadSingleGroup = (groupId) => async (dispatch) => {
   return response;
 };
 
+
 export const thunkUpdateGroup = (groupInfo, groupId) => async (dispatch) => {
   const response = await csrfFetch(`/api/groups/${groupId}`, {
     method: 'PUT',
@@ -111,12 +110,14 @@ export const thunkUpdateGroup = (groupInfo, groupId) => async (dispatch) => {
   })
     .catch(err => err);
 
+  const data = await response.json();
   if (response.ok) {
-    const data = await response.json();
     dispatch(actionUpdateGroup(data));
     dispatch(thunkLoadGroups());
     return response;
   };
+
+  return data;
 };
 
 
@@ -333,7 +334,8 @@ const groupReducer = (state = initialState, action) => {
       delete updatedState.group.Members[ memberId ];
       return updatedState;
     default:
-      return { ...state };
+      return state;
+    // break;
   };
 };
 

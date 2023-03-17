@@ -48,7 +48,7 @@ function LoginFormModal() {
   return (
     <div id='log-in'>
       <i onClick={closeModal} className="fa-solid fa-xmark"></i>
-      <img src={icon} id='icon'></img>
+      <img src={icon} id='icon' alt={'group-me'}></img>
       <h1 id="log-in__title">Log In</h1>
       <form id='log-in__form' onSubmit={handleSubmit}>
         <ul id='log-in__error-list'>

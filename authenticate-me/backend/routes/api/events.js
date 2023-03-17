@@ -507,6 +507,25 @@ eventsRouter.put('/:eventId', requireAuth, async (req, res, next) => {
     return next(err);
   };
 
+  const eventExists = await Event.findOne({
+    where: {
+      "venueId": venueId ? venueId : event.venueId,
+      "name": name ? name : event.name,
+      "description": description ? description : event.description,
+      "type": type ? type : event.type,
+      "capacity": capacity ? capacity : null,
+      "price": price ? price : null,
+      "startDate": startDate ? startDate : event.startDate,
+      "endDate": endDate ? endDate : event.endDate
+    }
+  });
+
+  if (eventExists) {
+    const newError = new Error('Failed: This event already exists');
+    newError.status = 409;
+    return next(newError);
+  };
+
   await event.update({
     "venueId": venueId ? venueId : event.venueId,
     "name": name ? name : event.name,

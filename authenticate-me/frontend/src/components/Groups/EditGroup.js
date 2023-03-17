@@ -13,16 +13,18 @@ const EditGroupPage = () => {
   const { groupId } = useParams();
   if (isNaN(parseInt(groupId))) return (<NotFoundPage />);
 
-  const { user } = useSelector(state => state.session);
-  const { groups, isLoading } = useSelector(state => state.groups);
-
-  const userId = user ? user.id : null;
-  const organizerId = groups[ groupId ] ? groups[ groupId ].organizerId : null;
-
-  const states = [ "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY" ];
   const dispatch = useDispatch();
 
   const history = useHistory();
+  const { user } = useSelector(state => state.session);
+  const { groups, isLoading } = useSelector(state => state.groups);
+  if (!isLoading && !groups[ groupId ]) history.push('/not-found');
+
+  const userId = user ? user.id : null;
+  const organizerId = groups[ groupId ] ? groups[ groupId ].organizerId : null;
+  if (!isLoading && organizerId !== userId) history.push(`/not-authorized`);
+
+  const states = [ "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY" ];
 
   const [ name, setName ] = useState('');
   const [ about, setAbout ] = useState('');
@@ -47,12 +49,6 @@ const EditGroupPage = () => {
         setPreviewImage(previewImage || '')
       });
   }, [ dispatch ]);
-
-
-  useEffect(() => {
-    if (!isLoading && !groups[ groupId ]) history.push('/not-found');
-    if (!isLoading && organizerId !== userId) history.push(`/not-authorized`);
-  }, [ isLoading, groupId, groups ]);
 
   useEffect(() => {
     if (!name || !about || !type || !city || !state) return setDisableSubmit(true);
@@ -88,6 +84,10 @@ const EditGroupPage = () => {
     };
 
     const response = await dispatch(thunkUpdateGroup(groupInfo, groupId));
+
+    if (response.statusCode >= 400) {
+      return setErrors([ response.message ]);
+    };
 
     if (response.ok) {
       history.push(`/groups/${groupId}`);

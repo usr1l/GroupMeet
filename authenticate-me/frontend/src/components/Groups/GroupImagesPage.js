@@ -1,6 +1,13 @@
-function GroupImagesPage() {
+import React from 'react';
+import './GroupImagesPage.css';
+
+function GroupImagesPage({ images }) {
   return (
-    <div></div>
+    <div id='groups-images-wrapper'>
+      <div id='groups-images-container'>
+
+      </div>
+    </div>
   )
 };
 

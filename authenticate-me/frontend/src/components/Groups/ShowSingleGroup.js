@@ -12,6 +12,7 @@ import EventsList from "../Events/EventsList";
 import GroupAboutPage from "./GroupAboutPage";
 import MembershipsPage from "../MembershipsPage";
 import BottomNav from "../BottomNav";
+import GroupImagesPage from "./GroupImagesPage";
 import { thunkSessionDeleteMembership, thunkSessionRequestMembership } from "../../store/session";
 import "./SingleGroupPage.css";
 
@@ -22,37 +23,43 @@ const SingleGroupPage = ({ groupData }) => {
   const { user } = useSelector(state => state.session);
   if (!user) return (<Redirect to='/groups' />);
 
+  const dispatch = useDispatch();
+  const history = useHistory();
+
   const group = useSelector(state => state.groups.group);
   const { groups, isLoading } = useSelector(state => state.groups);
+  if (!isLoading && !groups[ groupId ]) history.push(`/not-found`);
+
   const { memberships } = useSelector(state => state.session);
 
-  const dispatch = useDispatch();
 
   const [ membershipState, setMembershipState ] = useState('...');
   const [ organizerBool, setOrganizerBool ] = useState(false);
 
   function membershipButtonDisplay(status) {
+    let response;
     switch (status) {
       case 'pending':
-        return 'Requested';
+        response = 'Requested';
+        break;
       case 'member':
-        return 'Member';
+        response = 'Member';
+        break;
       case 'co-host':
-        return 'Co-Host';
+        response = 'Co-Host';
+        break;
       default:
-        return 'Join Group';
+        response = 'Join Group';
+        break;
     };
+    return response;
   };
 
   useEffect(() => {
     dispatch(thunkLoadSingleGroup(groupId))
       .then(() => dispatch(thunkLoadGroupEvents(groupId)))
       .then(() => dispatch(thunkLoadGroupMembers(groupId)));
-  }, [ dispatch, groupId ]);
-
-  useEffect(() => {
-    if (!isLoading && !groups[ groupId ]) history.push(`/not-found`);
-  }, [ isLoading, groupId, groups ]);
+  }, [ dispatch, groupId, groups ]);
 
   useEffect(() => {
     if (memberships[ groupId ]) setMembershipState(membershipButtonDisplay(memberships[ groupId ].status));
@@ -63,8 +70,6 @@ const SingleGroupPage = ({ groupData }) => {
     if (membershipState === 'Co-Host') setOrganizerBool(true);
     else setOrganizerBool(false);
   }, [ dispatch, membershipState ]);
-
-  const history = useHistory();
 
   const {
     name,
@@ -98,19 +103,20 @@ const SingleGroupPage = ({ groupData }) => {
     switch (membershipState) {
       case 'Join Group':
         dispatch(thunkSessionRequestMembership(groupId));
-        return;
+        break;
       case 'Member':
         dispatch(thunkSessionDeleteMembership({ groupId, memberId: user.id }));
-        return;
+        break;
       case 'Requested':
         dispatch(thunkSessionDeleteMembership({ groupId, memberId: user.id }));
-        return;
+        break;
       case 'Co-Host':
         window.alert('Hosts are not able to leave their groups.');
-        return;
+        break;
       default:
-        return;
+        break;
     };
+    return;
   };
 
   const handleDelete = async (e) => {
@@ -195,7 +201,7 @@ const SingleGroupPage = ({ groupData }) => {
               <MembershipsPage members={members} organizerBool={organizerBool} groupId={groupId} />
             </Route>
             <Route path={`/groups/${groupId}/images`}>
-
+              <GroupImagesPage images={images} />
             </Route>
             <Route path={`/groups/${groupId}`}>
               <GroupAboutPage about={about} hostName={hostName} status={membershipState} />

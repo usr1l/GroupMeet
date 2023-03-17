@@ -34,7 +34,7 @@ const SplashPage = () => {
             Your next adventure is just a click away—sign up today and join the fun.
           </span>
         </div>
-        <img src={selfie} id='selfie-image'></img>
+        <img src={selfie} id='selfie-image' alt={'preview'}></img>
       </div>
       <div id="content-images">
         <div>
