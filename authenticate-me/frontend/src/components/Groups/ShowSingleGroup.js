@@ -26,40 +26,28 @@ const SingleGroupPage = ({ groupData }) => {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const group = useSelector(state => state.groups.group);
-  const { groups, isLoading } = useSelector(state => state.groups);
-  if (!isLoading && !groups[ groupId ]) history.push(`/not-found`);
-
+  const { groups, group, isLoading } = useSelector(state => state.groups);
   const { memberships } = useSelector(state => state.session);
-
 
   const [ membershipState, setMembershipState ] = useState('...');
   const [ organizerBool, setOrganizerBool ] = useState(false);
-
-  function membershipButtonDisplay(status) {
-    let response;
-    switch (status) {
-      case 'pending':
-        response = 'Requested';
-        break;
-      case 'member':
-        response = 'Member';
-        break;
-      case 'co-host':
-        response = 'Co-Host';
-        break;
-      default:
-        response = 'Join Group';
-        break;
-    };
-    return response;
-  };
+  const [ isLoaded, setIsLoaded ] = useState(false);
 
   useEffect(() => {
     dispatch(thunkLoadSingleGroup(groupId))
-      .then(() => dispatch(thunkLoadGroupEvents(groupId)))
-      .then(() => dispatch(thunkLoadGroupMembers(groupId)));
-  }, [ dispatch, groupId, groups ]);
+
+    return () => {
+      if (!groups[ groupId ]) history.push(`/not-found`);
+    }
+  }, [ dispatch, isLoading, groupId, groups ]);
+
+  useEffect(() => {
+    if (group.id)
+      dispatch(thunkLoadGroupEvents(groupId))
+        .then(() => dispatch(thunkLoadGroupMembers(groupId)))
+        .then(() => setIsLoaded(true));
+
+  }, [ group ])
 
   useEffect(() => {
     if (memberships[ groupId ]) setMembershipState(membershipButtonDisplay(memberships[ groupId ].status));
@@ -96,6 +84,25 @@ const SingleGroupPage = ({ groupData }) => {
 
   const hostName = Organizer ? `${Organizer.firstName} ${Organizer.lastName}` : null;
   const isPrivate = group.private === true ? 'Private' : 'Public';
+
+  function membershipButtonDisplay(status) {
+    let response;
+    switch (status) {
+      case 'pending':
+        response = 'Requested';
+        break;
+      case 'member':
+        response = 'Member';
+        break;
+      case 'co-host':
+        response = 'Co-Host';
+        break;
+      default:
+        response = 'Join Group';
+        break;
+    };
+    return response;
+  };
 
   // need to work on not allowing single host to leave a group
   const handleMemberClick = (e) => {
@@ -136,92 +143,97 @@ const SingleGroupPage = ({ groupData }) => {
 
   return (
     <>
-      <div className="group-header-background">
-        <div className="group-header">
-          <ImagePreview imgWrapperStyle="group-page-header-image-container" imgClassName='group-page-header-image' imgSrc={previewImage}></ImagePreview>
-          <div className="group-page-description-card-container">
-            <div className="group-page-description-card">
-              <h2 id="single-group-page-name">{name}</h2>
-              <div>
-                <IconLabel iconClass={"fa-solid fa-location-dot"} labelText={`${city}, ${state}`} />
-                <IconLabel iconClass={"fa-solid fa-user-group"} labelText={`${numMembers} Members • ${isPrivate} Group`} />
-                <IconLabel iconClass={"fa-solid fa-user-large"} labelText={`Organized by ${hostName}`} />
-              </div>
-            </div>
-            <div id='group-page-description-card-bottom'>
-              {/* <i id='group-index-card-component-bottom-share' className="fa-regular fa-share-from-square"></i>
-              <div className='group-index-card-item'>{window.location.href}</div> */}
-              <Button buttonStyle='btn--delete' buttonSize='btn--large' onClick={handleMemberClick}>{membershipState}</Button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="single-group-page-navbar-background">
-        <div className="single-group-page-navbar-container">
-          <div className="single-group-page-navbar-wrapper">
-            <div className="single-group-page-navbar">
-              <NavLink exact to={`/groups/${groupId}`} className="single-group-page-navbar-item" activeClassName='group-navbar-navlink-active'>
-                About
-              </NavLink>
-              <NavLink to={`/groups/${groupId}/events`} className="single-group-page-navbar-item" activeClassName='group-navbar-navlink-active'>
-                Events
-              </NavLink>
-              <NavLink to={`/groups/${groupId}/members`} className="single-group-page-navbar-item" activeClassName='group-navbar-navlink-active'>
-                Members
-              </NavLink>
-              <NavLink to={`/groups/${groupId}/images`} className="single-group-page-navbar-item" activeClassName='group-navbar-navlink-active'>
-                Photos
-              </NavLink>
-            </div>
-          </div>
-          <div className="single-group-page-navbar-functions">
-            {organizerBool && (
-              <>
-                <Link to={`/groups/${groupId}/edit`}>
-                  <Button buttonStyle='btn--big' buttonSize='btn--large' onClick={(e) => e.preventDefault}>Edit Details</Button>
-                </Link>
-                <Button buttonStyle='btn--delete' buttonSize='btn--large' onClick={handleDelete}>Delete Group</Button>
-              </>
-            )}
-          </div>
-        </div>
-      </div>
-      <div className="group-property-page-container">
-        <div className="group-property-page-wrapper">
-          <Switch>
-            <Route exact path={`/groups/${groupId}/events`}>
-              <div id='group-events-page-wrapper'>
-                <div id='group-events-header-wrapper'>
-                  <h2>{`Events for this group (${events.length})`}</h2>
+      {isLoaded && (
+
+        <>
+          <div className="group-header-background">
+            <div className="group-header">
+              <ImagePreview imgWrapperStyle="group-page-header-image-container" imgClassName='group-page-header-image' imgSrc={previewImage}></ImagePreview>
+              <div className="group-page-description-card-container">
+                <div className="group-page-description-card">
+                  <h2 id="single-group-page-name">{name}</h2>
+                  <div>
+                    <IconLabel iconClass={"fa-solid fa-location-dot"} labelText={`${city}, ${state}`} />
+                    <IconLabel iconClass={"fa-solid fa-user-group"} labelText={`${numMembers} Members • ${isPrivate} Group`} />
+                    <IconLabel iconClass={"fa-solid fa-user-large"} labelText={`Organized by ${hostName}`} />
+                  </div>
                 </div>
-                <EventsList events={events} />
+                <div id='group-page-description-card-bottom'>
+                  {/* <i id='group-index-card-component-bottom-share' className="fa-regular fa-share-from-square"></i>
+              <div className='group-index-card-item'>{window.location.href}</div> */}
+                  <Button buttonStyle='btn--delete' buttonSize='btn--large' onClick={handleMemberClick}>{membershipState}</Button>
+                </div>
               </div>
-            </Route>
-            <Route path={`/groups/${groupId}/members`}>
-              <MembershipsPage members={members} organizerBool={organizerBool} groupId={groupId} />
-            </Route>
-            <Route path={`/groups/${groupId}/images`}>
-              <GroupImagesPage images={images} />
-            </Route>
-            <Route path={`/groups/${groupId}`}>
-              <GroupAboutPage about={about} hostName={hostName} status={membershipState} />
-            </Route>
-          </Switch>
-        </div>
-      </div>
-      <BottomNav>
-        <Link to={`/groups`} className="page-return">
-          <h3>
-            <i className="fa-solid fa-angle-left" /> Back to More Groups
-          </h3>
-        </Link>
-        {organizerBool && (
-          <Link to={`/groups/${groupId}/events/new`} className='page-return'>
-            <h3>Create An Event <i className="fa-solid fa-angle-right"></i>
-            </h3>
-          </Link>
-        )}
-      </BottomNav>
+            </div>
+          </div>
+          <div className="single-group-page-navbar-background">
+            <div className="single-group-page-navbar-container">
+              <div className="single-group-page-navbar-wrapper">
+                <div className="single-group-page-navbar">
+                  <NavLink exact to={`/groups/${groupId}`} className="single-group-page-navbar-item" activeClassName='group-navbar-navlink-active'>
+                    About
+                  </NavLink>
+                  <NavLink to={`/groups/${groupId}/events`} className="single-group-page-navbar-item" activeClassName='group-navbar-navlink-active'>
+                    Events
+                  </NavLink>
+                  <NavLink to={`/groups/${groupId}/members`} className="single-group-page-navbar-item" activeClassName='group-navbar-navlink-active'>
+                    Members
+                  </NavLink>
+                  <NavLink to={`/groups/${groupId}/images`} className="single-group-page-navbar-item" activeClassName='group-navbar-navlink-active'>
+                    Photos
+                  </NavLink>
+                </div>
+              </div>
+              <div className="single-group-page-navbar-functions">
+                {organizerBool && (
+                  <>
+                    <Link to={`/groups/${groupId}/edit`}>
+                      <Button buttonStyle='btn--big' buttonSize='btn--large' onClick={(e) => e.preventDefault}>Edit Details</Button>
+                    </Link>
+                    <Button buttonStyle='btn--delete' buttonSize='btn--large' onClick={handleDelete}>Delete Group</Button>
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+          <div className="group-property-page-container">
+            <div className="group-property-page-wrapper">
+              <Switch>
+                <Route exact path={`/groups/${groupId}/events`}>
+                  <div id='group-events-page-wrapper'>
+                    <div id='group-events-header-wrapper'>
+                      <h2>{`Events for this group (${events.length})`}</h2>
+                    </div>
+                    <EventsList events={events} />
+                  </div>
+                </Route>
+                <Route path={`/groups/${groupId}/members`}>
+                  <MembershipsPage members={members} organizerBool={organizerBool} groupId={groupId} />
+                </Route>
+                <Route path={`/groups/${groupId}/images`}>
+                  <GroupImagesPage images={images} />
+                </Route>
+                <Route path={`/groups/${groupId}`}>
+                  <GroupAboutPage about={about} hostName={hostName} status={membershipState} />
+                </Route>
+              </Switch>
+            </div>
+          </div>
+          <BottomNav>
+            <Link to={`/groups`} className="page-return">
+              <h3>
+                <i className="fa-solid fa-angle-left" /> Back to More Groups
+              </h3>
+            </Link>
+            {organizerBool && (
+              <Link to={`/groups/${groupId}/events/new`} className='page-return'>
+                <h3>Create An Event <i className="fa-solid fa-angle-right"></i>
+                </h3>
+              </Link>
+            )}
+          </BottomNav>
+        </>
+      )}
     </>
   )
 };

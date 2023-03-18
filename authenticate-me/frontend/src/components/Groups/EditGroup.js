@@ -15,12 +15,12 @@ const EditGroupPage = () => {
   const history = useHistory();
 
   const { user } = useSelector(state => state.session);
-  const { groups, isLoading } = useSelector(state => state.groups);
-  if (!isLoading && !groups[ groupId ]) history.push('/not-found');
+  const { group, groups, isLoading } = useSelector(state => state.groups);
+  // if (!isLoading && !groups[ groupId ]) history.push('/not-found');
 
-  const userId = user ? user.id : null;
-  const organizerId = groups[ groupId ] ? groups[ groupId ].organizerId : null;
-  if (!isLoading && organizerId !== userId) history.push(`/not-authorized`);
+  // const userId = user ? user.id : null;
+  // const organizerId = groups[ groupId ] ? groups[ groupId ].organizerId : null;
+  // if (!isLoading && organizerId !== userId) history.push(`/not-authorized`);
 
   const states = [ "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY" ];
 
@@ -35,24 +35,34 @@ const EditGroupPage = () => {
   const [ errors, setErrors ] = useState([]);
   const [ previewImage, setPreviewImage ] = useState('');
   const [ disableSubmit, setDisableSubmit ] = useState(true);
+  const [ isLoaded, setIsLoaded ] = useState(false);
 
   useEffect(() => {
-    dispatch(thunkLoadSingleGroup(groupId))
-      .then((data) => {
-        const { name, about, type, city, state, previewImage } = data;
-        setName(name);
-        setAbout(about);
-        setType(type);
-        setIsPrivate(data.private === true ? 'true' : 'false');
-        setCity(city);
-        setState(state);
-        setPreviewImage(previewImage || '')
-      });
-  }, [ dispatch ]);
+    const res = dispatch(thunkLoadSingleGroup(groupId));
+
+    return (res) => {
+      // if (!isLoading && !groups[ groupId ]) return history.push('/not-found');
+      // if (!isLoading && groups[ groupId ].organizerId !== user.id) return history.push('/not-authorized');
+      console.log(res)
+    };
+  }, [ dispatch, isLoading, groups, groupId, user ]);
 
   useEffect(() => {
-    if (!name || !about || !type || !city || !state) return setDisableSubmit(true);
-    else return setDisableSubmit(false);
+    if (group.id) {
+      setName(group.name);
+      setAbout(group.about);
+      setType(group.type);
+      setIsPrivate(group.private === true ? 'true' : 'false');
+      setCity(group.city);
+      setState(group.state);
+      setPreviewImage(previewImage || '');
+      setIsLoaded(true);
+    }
+  }, [ group ]);
+
+  useEffect(() => {
+    if (!name || !about || !type || !city || !state) setDisableSubmit(true);
+    else setDisableSubmit(false);
   }, [ name, about, type, city, state ]);
 
   const validate = () => {
@@ -97,102 +107,106 @@ const EditGroupPage = () => {
 
   return (
     <>
-      <div id='create-group-page-container'>
-        <div id='create-group-page'>
-          <h2 id="group-form__title" className="edit-form">EDIT GROUP</h2>
-          <ul id='group-form__error-list'>
-            {errors.map((error) => (
-              <li key={error}>{error}</li>
-            ))}
-          </ul>
-          <form id="group-form" onSubmit={onSubmit}>
-            <InputDiv divStyle="group-form__block" labelStyle="group-form__label" labelFor="name" label='Name: '>
-              <input
-                id="name"
-                type="text"
-                onChange={(e) => setName(e.target.value)}
-                value={name}
-                placeholder='Name'
-              />
-            </InputDiv>
-            <InputDiv divStyle="group-form__block" labelStyle="group-form__label" labelFor="type" label='Type: '>
-              <select
-                name="type"
-                onChange={(e) => setType(e.target.value)}
-                value={type}
-              >
-                <option value="" disabled>
-                  select:
-                </option>
-                <option value='In person'>In person</option>
-                <option value='Online'>Online</option>
-              </select>
-            </InputDiv>
-            <InputDiv divStyle="group-form__block" labelStyle="group-form__label" labelFor="city" label='City: '>
-              <input
-                id="city"
-                type="text"
-                onChange={(e) => setCity(e.target.value)}
-                value={city}
-                placeholder='City'
-              />
-            </InputDiv>
-            <InputDiv divStyle="group-form__block" labelStyle="group-form__label" labelFor="state" label='State: '>
-              <select
-                name="state"
-                onChange={(e) => setState(e.target.value)}
-                value={state}
-              >
-                <option value="" disabled>
-                  select:
-                </option>
-                {states.map(state => (
-                  <option key={`group-edit-${state}`} value={state}>{state}</option>
+      {isLoaded && (
+        <>
+          <div id='create-group-page-container'>
+            <div id='create-group-page'>
+              <h2 id="group-form__title" className="edit-form">EDIT GROUP</h2>
+              <ul id='group-form__error-list'>
+                {errors.map((error) => (
+                  <li key={error}>{error}</li>
                 ))}
-              </select>
-            </InputDiv>
-            <InputDiv divStyle="group-form__block" labelStyle="group-form__label" labelFor="about" label='About: '>
-              <textarea
-                id="about-input"
-                name="about"
-                onChange={(e) => setAbout(e.target.value)}
-                value={about}
-              />
-            </InputDiv>
-            <div className="group-form__block group-form__private">
-              <input type="radio" value="true" className='private-radio-button'
-                name="isPrivate" id='isPrivate-yes-button'
-                checked={isPrivate === "true" ? "checked" : ""}
-                onChange={(e) => setIsPrivate(e.target.value)}
-              /> Private
-              <input type="radio" value="false" className='private-radio-buttons'
-                name="isPrivate" id='isPrivate-no-button'
-                checked={isPrivate === "false" ? "checked" : ""}
-                onChange={(e) => setIsPrivate(e.target.value)}
-              /> Public
+              </ul>
+              <form id="group-form" onSubmit={onSubmit}>
+                <InputDiv divStyle="group-form__block" labelStyle="group-form__label" labelFor="name" label='Name: '>
+                  <input
+                    id="name"
+                    type="text"
+                    onChange={(e) => setName(e.target.value)}
+                    value={name}
+                    placeholder='Name'
+                  />
+                </InputDiv>
+                <InputDiv divStyle="group-form__block" labelStyle="group-form__label" labelFor="type" label='Type: '>
+                  <select
+                    name="type"
+                    onChange={(e) => setType(e.target.value)}
+                    value={type}
+                  >
+                    <option value="" disabled>
+                      select:
+                    </option>
+                    <option value='In person'>In person</option>
+                    <option value='Online'>Online</option>
+                  </select>
+                </InputDiv>
+                <InputDiv divStyle="group-form__block" labelStyle="group-form__label" labelFor="city" label='City: '>
+                  <input
+                    id="city"
+                    type="text"
+                    onChange={(e) => setCity(e.target.value)}
+                    value={city}
+                    placeholder='City'
+                  />
+                </InputDiv>
+                <InputDiv divStyle="group-form__block" labelStyle="group-form__label" labelFor="state" label='State: '>
+                  <select
+                    name="state"
+                    onChange={(e) => setState(e.target.value)}
+                    value={state}
+                  >
+                    <option value="" disabled>
+                      select:
+                    </option>
+                    {states.map(state => (
+                      <option key={`group-edit-${state}`} value={state}>{state}</option>
+                    ))}
+                  </select>
+                </InputDiv>
+                <InputDiv divStyle="group-form__block" labelStyle="group-form__label" labelFor="about" label='About: '>
+                  <textarea
+                    id="about-input"
+                    name="about"
+                    onChange={(e) => setAbout(e.target.value)}
+                    value={about}
+                  />
+                </InputDiv>
+                <div className="group-form__block group-form__private">
+                  <input type="radio" value="true" className='private-radio-button'
+                    name="isPrivate" id='isPrivate-yes-button'
+                    checked={isPrivate === "true" ? "checked" : ""}
+                    onChange={(e) => setIsPrivate(e.target.value)}
+                  /> Private
+                  <input type="radio" value="false" className='private-radio-buttons'
+                    name="isPrivate" id='isPrivate-no-button'
+                    checked={isPrivate === "false" ? "checked" : ""}
+                    onChange={(e) => setIsPrivate(e.target.value)}
+                  /> Public
+                </div>
+                <InputDiv divStyle="group-form__block" labelStyle="group-form__label" labelFor="group-profile-image" label='Group Image: '>
+                  <input
+                    name="group-profile-img"
+                    type='url'
+                    value={previewImage}
+                    onChange={(e) => setPreviewImage(e.target.value)}
+                  />
+                </InputDiv>
+                <div id='create-group-button-div'>
+                  <ImagePreview imgSrc={previewImage}></ImagePreview>
+                  <Button type='submit' disableButton={disableSubmit} buttonStyle='btn--wide'>Update</Button>
+                </div>
+              </form>
             </div>
-            <InputDiv divStyle="group-form__block" labelStyle="group-form__label" labelFor="group-profile-image" label='Group Image: '>
-              <input
-                name="group-profile-img"
-                type='url'
-                value={previewImage}
-                onChange={(e) => setPreviewImage(e.target.value)}
-              />
-            </InputDiv>
-            <div id='create-group-button-div'>
-              <ImagePreview imgSrc={previewImage}></ImagePreview>
-              <Button type='submit' disableButton={disableSubmit} buttonStyle='btn--wide'>Update</Button>
-            </div>
-          </form>
-        </div>
-      </div>
-      <BottomNav>
-        <Link to={`/groups/${groupId}`} className="page-return">
-          <h3>
-            <i className="fa-solid fa-angle-left" /> Back to Group
-          </h3>
-        </Link>
-      </BottomNav>
+          </div>
+          <BottomNav>
+            <Link to={`/groups/${groupId}`} className="page-return">
+              <h3>
+                <i className="fa-solid fa-angle-left" /> Back to Group
+              </h3>
+            </Link>
+          </BottomNav>
+        </>
+      )}
     </>
   );
 }
