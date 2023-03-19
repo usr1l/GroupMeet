@@ -17,7 +17,6 @@ const EditEventPage = () => {
 
   const { memberships } = useSelector(state => state.session);
   const { events, event, isLoading } = useSelector(state => state.events);
-  if (!isLoading && !events[ eventId ]) history.push('/not-found');
 
   // const groupId = events[ eventId ] ? events[ eventId ].groupId : null;
   // const memStatus = memberships[ groupId ] ? memberships[ groupId ].status : null;
@@ -38,31 +37,31 @@ const EditEventPage = () => {
   const [ previewImage, setPreviewImage ] = useState('');
   const [ disableSubmit, setDisableSubmit ] = useState(true);
   const [ isLoaded, setIsLoaded ] = useState(false);
+  // if (!isLoading && memberships[ events[ eventId ].groupId ].status) return history.push('/not-authorized');
+  // if (!events[ eventId ]) return history.push('/not-found');
 
   useEffect(() => {
-    dispatch(thunkLoadSingleEvent(eventId));
-
-    return () => {
-      if (!events[ eventId ]) return history.push('/not-found');
-      // if (!isLoading && memberships[ events[ eventId ].groupId ].status) return history.push('/not-authorized');
-    }
-  }, [ dispatch, eventId, isLoading, events, memberships ]);
+    if (!isLoading && !events[ eventId ]) history.push('/not-found');
+  }, [ isLoading ]);
 
   useEffect(() => {
-    if (event.id) {
-      setName(name);
-      setDescription(description);
-      setType(type);
-      setStartDate(startDate.slice(0, 10));
-      setStartTime(startDate.slice(11));
-      setEndDate(endDate.slice(0, 10));
-      setEndTime(endDate.slice(11));
-      setPrice(price || 0);
-      setCapacity(capacity || '');
-      setPreviewImage(previewImage || '');
-      setIsLoaded(true);
-    }
-  }, [ event ]);
+    dispatch(thunkLoadSingleEvent(eventId))
+      .then(({ Event }) => {
+        if (Event && Event.id) {
+          setName(Event.name);
+          setDescription(Event.description);
+          setType(Event.type);
+          setStartDate(Event.startDate.slice(0, 10));
+          setStartTime(Event.startDate.slice(11));
+          setEndDate(Event.endDate.slice(0, 10));
+          setEndTime(Event.endDate.slice(11));
+          setPrice(Event.price || 0);
+          setCapacity(Event.capacity || '');
+          setPreviewImage(Event.previewImage || '');
+          setIsLoaded(true);
+        };
+      });
+  }, [ dispatch ]);
 
   useEffect(() => {
     if (!name || !description || !type || (!price && price !== 0)) return setDisableSubmit(true);

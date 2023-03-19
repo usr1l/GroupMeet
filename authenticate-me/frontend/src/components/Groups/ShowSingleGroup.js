@@ -34,6 +34,10 @@ const SingleGroupPage = ({ groupData }) => {
   const [ isLoaded, setIsLoaded ] = useState(false);
 
   useEffect(() => {
+    if (!isLoading && !groups[ groupId ]) history.push('/not-found');
+  }, [ isLoading ])
+
+  useEffect(() => {
     dispatch(thunkLoadSingleGroup(groupId))
       .then((res) => {
         if (res.id) {
@@ -43,10 +47,6 @@ const SingleGroupPage = ({ groupData }) => {
         };
       });
   }, [ dispatch ]);
-
-  useEffect(() => {
-    if (!isLoading && !groups[ groupId ]) history.push('/not-found');
-  }, [ isLoading ])
 
   useEffect(() => {
     if (memberships[ groupId ]) setMembershipState(membershipButtonDisplay(memberships[ groupId ].status));

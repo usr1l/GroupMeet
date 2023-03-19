@@ -16,7 +16,6 @@ const EditGroupPage = () => {
 
   const { user } = useSelector(state => state.session);
   const { group, groups, isLoading } = useSelector(state => state.groups);
-  if (!isLoading && !groups[ groupId ]) history.push('/not-found');
 
   // const userId = user ? user.id : null;
   // const organizerId = groups[ groupId ] ? groups[ groupId ].organizerId : null;
@@ -39,22 +38,26 @@ const EditGroupPage = () => {
 
   // if (!isLoading && !groups[ groupId ]) return history.push('/not-found');
   // if (!isLoading && groups[ groupId ].organizerId !== user.id) return history.push('/not-authorized');
-  useEffect(() => {
-    dispatch(thunkLoadSingleGroup(groupId));
-  }, [ dispatch ]);
 
   useEffect(() => {
-    if (group.id) {
-      setName(group.name);
-      setAbout(group.about);
-      setType(group.type);
-      setIsPrivate(group.private === true ? 'true' : 'false');
-      setCity(group.city);
-      setState(group.state);
-      setPreviewImage(previewImage || '');
-      setIsLoaded(true);
-    }
-  }, [ group ]);
+    if (!isLoading && !groups[ groupId ]) history.push('/not-found');
+  }, [ isLoading ]);
+
+  useEffect(() => {
+    dispatch(thunkLoadSingleGroup(groupId))
+      .then((res) => {
+        if (res.id) {
+          setName(res.name);
+          setAbout(res.about);
+          setType(res.type);
+          setIsPrivate(res.private === true ? 'true' : 'false');
+          setCity(res.city);
+          setState(res.state);
+          setPreviewImage(res.previewImage || '');
+          setIsLoaded(true);
+        };
+      });
+  }, [ dispatch ]);
 
   useEffect(() => {
     if (!name || !about || !type || !city || !state) setDisableSubmit(true);

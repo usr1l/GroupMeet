@@ -30,6 +30,10 @@ const SingleEventPage = ({ eventData }) => {
   const { name, startDate, endDate, groupId, description, previewImage, Group } = event;
 
   useEffect(() => {
+    if (!isLoading && !events[ eventId ]) history.push('/not-found');
+  }, [ isLoading ])
+
+  useEffect(() => {
     dispatch(thunkLoadSingleEvent(eventId))
       .then(({ Event }) => {
         if (Event && Event.id) {
@@ -38,10 +42,6 @@ const SingleEventPage = ({ eventData }) => {
         };
       });
   }, [ dispatch ]);
-
-  useEffect(() => {
-    if (!isLoading && !events[ eventId ]) history.push('/not-found');
-  }, [ isLoading ])
 
   useEffect(() => {
     if (memberships[ groupId ]) setOrganizerBool(memberships[ groupId ].status === 'co-host');
