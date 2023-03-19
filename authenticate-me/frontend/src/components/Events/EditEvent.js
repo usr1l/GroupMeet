@@ -43,8 +43,7 @@ const EditEventPage = () => {
   useEffect(() => {
     if (eventGroupId && !userIsLoading) {
       if (!memberships[ eventGroupId ]) history.push('/not-authorized');
-      else if (memberships[ eventGroupId ] && memberships[ eventGroupId ].status !== 'co-host') history.push('/not-authorized');
-      else setIsLoaded(true);
+      else if (memberships[ eventGroupId ]) memberships[ eventGroupId ].status !== 'co-host' ? history.push('/not-authorized') : setIsLoaded(true);
     }
   }, [ memberships, eventGroupId ]);
 

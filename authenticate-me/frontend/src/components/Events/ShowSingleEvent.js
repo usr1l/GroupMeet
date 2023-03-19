@@ -13,20 +13,22 @@ import './SingleEventPage.css';
 import { thunkLoadSingleGroup } from "../../store/groups";
 
 const SingleEventPage = ({ eventData }) => {
+  const history = useHistory();
   const { eventId } = useParams();
   if (isNaN(parseInt(eventId))) return (<NotFoundPage />);
 
   const { user, memberships } = useSelector(state => state.session);
   if (!user) return (<Redirect to='/events' />);
 
-  const history = useHistory();
-  const dispatch = useDispatch();
 
   const { events, isLoading, event } = useSelector(state => state.events);
   const { group } = useSelector(state => state.groups);
 
   const [ organizerBool, setOrganizerBool ] = useState(false);
   const [ isLoaded, setIsLoaded ] = useState(false);
+
+  const dispatch = useDispatch();
+
   const { name, startDate, endDate, groupId, description, previewImage, Group } = event;
 
   useEffect(() => {
