@@ -100,7 +100,6 @@ const CreateEventForm = (event) => {
   return (
     <>
       {isLoaded && (
-
         <>
           <div id='create-event-page-container'>
             <div id='create-event-page'>
