@@ -15,14 +15,8 @@ const EditEventPage = () => {
   if (isNaN(parseInt(eventId))) return (<NotFoundPage />);
   const history = useHistory();
 
-  const { memberships } = useSelector(state => state.session);
-  const { events, event, isLoading } = useSelector(state => state.events);
-
-  // const groupId = events[ eventId ] ? events[ eventId ].groupId : null;
-  // const memStatus = memberships[ groupId ] ? memberships[ groupId ].status : null;
-  // if (memStatus !== 'co-host') history.push('/notAuthorized');
-
-  const dispatch = useDispatch();
+  const { memberships, isLoading: userIsLoading } = useSelector(state => state.session);
+  const { events, isLoading: eventIsLoading } = useSelector(state => state.events);
 
   const [ name, setName ] = useState('');
   const [ description, setDescription ] = useState('');
@@ -36,13 +30,22 @@ const EditEventPage = () => {
   const [ errors, setErrors ] = useState([]);
   const [ previewImage, setPreviewImage ] = useState('');
   const [ disableSubmit, setDisableSubmit ] = useState(true);
+  const [ eventGroupId, setEventGroupId ] = useState('');
   const [ isLoaded, setIsLoaded ] = useState(false);
-  // if (!isLoading && memberships[ events[ eventId ].groupId ].status) return history.push('/not-authorized');
-  // if (!events[ eventId ]) return history.push('/not-found');
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!isLoading && !events[ eventId ]) history.push('/not-found');
-  }, [ isLoading ]);
+    if (!eventIsLoading && !events[ eventId ]) history.push('/not-found');
+    else if (!eventIsLoading && events[ eventId ]) setEventGroupId(events[ eventId ].groupId)
+  }, [ eventIsLoading ]);
+
+  useEffect(() => {
+    if (eventGroupId && !userIsLoading) {
+      if (!memberships[ eventGroupId ]) history.push('/not-authorized');
+      if (memberships[ eventGroupId ] && memberships[ eventGroupId ].status !== 'co-host') history.push('/not-authorized');
+    }
+  }, [ memberships, eventGroupId ]);
 
   useEffect(() => {
     dispatch(thunkLoadSingleEvent(eventId))
@@ -64,8 +67,8 @@ const EditEventPage = () => {
   }, [ dispatch ]);
 
   useEffect(() => {
-    if (!name || !description || !type || (!price && price !== 0)) return setDisableSubmit(true);
-    else return setDisableSubmit(false);
+    if (!name || !description || !type || (!price && price !== 0)) setDisableSubmit(true);
+    else setDisableSubmit(false);
   }, [ name, description, type, price ]);
 
   const validate = () => {
