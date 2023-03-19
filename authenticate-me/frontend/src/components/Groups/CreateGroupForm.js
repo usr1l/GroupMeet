@@ -28,8 +28,8 @@ const CreateGroupForm = () => {
   const [ disableSubmit, setDisableSubmit ] = useState(true);
 
   useEffect(() => {
-    if (!name || !about || !type || !city || !state) return setDisableSubmit(true);
-    else return setDisableSubmit(false);
+    if (!name || !about || !type || !city || !state) setDisableSubmit(true);
+    else setDisableSubmit(false);
   }, [ name, about, type, city, state ]);
 
   const validate = () => {
