@@ -35,29 +35,28 @@ const SingleGroupPage = ({ groupData }) => {
 
   useEffect(() => {
     dispatch(thunkLoadSingleGroup(groupId))
-
-    return () => {
-      if (!groups[ groupId ]) history.push(`/not-found`);
-    }
-  }, [ dispatch, isLoading, groupId, groups ]);
+      .then((res) => {
+        if (res.id) {
+          dispatch(thunkLoadGroupEvents(groupId));
+          dispatch(thunkLoadGroupMembers(groupId));
+          setIsLoaded(true);
+        };
+      });
+  }, [ dispatch ]);
 
   useEffect(() => {
-    if (group.id)
-      dispatch(thunkLoadGroupEvents(groupId))
-        .then(() => dispatch(thunkLoadGroupMembers(groupId)))
-        .then(() => setIsLoaded(true));
-
-  }, [ group ])
+    if (!isLoading && !groups[ groupId ]) history.push('/not-found');
+  }, [ isLoading ])
 
   useEffect(() => {
     if (memberships[ groupId ]) setMembershipState(membershipButtonDisplay(memberships[ groupId ].status));
     else setMembershipState('Join Group');
-  }, [ dispatch, memberships, groupId ]);
+  }, [ memberships, groupId ]);
 
   useEffect(() => {
     if (membershipState === 'Co-Host') setOrganizerBool(true);
     else setOrganizerBool(false);
-  }, [ dispatch, membershipState ]);
+  }, [ membershipState ]);
 
   const {
     name,

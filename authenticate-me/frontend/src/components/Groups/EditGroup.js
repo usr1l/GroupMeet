@@ -16,7 +16,7 @@ const EditGroupPage = () => {
 
   const { user } = useSelector(state => state.session);
   const { group, groups, isLoading } = useSelector(state => state.groups);
-  // if (!isLoading && !groups[ groupId ]) history.push('/not-found');
+  if (!isLoading && !groups[ groupId ]) history.push('/not-found');
 
   // const userId = user ? user.id : null;
   // const organizerId = groups[ groupId ] ? groups[ groupId ].organizerId : null;
@@ -37,15 +37,11 @@ const EditGroupPage = () => {
   const [ disableSubmit, setDisableSubmit ] = useState(true);
   const [ isLoaded, setIsLoaded ] = useState(false);
 
+  // if (!isLoading && !groups[ groupId ]) return history.push('/not-found');
+  // if (!isLoading && groups[ groupId ].organizerId !== user.id) return history.push('/not-authorized');
   useEffect(() => {
-    const res = dispatch(thunkLoadSingleGroup(groupId));
-
-    return (res) => {
-      // if (!isLoading && !groups[ groupId ]) return history.push('/not-found');
-      // if (!isLoading && groups[ groupId ].organizerId !== user.id) return history.push('/not-authorized');
-      console.log(res)
-    };
-  }, [ dispatch, isLoading, groups, groupId, user ]);
+    dispatch(thunkLoadSingleGroup(groupId));
+  }, [ dispatch ]);
 
   useEffect(() => {
     if (group.id) {
