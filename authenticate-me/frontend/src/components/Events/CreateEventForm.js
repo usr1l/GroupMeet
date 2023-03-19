@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { thunkCreateEvent, thunkLoadEvents } from "../../store/events";
 import { useHistory, useParams, Link } from "react-router-dom";
 import getCurrTime from "../HelperFns/GetCurrTime";
@@ -14,6 +14,10 @@ const CreateEventForm = (event) => {
   const dispatch = useDispatch();
 
   const { groupId } = useParams();
+  // const { memberships, isLoading } = useSelector(state => state.session);
+  // if (!isLoading && memberships[groupId])
+  // const memStatus = memberships[groupId] ? memberships[groupId].status : null;
+  // if (memStatus)
 
   const { currTime, currDate } = getCurrTime();
 

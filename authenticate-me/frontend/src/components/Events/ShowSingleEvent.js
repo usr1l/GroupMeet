@@ -23,17 +23,25 @@ const SingleEventPage = ({ eventData }) => {
   const dispatch = useDispatch();
 
   const { events, isLoading, event } = useSelector(state => state.events);
-  if (!isLoading && !events[ eventId ]) history.push('/not-found');
-
   const { group } = useSelector(state => state.groups);
 
   const [ organizerBool, setOrganizerBool ] = useState(false);
+  const [ isLoaded, setIsLoaded ] = useState(false);
   const { name, startDate, endDate, groupId, description, previewImage, Group } = event;
 
   useEffect(() => {
+    if (!isLoading && !events[ eventId ]) history.push('/not-found');
+  }, [ isLoading ])
+
+  useEffect(() => {
     dispatch(thunkLoadSingleEvent(eventId))
-      .then(({ Event }) => Event ? dispatch(thunkLoadSingleGroup(Event.groupId)) : null);
-  }, [ dispatch, eventId ]);
+      .then(({ Event }) => {
+        if (Event && Event.id) {
+          dispatch(thunkLoadSingleGroup(Event.groupId))
+          setIsLoaded(true);
+        };
+      });
+  }, [ dispatch ]);
 
   useEffect(() => {
     if (memberships[ groupId ]) setOrganizerBool(memberships[ groupId ].status === 'co-host');
@@ -60,76 +68,80 @@ const SingleEventPage = ({ eventData }) => {
 
   return (
     <>
-      <div id='event-header-background'>
-        <div className="event-page-header">
-          <h2>{name}</h2>
-          <IconDescriptionCard
-            iconClass="fas fa-user-circle"
-            heading='Hosted By'
-            subHeading={organizerName}
-          />
-        </div>
-      </div>
-      <div className="event-page-container">
-        <div className="event-page-content">
-          <div className="event-page-details">
-            <section className="event-page-image-container">
-              <img src={previewImage} alt='preview' className="event-page-image" />
-            </section>
-            <div className="event-page-info">
-              <h3>Details</h3>
-              <div className="event-page-info-item">{description}</div>
-            </div>
-          </div>
-          <div className="event-page-sticky-div">
-            <section className="event-page-icon-card-section">
+      {isLoaded && (
+        <>
+          <div id='event-header-background'>
+            <div className="event-page-header">
+              <h2>{name}</h2>
               <IconDescriptionCard
                 iconClass="fas fa-user-circle"
-                heading={groupName}
-                subHeading={groupType}
+                heading='Hosted By'
+                subHeading={organizerName}
               />
-              <IconDescriptionCard
-                iconClass="fa-regular fa-clock"
-                heading={`${startDateSlice}`}
-                subHeading={`${endDateSlice}`}
-              />
-            </section>
-          </div>
-        </div>
-      </div>
-      <div></div>
-      <div className="event-page-footer">
-        <div className="event-page-footer-buffer">
-          <div className="event-page-footer-container">
-            <div className="event-page-footertext">
-              {`${startDateSlice}`}
-              <br></br>
-              {name}
             </div>
-            <div>
-              {organizerBool && (
-                <section className="event-page-footer-buttons">
-                  <NavLink to={`/events/${eventId}/edit`} id='event-edit-navlink'>
-                    <Button buttonStyle='btn--big' buttonSize='btn--large' onClick={(e) => e.preventDefault} >Edit Details</Button>
-                  </NavLink>
-                  <Button buttonStyle='btn--delete' buttonSize='btn--large' onClick={handleDelete}>Delete Event</Button>
+          </div>
+          <div className="event-page-container">
+            <div className="event-page-content">
+              <div className="event-page-details">
+                <section className="event-page-image-container">
+                  <img src={previewImage} alt='preview' className="event-page-image" />
                 </section>
-              )}
+                <div className="event-page-info">
+                  <h3>Details</h3>
+                  <div className="event-page-info-item">{description}</div>
+                </div>
+              </div>
+              <div className="event-page-sticky-div">
+                <section className="event-page-icon-card-section">
+                  <IconDescriptionCard
+                    iconClass="fas fa-user-circle"
+                    heading={groupName}
+                    subHeading={groupType}
+                  />
+                  <IconDescriptionCard
+                    iconClass="fa-regular fa-clock"
+                    heading={`${startDateSlice}`}
+                    subHeading={`${endDateSlice}`}
+                  />
+                </section>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
-      <BottomNav pageType={'events'}>
-        <Link to={`/events`} className="page-return">
-          <h3>
-            <i className="fa-solid fa-angle-left" /> Back to More Events
-          </h3>
-        </Link>
-        <Link to={`/groups/${groupId}`} className='page-return'>
-          <h3>Visit This Group <i className="fa-solid fa-angle-right"></i>
-          </h3>
-        </Link>
-      </BottomNav>
+          <div></div>
+          <div className="event-page-footer">
+            <div className="event-page-footer-buffer">
+              <div className="event-page-footer-container">
+                <div className="event-page-footertext">
+                  {`${startDateSlice}`}
+                  <br></br>
+                  {name}
+                </div>
+                <div>
+                  {organizerBool && (
+                    <section className="event-page-footer-buttons">
+                      <NavLink to={`/events/${eventId}/edit`} id='event-edit-navlink'>
+                        <Button buttonStyle='btn--big' buttonSize='btn--large' onClick={(e) => e.preventDefault} >Edit Details</Button>
+                      </NavLink>
+                      <Button buttonStyle='btn--delete' buttonSize='btn--large' onClick={handleDelete}>Delete Event</Button>
+                    </section>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+          <BottomNav pageType={'events'}>
+            <Link to={`/events`} className="page-return">
+              <h3>
+                <i className="fa-solid fa-angle-left" /> Back to More Events
+              </h3>
+            </Link>
+            <Link to={`/groups/${groupId}`} className='page-return'>
+              <h3>Visit This Group <i className="fa-solid fa-angle-right"></i>
+              </h3>
+            </Link>
+          </BottomNav>
+        </>
+      )}
     </>
   )
 }

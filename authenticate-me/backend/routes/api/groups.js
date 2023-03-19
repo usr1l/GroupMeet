@@ -797,7 +797,7 @@ router.put('/:groupId', requireAuth, async (req, res, next) => {
 });
 
 // get details of a group by groupid
-router.get('/:groupId', async (req, res) => {
+router.get('/:groupId', async (req, res, next) => {
   const { groupId } = req.params;
 
   const group = await Group.scope('allDetails').findOne({

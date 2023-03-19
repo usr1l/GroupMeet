@@ -15,15 +15,8 @@ const EditEventPage = () => {
   if (isNaN(parseInt(eventId))) return (<NotFoundPage />);
   const history = useHistory();
 
-  const { memberships } = useSelector(state => state.session);
-  const { events, isLoading } = useSelector(state => state.events);
-  if (!isLoading && !events[ eventId ]) history.push('/not-found');
-
-  const groupId = events[ eventId ] ? events[ eventId ].groupId : null;
-  const memStatus = memberships[ groupId ] ? memberships[ groupId ].status : null;
-  if (memStatus !== 'co-host') history.push('/notAuthorized');
-
-  const dispatch = useDispatch();
+  const { memberships, isLoading: userIsLoading } = useSelector(state => state.session);
+  const { events, isLoading: eventIsLoading } = useSelector(state => state.events);
 
   const [ name, setName ] = useState('');
   const [ description, setDescription ] = useState('');
@@ -37,27 +30,45 @@ const EditEventPage = () => {
   const [ errors, setErrors ] = useState([]);
   const [ previewImage, setPreviewImage ] = useState('');
   const [ disableSubmit, setDisableSubmit ] = useState(true);
+  const [ eventGroupId, setEventGroupId ] = useState('');
+  const [ isLoaded, setIsLoaded ] = useState(false);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (!eventIsLoading && !events[ eventId ]) history.push('/not-found');
+    else if (!eventIsLoading && events[ eventId ]) setEventGroupId(events[ eventId ].groupId)
+  }, [ eventIsLoading ]);
+
+  useEffect(() => {
+    if (eventGroupId && !userIsLoading) {
+      if (!memberships[ eventGroupId ]) history.push('/not-authorized');
+      if (memberships[ eventGroupId ] && memberships[ eventGroupId ].status !== 'co-host') history.push('/not-authorized');
+    }
+  }, [ memberships, eventGroupId ]);
 
   useEffect(() => {
     dispatch(thunkLoadSingleEvent(eventId))
-      .then((data) => {
-        const { name, type, startDate, endDate, description, price, capacity, previewImage } = data.Event;
-        setName(name);
-        setDescription(description);
-        setType(type);
-        setStartDate(startDate.slice(0, 10));
-        setStartTime(startDate.slice(11));
-        setEndDate(endDate.slice(0, 10));
-        setEndTime(endDate.slice(11));
-        setPrice(price || 0);
-        setCapacity(capacity || '');
-        setPreviewImage(previewImage || '');
+      .then(({ Event }) => {
+        if (Event && Event.id) {
+          setName(Event.name);
+          setDescription(Event.description);
+          setType(Event.type);
+          setStartDate(Event.startDate.slice(0, 10));
+          setStartTime(Event.startDate.slice(11));
+          setEndDate(Event.endDate.slice(0, 10));
+          setEndTime(Event.endDate.slice(11));
+          setPrice(Event.price || 0);
+          setCapacity(Event.capacity || '');
+          setPreviewImage(Event.previewImage || '');
+          setIsLoaded(true);
+        };
       });
-  }, [ dispatch, eventId ]);
+  }, [ dispatch ]);
 
   useEffect(() => {
-    if (!name || !description || !type || (!price && price !== 0)) return setDisableSubmit(true);
-    else return setDisableSubmit(false);
+    if (!name || !description || !type || (!price && price !== 0)) setDisableSubmit(true);
+    else setDisableSubmit(false);
   }, [ name, description, type, price ]);
 
   const validate = () => {
@@ -111,120 +122,124 @@ const EditEventPage = () => {
 
   return (
     <>
-      <div id='create-event-page-container'>
-        <div id='create-event-page'>
-          <h2 className='edit-form' id="event-form__title">EDIT AN EVENT</h2>
-          <ul id='event-form__error-list'>
-            {errors.map((error) => (
-              <li key={error}>{error}</li>
-            ))}
-          </ul>
-          <form id="event-form" onSubmit={onSubmit}>
-            <InputDiv divStyle="event-form__block" labelStyle="event-form__label" labelFor='eventName' label='Name: '>
-              <input
-                id="eventName"
-                type="text"
-                onChange={(e) => setName(e.target.value)}
-                value={name}
-                placeholder='Name (min 5 characters)'
-              />
-            </InputDiv>
-            <InputDiv divStyle="event-form__block" labelStyle="event-form__label" labelFor='Type' label='Type: '>
-              <select
-                name="Type"
-                onChange={(e) => setType(e.target.value)}
-                value={type}
-              >
-                <option value="" disabled>
-                  select:
-                </option>
-                <option value='In person'>In person</option>
-                <option value='Online'>Online</option>
-              </select>
-            </InputDiv>
-            <InputDiv divStyle="event-form__block" labelStyle="event-form__label" labelFor='price' label='Price: '>
-              <input
-                type="number"
-                name="price"
-                value={price}
-                placeholder='0.00'
-                onChange={(e) => setPrice(e.target.value)}
-              />
-            </InputDiv>
-            <InputDiv divStyle="event-form__block" labelStyle="event-form__label" labelFor='capacity' label='Capacity: '>
-              <input
-                type="number"
-                name="capactiy"
-                value={capacity}
-                onChange={(e) => setCapacity(e.target.value)}
-                placeholder={'Max # of occupants (not required)'}
-              />
-            </InputDiv>
-            <InputDiv divStyle="date-time__block" labelStyle="event-form__label" labelFor='startDate-Time' label='Start Date: '>
-              <input
-                name='startDate-Time'
-                type='date'
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
-              />
-              <input
-                name="startDate-Time"
-                type='time'
-                step={1}
-                value={startTime}
-                onChange={(e) => setStartTime(e.target.value)}
-              />
-            </InputDiv>
-            <InputDiv divStyle="date-time__block" labelStyle="event-form__label" labelFor='endDate-Time' label='End Date: '>
-              <input
-                name="endDate-Time"
-                type='date'
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
-              />
-              <input
-                name="endDate-Time"
-                type='time'
-                step={1}
-                value={endTime}
-                onChange={(e) => setEndTime(e.target.value)}
-              />
-            </InputDiv>
-            <InputDiv divStyle="event-form__block" labelStyle="event-form__label" labelFor="description" label='Description: '>
-              <textarea
-                id="description"
-                name="description"
-                onChange={(e) => setDescription(e.target.value)}
-                value={description}
-                placeholder='What is your event about'
-              />
-            </InputDiv>
-            <InputDiv divStyle="event-form__block" labelStyle="event-form__label" labelFor="event-profile-img" label='Event Image: '>
-              <input
-                name="event-profile-img"
-                type='url'
-                value={previewImage}
-                onChange={(e) => setPreviewImage(e.target.value)}
-              />
-            </InputDiv>
-            <div id='create-event-button-div'>
-              <ImagePreview imgSrc={previewImage}></ImagePreview>
-              <Button type='submit' disableButton={disableSubmit} buttonStyle='btn--delete' buttonSize='btn--large'>Update</Button>
-            </div>
-          </form>
-        </div >
-      </div >
-      <BottomNav>
-        <Link to={`/events/${eventId}`} className="page-return">
-          <h3>
-            <i className="fa-solid fa-angle-left" /> Back to This Event
-          </h3>
-        </Link>
-        <Link to={`/events`} className='page-return'>
-          <h3>More Events <i className="fa-solid fa-angle-right"></i>
-          </h3>
-        </Link>
-      </BottomNav>
+      {isLoaded && (
+        <>
+          <div id='create-event-page-container'>
+            <div id='create-event-page'>
+              <h2 className='edit-form' id="event-form__title">EDIT AN EVENT</h2>
+              <ul id='event-form__error-list'>
+                {errors.map((error) => (
+                  <li key={error}>{error}</li>
+                ))}
+              </ul>
+              <form id="event-form" onSubmit={onSubmit}>
+                <InputDiv divStyle="event-form__block" labelStyle="event-form__label" labelFor='eventName' label='Name: '>
+                  <input
+                    id="eventName"
+                    type="text"
+                    onChange={(e) => setName(e.target.value)}
+                    value={name}
+                    placeholder='Name (min 5 characters)'
+                  />
+                </InputDiv>
+                <InputDiv divStyle="event-form__block" labelStyle="event-form__label" labelFor='Type' label='Type: '>
+                  <select
+                    name="Type"
+                    onChange={(e) => setType(e.target.value)}
+                    value={type}
+                  >
+                    <option value="" disabled>
+                      select:
+                    </option>
+                    <option value='In person'>In person</option>
+                    <option value='Online'>Online</option>
+                  </select>
+                </InputDiv>
+                <InputDiv divStyle="event-form__block" labelStyle="event-form__label" labelFor='price' label='Price: '>
+                  <input
+                    type="number"
+                    name="price"
+                    value={price}
+                    placeholder='0.00'
+                    onChange={(e) => setPrice(e.target.value)}
+                  />
+                </InputDiv>
+                <InputDiv divStyle="event-form__block" labelStyle="event-form__label" labelFor='capacity' label='Capacity: '>
+                  <input
+                    type="number"
+                    name="capactiy"
+                    value={capacity}
+                    onChange={(e) => setCapacity(e.target.value)}
+                    placeholder={'Max # of occupants (not required)'}
+                  />
+                </InputDiv>
+                <InputDiv divStyle="date-time__block" labelStyle="event-form__label" labelFor='startDate-Time' label='Start Date: '>
+                  <input
+                    name='startDate-Time'
+                    type='date'
+                    value={startDate}
+                    onChange={(e) => setStartDate(e.target.value)}
+                  />
+                  <input
+                    name="startDate-Time"
+                    type='time'
+                    step={1}
+                    value={startTime}
+                    onChange={(e) => setStartTime(e.target.value)}
+                  />
+                </InputDiv>
+                <InputDiv divStyle="date-time__block" labelStyle="event-form__label" labelFor='endDate-Time' label='End Date: '>
+                  <input
+                    name="endDate-Time"
+                    type='date'
+                    value={endDate}
+                    onChange={(e) => setEndDate(e.target.value)}
+                  />
+                  <input
+                    name="endDate-Time"
+                    type='time'
+                    step={1}
+                    value={endTime}
+                    onChange={(e) => setEndTime(e.target.value)}
+                  />
+                </InputDiv>
+                <InputDiv divStyle="event-form__block" labelStyle="event-form__label" labelFor="description" label='Description: '>
+                  <textarea
+                    id="description"
+                    name="description"
+                    onChange={(e) => setDescription(e.target.value)}
+                    value={description}
+                    placeholder='What is your event about'
+                  />
+                </InputDiv>
+                <InputDiv divStyle="event-form__block" labelStyle="event-form__label" labelFor="event-profile-img" label='Event Image: '>
+                  <input
+                    name="event-profile-img"
+                    type='url'
+                    value={previewImage}
+                    onChange={(e) => setPreviewImage(e.target.value)}
+                  />
+                </InputDiv>
+                <div id='create-event-button-div'>
+                  <ImagePreview imgSrc={previewImage}></ImagePreview>
+                  <Button type='submit' disableButton={disableSubmit} buttonStyle='btn--delete' buttonSize='btn--large'>Update</Button>
+                </div>
+              </form>
+            </div >
+          </div >
+          <BottomNav>
+            <Link to={`/events/${eventId}`} className="page-return">
+              <h3>
+                <i className="fa-solid fa-angle-left" /> Back to This Event
+              </h3>
+            </Link>
+            <Link to={`/events`} className='page-return'>
+              <h3>More Events <i className="fa-solid fa-angle-right"></i>
+              </h3>
+            </Link>
+          </BottomNav>
+        </>
+      )}
     </>
   )
 }

@@ -77,13 +77,13 @@ export const thunkLoadSingleEvent = (eventId) => async (dispatch) => {
   const response = await csrfFetch(`/api/events/${eventId}`)
     .catch(err => err);
 
+  const data = await response.json();
   if (response.ok) {
-    const data = await response.json();
     await dispatch(actionLoadSingleEvent(data));
     return data;
   };
 
-  return response;
+  return data;
 };
 
 export const thunkUpdateEvent = (eventInfo, eventId) => async (dispatch) => {

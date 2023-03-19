@@ -88,17 +88,16 @@ export const thunkCreateGroup = (groupInfo) => async (dispatch) => {
 };
 
 export const thunkLoadSingleGroup = (groupId) => async (dispatch) => {
-
   const response = await csrfFetch(`/api/groups/${groupId}`)
     .catch(err => err);
 
+  const data = await response.json();
   if (response.ok) {
-    const data = await response.json();
     dispatch(actionLoadSingleGroup(data));
     return data;
   };
 
-  return response;
+  return data;
 };
 
 
