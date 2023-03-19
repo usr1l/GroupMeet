@@ -14,12 +14,13 @@ const EditGroupPage = () => {
   if (isNaN(parseInt(groupId))) return (<NotFoundPage />);
   const history = useHistory();
 
-  const { user } = useSelector(state => state.session);
-  const { group, groups, isLoading } = useSelector(state => state.groups);
+  const { memberships, isLoading: userIsLoading } = useSelector(state => state.session);
+  const { groups, isLoading: groupIsLoading } = useSelector(state => state.groups);
 
   // const userId = user ? user.id : null;
   // const organizerId = groups[ groupId ] ? groups[ groupId ].organizerId : null;
   // if (!isLoading && organizerId !== userId) history.push(`/not-authorized`);
+  // if (!isLoading && groups[ groupId ].organizerId !== user.id) return history.push('/not-authorized');
 
   const states = [ "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY" ];
 
@@ -36,12 +37,17 @@ const EditGroupPage = () => {
   const [ disableSubmit, setDisableSubmit ] = useState(true);
   const [ isLoaded, setIsLoaded ] = useState(false);
 
-  // if (!isLoading && !groups[ groupId ]) return history.push('/not-found');
-  // if (!isLoading && groups[ groupId ].organizerId !== user.id) return history.push('/not-authorized');
+  useEffect(() => {
+    if (!userIsLoading && !memberships[ groupId ]) history.push('/not-authorized');
+  }, [ userIsLoading ]);
 
   useEffect(() => {
-    if (!isLoading && !groups[ groupId ]) history.push('/not-found');
-  }, [ isLoading ]);
+    if (memberships[ groupId ] && memberships[ groupId ].status !== 'co-host') history.push('/not-authorized');
+  }, [ memberships ]);
+
+  useEffect(() => {
+    if (!groupIsLoading && !groups[ groupId ]) history.push('/not-found');
+  }, [ groupIsLoading ]);
 
   useEffect(() => {
     dispatch(thunkLoadSingleGroup(groupId))
