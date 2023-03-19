@@ -80,7 +80,6 @@ export const thunkCreateGroup = (groupInfo) => async (dispatch) => {
 
   if (response.ok) {
     dispatch(actionCreateGroup(data));
-    dispatch(thunkLoadGroups());
     dispatch(thunkLoadUserMemberships());
   };
 
@@ -281,7 +280,7 @@ const groupReducer = (state = initialState, action) => {
       return { ...state, group: { ...state.group, Members: members } };
     case CREATE_GROUP:
       const newGroupId = action.payload.id;
-      return { ...state, groups: { ...state.groups, [ newGroupId ]: { ...action.payload } } };
+      return { ...state, groups: { ...state.groups, [ newGroupId ]: { ...action.payload, numMembers: 1 } } };
     case DELETE_GROUP:
       const id = action.payload;
       updatedState = objDeepCopyFn(state);
