@@ -11,6 +11,8 @@ import BottomNav from "../BottomNav";
 import convertDate from '../HelperFns/ConvertDate';
 import './SingleEventPage.css';
 import { thunkLoadSingleGroup } from "../../store/groups";
+import ConfirmDeleteModal from "../ConfirmDeleteModal";
+import OpenModalMenuItem from "../Navigation/OpenModalMenuItem";
 
 const SingleEventPage = ({ eventData }) => {
   const history = useHistory();
@@ -121,7 +123,12 @@ const SingleEventPage = ({ eventData }) => {
                       <NavLink to={`/events/${eventId}/edit`} id='event-edit-navlink'>
                         <Button buttonStyle='btn--big' buttonSize='btn--large' onClick={(e) => e.preventDefault} >Edit Details</Button>
                       </NavLink>
-                      <Button buttonStyle='btn--delete' buttonSize='btn--large' onClick={handleDelete}>Delete Event</Button>
+                      <OpenModalMenuItem
+                        itemText='Delete Event'
+                        buttonStyle='btn--delete'
+                        buttonSize='btn--large'
+                        modalComponent={<ConfirmDeleteModal directTo={'/events'} eventId={eventId} deleteFn={thunkDeleteEvent} />}
+                      />
                     </section>
                   )}
                 </div>

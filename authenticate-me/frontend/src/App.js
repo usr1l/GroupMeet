@@ -62,9 +62,9 @@ function App() {
             {sessionUser && (
               <Route path='/groups/:groupId/members' component={SingleGroupPage} />
             )}
-            {sessionUser && (
+            {/* {sessionUser && (
               <Route path='/groups/:groupId/images' component={SingleGroupPage} />
-            )}
+            )} */}
             <Route path='/groups/:groupId/events' component={SingleGroupPage} />
             {sessionUser && (
               <Route path='/events/:eventId/edit' component={EditEventPage} />

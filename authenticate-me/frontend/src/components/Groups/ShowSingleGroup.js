@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams, Link, NavLink, Switch, Route, Redirect } from "react-router-dom";
-import { thunkDeleteGroup, thunkLoadSingleGroup, thunkLoadGroupEvents, thunkLoadGroupMembers } from "../../store/groups";
+import { thunkLoadSingleGroup, thunkLoadGroupEvents, thunkLoadGroupMembers, thunkDeleteGroup } from "../../store/groups";
 import { useHistory } from "react-router-dom";
-import errorPageHandler from "../ErrorPage";
 import ImagePreview from "../ImagePreview";
 import NotFoundPage from "../NotFoundPage";
 import IconLabel from "../IconLabel";
@@ -16,7 +15,7 @@ import GroupImagesPage from "./GroupImagesPage";
 import { thunkSessionDeleteMembership, thunkSessionRequestMembership } from "../../store/session";
 import "./SingleGroupPage.css";
 import OpenModalMenuItem from "../Navigation/OpenModalMenuItem";
-import SignupFormModal from "../SignupFormModal";
+import ConfirmDeleteModal from "../ConfirmDeleteModal";
 
 const SingleGroupPage = ({ groupData }) => {
   const { groupId } = useParams();
@@ -126,21 +125,6 @@ const SingleGroupPage = ({ groupData }) => {
     return;
   };
 
-  const handleDelete = async (e) => {
-    e.preventDefault();
-    const data = await dispatch(thunkDeleteGroup({ groupId }));
-
-    if (data.ok === true) {
-      history.push(`/groups`);
-    };
-
-    if (data.ok === false) {
-      errorPageHandler(data);
-    };
-
-    return;
-  };
-
   return (
     <>
       {isLoaded && (
@@ -183,11 +167,11 @@ const SingleGroupPage = ({ groupData }) => {
                       Members
                     </NavLink>
                   )}
-                  {user && (
+                  {/* {user && (
                     <NavLink to={`/groups/${groupId}/images`} className="single-group-page-navbar-item" activeClassName='group-navbar-navlink-active'>
                       Photos
                     </NavLink>
-                  )}
+                  )} */}
                 </div>
               </div>
               <div className="single-group-page-navbar-functions">
@@ -198,12 +182,10 @@ const SingleGroupPage = ({ groupData }) => {
                     </Link>
                     <OpenModalMenuItem
                       itemText='Delete Group'
-
                       buttonStyle='btn--delete'
                       buttonSize='btn--large'
-                      modalComponent={<SignupFormModal />}
+                      modalComponent={<ConfirmDeleteModal directTo={'/groups'} groupId={groupId} deleteFn={thunkDeleteGroup} />}
                     />
-                    {/* <Button buttonStyle='btn--delete' buttonSize='btn--large' onClick={handleDelete}>Delete Group</Button> */}
                   </>
                 )}
               </div>
