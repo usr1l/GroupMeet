@@ -49,7 +49,9 @@ const MembershipsPage = ({ members, organizerBool, groupId }) => {
   return (
     <div id="membership-page-background">
       <h2>All Members
-        <Button onClick={toggleEditMode} buttonStyle='btn--remove' buttonSize={'btn--medium'}>{editText}</Button>
+        {organizerBool && (
+          <Button onClick={toggleEditMode} buttonStyle='btn--remove' buttonSize={'btn--medium'}>{editText}</Button>
+        )}
       </h2>
       <div id="membership-page-wrapper">
         <div id="membership-page-container">
