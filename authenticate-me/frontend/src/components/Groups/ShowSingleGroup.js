@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams, Link, NavLink, Switch, Route, Redirect } from "react-router-dom";
-import { thunkDeleteGroup, thunkLoadSingleGroup, thunkLoadGroupEvents, thunkLoadGroupMembers } from "../../store/groups";
+import { thunkLoadSingleGroup, thunkLoadGroupEvents, thunkLoadGroupMembers, thunkDeleteGroup } from "../../store/groups";
 import { useHistory } from "react-router-dom";
-import errorPageHandler from "../ErrorPage";
 import ImagePreview from "../ImagePreview";
 import NotFoundPage from "../NotFoundPage";
 import IconLabel from "../IconLabel";
@@ -15,23 +14,24 @@ import BottomNav from "../BottomNav";
 import GroupImagesPage from "./GroupImagesPage";
 import { thunkSessionDeleteMembership, thunkSessionRequestMembership } from "../../store/session";
 import "./SingleGroupPage.css";
+import OpenModalMenuItem from "../Navigation/OpenModalMenuItem";
+import ConfirmDeleteModal from "../ConfirmDeleteModal";
 
 const SingleGroupPage = ({ groupData }) => {
   const { groupId } = useParams();
   if (isNaN(parseInt(groupId))) return (<NotFoundPage />);
 
-  const { user } = useSelector(state => state.session);
-  if (!user) return (<Redirect to='/groups' />);
-
-  const dispatch = useDispatch();
   const history = useHistory();
 
+  const { user } = useSelector(state => state.session);
   const { groups, group, isLoading } = useSelector(state => state.groups);
   const { memberships } = useSelector(state => state.session);
 
   const [ membershipState, setMembershipState ] = useState('...');
   const [ organizerBool, setOrganizerBool ] = useState(false);
   const [ isLoaded, setIsLoaded ] = useState(false);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (!isLoading && !groups[ groupId ]) history.push('/not-found');
@@ -125,21 +125,6 @@ const SingleGroupPage = ({ groupData }) => {
     return;
   };
 
-  const handleDelete = async (e) => {
-    e.preventDefault();
-    const data = await dispatch(thunkDeleteGroup({ groupId }));
-
-    if (data.ok === true) {
-      history.push(`/groups`);
-    };
-
-    if (data.ok === false) {
-      errorPageHandler(data);
-    };
-
-    return;
-  };
-
   return (
     <>
       {isLoaded && (
@@ -160,7 +145,9 @@ const SingleGroupPage = ({ groupData }) => {
                 <div id='group-page-description-card-bottom'>
                   {/* <i id='group-index-card-component-bottom-share' className="fa-regular fa-share-from-square"></i>
               <div className='group-index-card-item'>{window.location.href}</div> */}
-                  <Button buttonStyle='btn--delete' buttonSize='btn--large' onClick={handleMemberClick}>{membershipState}</Button>
+                  {user && (
+                    <Button buttonStyle='btn--delete' buttonSize='btn--large' onClick={handleMemberClick}>{membershipState}</Button>
+                  )}
                 </div>
               </div>
             </div>
@@ -175,12 +162,16 @@ const SingleGroupPage = ({ groupData }) => {
                   <NavLink to={`/groups/${groupId}/events`} className="single-group-page-navbar-item" activeClassName='group-navbar-navlink-active'>
                     Events
                   </NavLink>
-                  <NavLink to={`/groups/${groupId}/members`} className="single-group-page-navbar-item" activeClassName='group-navbar-navlink-active'>
-                    Members
-                  </NavLink>
-                  <NavLink to={`/groups/${groupId}/images`} className="single-group-page-navbar-item" activeClassName='group-navbar-navlink-active'>
-                    Photos
-                  </NavLink>
+                  {user && (
+                    <NavLink to={`/groups/${groupId}/members`} className="single-group-page-navbar-item" activeClassName='group-navbar-navlink-active'>
+                      Members
+                    </NavLink>
+                  )}
+                  {/* {user && (
+                    <NavLink to={`/groups/${groupId}/images`} className="single-group-page-navbar-item" activeClassName='group-navbar-navlink-active'>
+                      Photos
+                    </NavLink>
+                  )} */}
                 </div>
               </div>
               <div className="single-group-page-navbar-functions">
@@ -189,7 +180,12 @@ const SingleGroupPage = ({ groupData }) => {
                     <Link to={`/groups/${groupId}/edit`}>
                       <Button buttonStyle='btn--big' buttonSize='btn--large' onClick={(e) => e.preventDefault}>Edit Details</Button>
                     </Link>
-                    <Button buttonStyle='btn--delete' buttonSize='btn--large' onClick={handleDelete}>Delete Group</Button>
+                    <OpenModalMenuItem
+                      itemText='Delete Group'
+                      buttonStyle='btn--delete'
+                      buttonSize='btn--large'
+                      modalComponent={<ConfirmDeleteModal directTo={'/groups'} groupId={groupId} deleteFn={thunkDeleteGroup} />}
+                    />
                   </>
                 )}
               </div>
@@ -206,12 +202,16 @@ const SingleGroupPage = ({ groupData }) => {
                     <EventsList events={events} />
                   </div>
                 </Route>
-                <Route path={`/groups/${groupId}/members`}>
-                  <MembershipsPage members={members} organizerBool={organizerBool} groupId={groupId} />
-                </Route>
-                <Route path={`/groups/${groupId}/images`}>
-                  <GroupImagesPage images={images} />
-                </Route>
+                {user && (
+                  <Route path={`/groups/${groupId}/members`}>
+                    <MembershipsPage members={members} organizerBool={organizerBool} groupId={groupId} />
+                  </Route>
+                )}
+                {user && (
+                  <Route path={`/groups/${groupId}/images`}>
+                    <GroupImagesPage images={images} />
+                  </Route>
+                )}
                 <Route path={`/groups/${groupId}`}>
                   <GroupAboutPage about={about} hostName={hostName} status={membershipState} />
                 </Route>

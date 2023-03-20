@@ -54,7 +54,7 @@ export const thunkLoadGroupMembers = (groupId) => async (dispatch) => {
 };
 
 
-export const thunkDeleteGroup = ({ groupId }) => async (dispatch) => {
+export const thunkDeleteGroup = (groupId) => async (dispatch) => {
   const response = await csrfFetch(`/api/groups/${groupId}`, {
     method: 'DELETE'
   })

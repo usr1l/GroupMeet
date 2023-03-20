@@ -12,6 +12,7 @@ const AllGroupsPage = () => {
   return (
     <div className="groups-index-page">
       <FeaturesBar />
+      <h2 className='groups-events-header'>Groups in GroupMeet</h2>
       <GroupsList groups={groups} />
     </div>
   );
