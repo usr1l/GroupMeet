@@ -1,9 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import ImagePreview from "../ImagePreview";
-import { useSelector } from "react-redux";
-// import { useDispatch } from "react-redux";
-// import { thunkLoadSingleGroup, thunkLoadGroupMembers, thunkLoadGroupEvents } from "../../store/groups";
 import './GroupsPage.css';
 
 

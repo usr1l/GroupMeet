@@ -2,9 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 import ImagePreview from "../ImagePreview";
 import convertDate from "../HelperFns/ConvertDate";
-import { useSelector } from "react-redux";
-// import { useDispatch } from "react-redux";
-// import { thunkLoadSingleEvent } from "../../store/events";
 import './EventsPage.css';
 
 
