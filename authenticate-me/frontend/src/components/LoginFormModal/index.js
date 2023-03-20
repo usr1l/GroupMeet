@@ -40,6 +40,7 @@ function LoginFormModal() {
     setErrors([]);
     return dispatch(sessionActions.thunkLogin({ credential, password }))
       .then(closeModal)
+      .then(() => history.push('/'))
       .catch(
         async (res) => {
           const data = await res.json();
