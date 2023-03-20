@@ -74,6 +74,7 @@ function SignupFormModal() {
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           required
+          placeholder="(4 characters min.)"
         />
         <label className="sign-up__label">
           First Name
@@ -104,6 +105,7 @@ function SignupFormModal() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
+          placeholder="(6 characters min.)"
         />
         <label className="sign-up__label">
           Confirm Password

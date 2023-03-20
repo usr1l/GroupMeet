@@ -17,10 +17,7 @@ const SingleEventPage = ({ eventData }) => {
   const { eventId } = useParams();
   if (isNaN(parseInt(eventId))) return (<NotFoundPage />);
 
-  const { user, memberships } = useSelector(state => state.session);
-  if (!user) return (<Redirect to='/events' />);
-
-
+  const { memberships } = useSelector(state => state.session);
   const { events, isLoading, event } = useSelector(state => state.events);
   const { group } = useSelector(state => state.groups);
 
@@ -48,7 +45,7 @@ const SingleEventPage = ({ eventData }) => {
   useEffect(() => {
     if (memberships[ groupId ]) setOrganizerBool(memberships[ groupId ].status === 'co-host');
     else setOrganizerBool(false);
-  }, [ memberships, groupId, user ]);
+  }, [ memberships, groupId ]);
 
   const groupType = Group ? (Group.private === true ? 'Public group' : 'Private group') : null;
   const groupName = Group ? Group.name : null;

@@ -89,5 +89,11 @@ ul.group-index-card-component {
   font-size: 14px;
   font-weight: 400;
   margin: 0;
+}
 
+.groups-events-header {
+  font-size: 26pt;
+  font-weight: 400;
+  width: 800px;
+  margin: 40px 0;
 }

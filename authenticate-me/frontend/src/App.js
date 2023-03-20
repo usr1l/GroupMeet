@@ -65,9 +65,7 @@ function App() {
             {sessionUser && (
               <Route path='/groups/:groupId/images' component={SingleGroupPage} />
             )}
-            {sessionUser && (
-              <Route path='/groups/:groupId/events' component={SingleGroupPage} />
-            )}
+            <Route path='/groups/:groupId/events' component={SingleGroupPage} />
             {sessionUser && (
               <Route path='/events/:eventId/edit' component={EditEventPage} />
             )}
@@ -85,7 +83,6 @@ function App() {
           </Switch>
         </>
       )}
-      {/* <BottomNav ></BottomNav> */}
     </>
   );
 }

@@ -16,6 +16,7 @@ const MembershipsPage = ({ members, organizerBool, groupId }) => {
     e.preventDefault();
     setEditState(!editState);
     setEditText(editText === 'Edit' ? 'Cancel' : 'Edit');
+    return;
   };
 
   const handleAccept = (e) => {

@@ -9,23 +9,9 @@ import './GroupsPage.css';
 
 function GroupIndexCard({ group }) {
   const { id, name, about, state, type, numMembers, previewImage, city } = group;
-  const { user } = useSelector(state => state.session);
-  // const dispatch = useDispatch();
-
-  const loginAlert = (e) => {
-    if (!user) {
-      e.preventDefault();
-      return alert('Please login to see more.');
-    };
-
-    // await dispatch(thunkLoadSingleGroup(id));
-    // await dispatch(thunkLoadGroupEvents(id));
-    // await dispatch(thunkLoadGroupMembers(id));
-    return;
-  };
 
   return (
-    <Link to={`/groups/${id}`} onClick={loginAlert}>
+    <Link to={`/groups/${id}`} >
       <div className='group-index-cards-click'>
         <ImagePreview imgSrc={previewImage} imgWrapperStyle='group-index-card-image-container' imgClassName='group-index-card-image' />
         <div key={`${name}-${id}`} className='group-index-card'>

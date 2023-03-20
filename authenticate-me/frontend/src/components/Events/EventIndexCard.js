@@ -11,24 +11,11 @@ import './EventsPage.css';
 function EventIndexCard({ event }) {
   const { id, name, type, previewImage, startDate, numAttending, Group } = event;
   const newDate = startDate ? convertDate(startDate) : null;
-  const { user } = useSelector(state => state.session);
   const state = Group ? Group.state : null;
   const city = Group ? Group.city : null;
 
-  // const dispatch = useDispatch();
-
-  const loginAlert = (e) => {
-    if (!user) {
-      e.preventDefault();
-      return alert('Please login to see more.');
-    };
-
-    // await dispatch(thunkLoadSingleEvent(id));
-    return;
-  };
-
   return (
-    <Link to={`/events/${id}`} onClick={loginAlert}>
+    <Link to={`/events/${id}`}>
       <div className='event-index-cards-click'>
         <ImagePreview imgSrc={previewImage} imgWrapperStyle='event-index-card-image-container' imgClassName='event-index-card-image' />
         <div className='event-index-card'>
