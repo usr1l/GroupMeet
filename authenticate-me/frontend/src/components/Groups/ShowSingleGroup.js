@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useParams, Link, NavLink, Switch, Route, Redirect } from "react-router-dom";
+import { useParams, Link, NavLink, Switch, Route } from "react-router-dom";
 import { thunkLoadSingleGroup, thunkLoadGroupEvents, thunkLoadGroupMembers, thunkDeleteGroup } from "../../store/groups";
 import { useHistory } from "react-router-dom";
 import ImagePreview from "../ImagePreview";

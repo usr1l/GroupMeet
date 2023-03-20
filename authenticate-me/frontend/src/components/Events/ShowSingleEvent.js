@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react"
-import { useParams, NavLink, Link, Redirect } from "react-router-dom";
+import { useParams, NavLink, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { thunkDeleteEvent, thunkLoadSingleEvent } from "../../store/events";
 import { useHistory } from "react-router-dom";
-import errorPageHandler from "../ErrorPage";
 import IconDescriptionCard from "../IconDescriptionCard";
 import Button from "../Button";
 import NotFoundPage from "../NotFoundPage";
@@ -54,18 +53,6 @@ const SingleEventPage = ({ eventData }) => {
   const startDateSlice = startDate ? convertDate(startDate) : null;
   const endDateSlice = endDate ? convertDate(endDate) : null;
   const organizerName = group.id ? `${group.Organizer.firstName} ${group.Organizer.lastName[ 0 ]}.` : null;
-
-  const handleDelete = async (e) => {
-    e.preventDefault();
-    const data = await dispatch(thunkDeleteEvent({ eventId }));
-    if (data.ok === true) {
-      history.push(`/events`);
-    };
-
-    if (data.ok === false) {
-      errorPageHandler(data);
-    };
-  };
 
   return (
     <>

@@ -7,8 +7,10 @@ import icon from '../../images/g-icon.png';
 import "./LoginForm.css";
 import Button from "../Button";
 import { thunkLogin } from "../../store/session";
+import { useHistory } from "react-router-dom";
 
 function LoginFormModal() {
+  const history = useHistory();
   const dispatch = useDispatch();
   const demoUser = async () => {
     const user = {
@@ -17,7 +19,8 @@ function LoginFormModal() {
     };
 
     dispatch(thunkLogin(user))
-      .then(closeModal);
+      .then(closeModal)
+      .then(() => history.push('/'));
     return;
   };
 
