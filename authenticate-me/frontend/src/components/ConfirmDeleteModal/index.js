@@ -11,7 +11,6 @@ import './ConfirmDeleteModal.css';
 const ConfirmDeleteModal = ({ groupId, eventId, deleteFn, directTo }) => {
 
   const itemId = groupId ? groupId : eventId;
-  console.log(itemId)
   const dispatch = useDispatch();
   const history = useHistory();
   const { closeModal } = useModal();

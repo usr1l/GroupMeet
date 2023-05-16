@@ -3,6 +3,8 @@ GroupMeet is the go-to place for people looking to meet new people, or engage wi
 
 Your next great adventure is just a click away.
 
+![This is an image](./README/assets/meetup-home.gif)
+
 Register today: https://aa-meetup-api-project.onrender.com/
 
 GitHub Repo: https://github.com/usr1l/project1
@@ -40,17 +42,22 @@ Create, edit or delete a group that you are hosting.
 
 View all groups.
 
-![This is an image](../../README/assets/groups1.png)
+![This is an image](./README/assets/groupmeet4.PNG)
 
-![This is an image](../../README/assets/groups2.png)
+![This is an image](./README/assets/groupmeet1.PNG)
+
+![This is an image](./README/assets/groupmeet.PNG)
+
+
 ### Events
 Create, edit or delete events your group is hosting.
 
 View all events.
 
-![This is an image](../../README/assets/events1.png)
+![This is an image](./README/assets/groupmeet3.PNG)
 
-![This is an image](../../README/assets/events2.png)
+![This is an image](./README/assets/groupmeet2.PNG)
+
 ## React Components
 
 - Bottom Navbar
@@ -80,7 +87,7 @@ View all events.
 
 ## Database Schema
 
-![This is an image](../../README/assets/meetup_dbdiagram.png)
+![This is an image](./README/assets/meetup_dbdiagram.png)
 
 ## Frontend Routes
 
@@ -97,7 +104,7 @@ View all events.
 
 ## API Routes
 
-[Link to API Routes](../../README/assets/API-docs-Meetup.md)
+[Link to API Routes](./README/assets/API-docs-Meetup.md)
 
 ## Redux Store Tree
 ```
@@ -180,4 +187,4 @@ store = {
 
 
 ## Other Files and Links
-- [Link to Kanban cards](../../README/assets/Kanban-cards-Meetup.md)
+- [Link to Kanban cards](./README/assets/Kanban-cards-Meetup.md)
