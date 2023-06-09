@@ -34,14 +34,24 @@ router.delete('/:imageId', requireAuth, async (req, res, next) => {
 });
 
 router.post('/new', singleMulterUpload("image"), requireAuth, async (req, res, next) => {
-  const { preview } = req.body;
+  const { preview, groupId } = req.body;
   const imageUrl = req.file ? await singleFileUpload({ file: req.file, public: true }) : null;
 
-  const newGroupImage = await GroupImage.create({
-    url:
-  })
+  await GroupImage.create({
+    url: imageUrl,
+    preview,
+    groupId
+  });
 
-  return;
+  const newGroupImage = await GroupImage.findOne({
+    where: {
+      url: imageUrl,
+      preview,
+      groupId
+    }
+  });
+
+  return res.json(newGroupImage);
 });
 
 module.exports = router;

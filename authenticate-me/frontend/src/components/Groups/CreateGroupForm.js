@@ -23,7 +23,8 @@ const CreateGroupForm = () => {
   const [ isPrivate, setIsPrivate ] = useState('true');
   const [ city, setCity ] = useState("");
   const [ state, setState ] = useState("");
-  const [ previewImage, setPreviewImage ] = useState("");
+  // const [ previewImage, setPreviewImage ] = useState("");
+  const [ image, setImage ] = useState(null);
   const [ errors, setErrors ] = useState([]);
   const [ disableSubmit, setDisableSubmit ] = useState(true);
 
@@ -31,6 +32,12 @@ const CreateGroupForm = () => {
     if (!name || !about || !type || !city || !state) setDisableSubmit(true);
     else setDisableSubmit(false);
   }, [ name, about, type, city, state ]);
+
+  const updateFile = (e) => {
+    const file = e.target.files[ 0 ];
+    if (file) setImage(file);
+  };
+
 
   const validate = () => {
     const validationErrors = [];
@@ -59,8 +66,7 @@ const CreateGroupForm = () => {
       isPrivate: (isPrivate === 'true' ? true : false),
       city,
       state,
-      organizerId: sessionUserId,
-      previewImage
+      image
     };
 
     const data = await dispatch(thunkCreateGroup(groupInfo));
@@ -158,13 +164,12 @@ const CreateGroupForm = () => {
             <InputDiv divStyle="group-form__block" labelStyle="group-form__label" labelFor="group-profile-image" label='Please add an image URL for your group below:'>
               <input
                 name="group-profile-img"
-                type='url'
-                value={previewImage}
-                onChange={(e) => setPreviewImage(e.target.value)}
+                type='file'
+                onChange={updateFile}
               />
             </InputDiv>
             <div id='create-group-button-div'>
-              <ImagePreview imgSrc={previewImage}></ImagePreview>
+              {/* <ImagePreview imgSrc={previewImage}></ImagePreview> */}
               <Button type='submit' disableButton={disableSubmit} buttonStyle='btn--delete' buttonSize='btn--large'>Create Group</Button>
             </div>
           </form>

@@ -3,7 +3,7 @@
 const AWS = require("aws-sdk");
 const multer = require("multer");
 const s3 = new AWS.S3({ apiVersion: "2006-03-01" });
-const NAME_OF_BUCKET = "aagroupmeet"; // <-- Use your bucket name here
+const NAME_OF_BUCKET = "aagroupmeet-bucket"; // <-- Use your bucket name here
 
 
 const singleFileUpload = async ({ file, public = false }) => {
