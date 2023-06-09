@@ -69,10 +69,18 @@ export const thunkDeleteGroup = (groupId) => async (dispatch) => {
 }
 
 export const thunkCreateGroup = (groupInfo) => async (dispatch) => {
+  const formData = new FormData();
+  const { name, about, type, isPrivate, city, state, image } = groupInfo;
+  formData.append("name", name)
+  formData.append("about", about)
+  formData.append("type", type)
+  formData.append("isPrivate", isPrivate)
+  formData.append("city", city)
+  formData.append("state", state)
+  if (image) formData.append("image", image)
   const response = await csrfFetch(`/api/groups`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(groupInfo)
+    body: formData
   })
     .catch(err => err);
 
@@ -333,7 +341,6 @@ const groupReducer = (state = initialState, action) => {
       return updatedState;
     default:
       return state;
-    // break;
   };
 };
 

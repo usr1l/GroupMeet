@@ -10,6 +10,7 @@ const { validateEventData, getEvents } = require('./events');
 const { getDisplayDate, toJSONDisplay, checkUserId, updateGroupPreviewImage, membershipArrToObj } = require('../../utils/helpers')
 const { venueDoesNotExist } = require('./venues');
 const { validateMembershipData, validateMembershipDataDelete } = require('./memberships');
+const { singleMulterUpload, singleFileUpload } = require('../../awsS3');
 
 
 const validateGroupData = [
@@ -882,16 +883,16 @@ router.get('/', async (_req, res) => {
 
 
 // create a group
-router.post('/', requireAuth, validateGroupData, async (req, res, next) => {
-  const { name, about, type, isPrivate, city, state, previewImage } = req.body;
+router.post('/', singleMulterUpload("image"), requireAuth, validateGroupData, async (req, res, next) => {
+  const { name, about, type, isPrivate, city, state } = req.body;
   const organizerId = req.user.id;
-
+  const imageUrl = req.file ? await singleFileUpload({ file: req.file, public: true }) : null;
   const groupExists = await Group.findOne({
     where: {
       name,
       about,
       type,
-      private: isPrivate,
+      // private: isPrivate,
       city,
       state,
       organizerId
@@ -907,7 +908,7 @@ router.post('/', requireAuth, validateGroupData, async (req, res, next) => {
   };
 
 
-  await Group.create({
+  const newGroup = await Group.create({
     name,
     about,
     type,
@@ -917,23 +918,22 @@ router.post('/', requireAuth, validateGroupData, async (req, res, next) => {
     organizerId
   });
 
-  const newGroup = await Group.scope('allDetails').findOne({
-    where: {
-      name,
-      about,
-      type,
-      private: isPrivate,
-      city,
-      state,
-      organizerId
-    }
-  });
+  // const createdGroup = await Group.scope('allDetails').findOne({
+  //   where: {
+  //     name,
+  //     about,
+  //     type,
+  //     // private: isPrivate,
+  //     city,
+  //     state,
+  //     organizerId
+  //   }
+  // });
 
-
-  if (previewImage) {
+  if (imageUrl) {
     // add the new img
     await GroupImage.create({
-      url: previewImage,
+      url: imageUrl,
       preview: true,
       groupId: newGroup.id
     });

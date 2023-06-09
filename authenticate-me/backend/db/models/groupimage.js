@@ -32,12 +32,12 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'GroupImage',
     defaultScope: {
       attributes: {
-        exclude: ['createdAt', 'updatedAt', 'groupId']
+        exclude: [ 'updatedAt' ]
       }
     },
     scopes: {
       deletion: {
-        attributes: ['groupId', 'id']
+        attributes: [ 'groupId', 'id' ]
       }
     }
   });
