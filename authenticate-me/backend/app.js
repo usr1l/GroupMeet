@@ -17,6 +17,7 @@ const app = express();
 
 app.use(morgan('dev'));
 app.use(cookieParser());
+app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 // Security Middleware
@@ -52,7 +53,7 @@ app.use(routes);
 app.use((_req, _res, next) => {
   const err = new Error("The requested resource couldn't be found.");
   err.title = "Resource Not Found";
-  err.errors = ["The requested resource couldn't be found."];
+  err.errors = [ "The requested resource couldn't be found." ];
   err.status = 404;
   next(err);
 });
