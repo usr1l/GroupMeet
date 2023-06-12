@@ -1,10 +1,24 @@
 #groups-images-wrapper {
-  border: solid 1px black;
+  /* border: solid 1px black; */
   width: 1100px;
 }
 
 #groups-images-container {
   display: flex;
-  width: 900px;
-  border: 1px solid purple;
+  width: 100%;
+  /* border: 1px solid purple; */
+}
+
+.image-card {
+  width: auto;
+  height: 225px;
+  box-sizing: border-box;
+  margin: 30px 20px;
+  display: flex;
+  align-items: "center";
+  justify-content: "center";
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
 }
