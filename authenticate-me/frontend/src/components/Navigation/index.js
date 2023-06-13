@@ -54,7 +54,7 @@ function Navigation({ isLoaded }) {
           <ul className={`${divClassName}`}>
             {isLoaded && (
               <>
-                {sessionUser && button && (
+                {/* {sessionUser && button && (
                   <>
                     <li key='nav-3' className={`nav-item`}>
                       <MessagesButton />
@@ -63,7 +63,7 @@ function Navigation({ isLoaded }) {
                       <NotificationButton />
                     </li>
                   </>
-                )}
+                )} */}
                 <li key='nav-5' className={`nav-item`}>
                   <ProfileButton user={sessionUser} />
                 </li>
