@@ -2,7 +2,7 @@ import React from 'react';
 import './ImagePreview.css';
 
 const wrapperSTYLES = [ '', 'group-page-header-image-container', 'event-index-card-image-container', 'group-index-card-image-container' ];
-const imgSTYLES = [ '', "group-page-header-image", 'event-index-card-image', 'group-index-card-image' ];
+const imgSTYLES = [ '', "group-image-large", "group-page-header-image", 'event-index-card-image', 'group-index-card-image' ];
 
 const ImagePreview = ({
   imgWrapperStyle,

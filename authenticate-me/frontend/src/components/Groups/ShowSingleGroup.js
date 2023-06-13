@@ -167,11 +167,11 @@ const SingleGroupPage = ({ groupData }) => {
                       Members
                     </NavLink>
                   )}
-                  {/* {user && (
+                  {user && (
                     <NavLink to={`/groups/${groupId}/images`} className="single-group-page-navbar-item" activeClassName='group-navbar-navlink-active'>
                       Photos
                     </NavLink>
-                  )} */}
+                  )}
                 </div>
               </div>
               <div className="single-group-page-navbar-functions">
@@ -209,7 +209,7 @@ const SingleGroupPage = ({ groupData }) => {
                 )}
                 {user && (
                   <Route path={`/groups/${groupId}/images`}>
-                    <GroupImagesPage images={images} />
+                    <GroupImagesPage images={images} groupId={groupId} />
                   </Route>
                 )}
                 <Route path={`/groups/${groupId}`}>
