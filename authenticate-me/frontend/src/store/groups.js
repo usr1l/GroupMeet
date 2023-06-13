@@ -27,6 +27,7 @@ export const thunkUploadImages = (images, groupId) => async dispatch => {
     body: formData
   });
   const data = await response.json();
+  console.log(response, data);
   if (response.ok) {
     dispatch(actionUploadImages(data, groupId));
   }

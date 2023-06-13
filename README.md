@@ -9,6 +9,12 @@ Register today: https://aa-meetup-api-project.onrender.com/
 
 GitHub Repo: https://github.com/usr1l/project1
 
+To run this in local environment:
+- Clone repository, and run ```npm install``` in the backend and frontend directories
+- Run ```npm start``` in both the frontend and backend directories
+- Use ```npm run resetdb``` to reset the database
+- Use ```npm run reseed``` to reset the seeder files
+
 ## Technologies Used
 
 ### Languages
@@ -58,6 +64,10 @@ View all events.
 
 ![This is an image](./README/assets/groupmeet2.PNG)
 
+### Memberships
+
+### GroupImages
+
 ## React Components
 
 - Bottom Navbar
@@ -71,6 +81,7 @@ View all events.
 - Groups About Page
 - Groups Index Card
 - Groups List
+- Groups Memberships Page
 - Groups Pages
 - Homepage
 - Icon Description Card
@@ -78,7 +89,7 @@ View all events.
 - Image Preview
 - Input Div
 - Login Form
-- Group Memberships Page
+- Navigation
 - Navigation Bar
 - Open Modal Button
 - Preview Card
@@ -182,7 +193,6 @@ store = {
 - Membership and Attendance status and update.
 - Sort events by groups.
 - Search feature.
-- Upload image files.
 - User profile page.
 
 
