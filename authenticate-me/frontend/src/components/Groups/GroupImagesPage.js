@@ -2,17 +2,13 @@ import React, { useState } from 'react';
 import './GroupImagesPage.css';
 import { useModal } from '../../context/Modal';
 import ImageUpload from '../ImageUpload';
+import ImagePreview from '../ImagePreview';
 
-function GroupImagesPage({ images }) {
+function GroupImagesPage({ images, groupId }) {
 
   const [ image, setImage ] = useState(null);
 
   const { setModalContent } = useModal();
-
-  const handleUpload = (e) => {
-    const file = e.target.files[ 0 ];
-    if (file) setImage(file);
-  };
 
   return (
     <div id='groups-images-wrapper'>
@@ -32,7 +28,7 @@ function GroupImagesPage({ images }) {
             color: "lightgrey"
 
           }}
-          onClick={() => setModalContent(<ImageUpload />)}>
+          onClick={() => setModalContent(<ImageUpload groupId={groupId} />)}>
           <i
             style={{
               fontSize: "40px",
@@ -42,7 +38,7 @@ function GroupImagesPage({ images }) {
         </div>
         {
           images.map((image) => (
-            <div className='image-card'>
+            <div onClick={() => setModalContent(<ImagePreview imgClassName={'group-image-large'} imgSrc={image.url} />)} className='image-card'>
               <img src={image.url}></img>
             </div>
           ))

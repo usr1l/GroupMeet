@@ -16,6 +16,29 @@ const UPDATE_GROUP = 'groups/EDIT';
 const CREATE_MEMBERSHIP = 'groups/membership/CREATE';
 const DELETE_MEMBERSHIP = 'groups/membership/DELETE';
 // const JOIN_GROUP = 'group/membership/CREATE';
+const UPLOAD_IMAGES = 'groups/images/UPLOAD';
+
+export const thunkUploadImages = (images, groupId) => async dispatch => {
+  const formData = new FormData();
+  console.log("images", images)
+  Array.from(images).forEach(image => formData.append("images", image));
+  const response = await csrfFetch(`/api/group-images/groups/${groupId}`, {
+    method: "POST",
+    body: formData
+  });
+  const data = await response.json();
+  if (response.ok) {
+    dispatch(actionUploadImages(data, groupId));
+  }
+  return response;
+};
+
+const actionUploadImages = (data, groupId) => {
+  return {
+    type: UPLOAD_IMAGES,
+    payload: { data, groupId }
+  };
+};
 
 export const thunkLoadGroups = () => async (dispatch) => {
   const response = await csrfFetch('/api/groups/');
@@ -339,6 +362,16 @@ const groupReducer = (state = initialState, action) => {
       };
       delete updatedState.group.Members[ memberId ];
       return updatedState;
+    case UPLOAD_IMAGES:
+      return {
+        ...state,
+        group: {
+          ...state.group,
+          GroupImages: {
+            ...action.payload.data
+          }
+        }
+      }
     default:
       return state;
   };

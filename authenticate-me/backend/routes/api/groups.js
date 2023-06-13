@@ -899,7 +899,6 @@ router.post('/', singleMulterUpload("image"), requireAuth, validateGroupData, as
     }
   });
 
-
   // create a group if it doesnt already exist
   if (groupExists) {
     const newError = new Error('Failed: This group already exists');
@@ -917,18 +916,6 @@ router.post('/', singleMulterUpload("image"), requireAuth, validateGroupData, as
     state,
     organizerId
   });
-
-  // const createdGroup = await Group.scope('allDetails').findOne({
-  //   where: {
-  //     name,
-  //     about,
-  //     type,
-  //     // private: isPrivate,
-  //     city,
-  //     state,
-  //     organizerId
-  //   }
-  // });
 
   if (imageUrl) {
     // add the new img

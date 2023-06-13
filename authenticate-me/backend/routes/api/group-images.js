@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { singleMulterUpload, singleFileUpload } = require('../../awsS3');
+const { singleMulterUpload, singleFileUpload, multipleMulterUpload, multipleFilesUpload, retrievePrivateFile } = require('../../awsS3');
 const { Group, GroupImage, User, Membership, Venue, Event, EventImage, Attendance } = require('../../db/models');
 const { requireAuth, checkAuth, checkCohost, checkAttendance, deleteAuth } = require('../../utils/auth');
 const { inputToDate, toJSONDisplay, getDisplayDate, checkUserId } = require('../../utils/helpers');
@@ -33,25 +33,34 @@ router.delete('/:imageId', requireAuth, async (req, res, next) => {
   return res.json({ message: res.message, statusCode: res.status });
 });
 
-router.post('/new', singleMulterUpload("image"), requireAuth, async (req, res, next) => {
-  const { preview, groupId } = req.body;
-  const imageUrl = req.file ? await singleFileUpload({ file: req.file, public: true }) : null;
+router.post('/groups/:groupId', multipleMulterUpload("images"), requireAuth, async (req, res, next) => {
+  const { groupId } = req.params;
+  const keys = await multipleFilesUpload({ files: req.files, public: true });
+  const userId = req.user.id;
 
-  await GroupImage.create({
-    url: imageUrl,
-    preview,
-    groupId
-  });
+  console.log(keys)
+  const images = await Promise.all(
+    keys.map(key => GroupImage.create({ url: key, preview: false, groupId }))
+  );
 
-  const newGroupImage = await GroupImage.findOne({
+
+  const resImages = await GroupImage.findAll({
     where: {
-      url: imageUrl,
-      preview,
       groupId
     }
   });
-
-  return res.json(newGroupImage);
+  console.log(resImages, "====================")
+  return res.json(resImages);
 });
+
+// get from aws
+router.get(
+  '/:userId',
+  async (req, res) => {
+    const images = await Image.findAll({ where: { userId: req.params[ "userId" ] } });
+    const imageUrls = images.map(image => retrievePrivateFile(image.key));
+    return res.json(imageUrls);
+  }
+);
 
 module.exports = router;

@@ -209,7 +209,7 @@ const SingleGroupPage = ({ groupData }) => {
                 )}
                 {user && (
                   <Route path={`/groups/${groupId}/images`}>
-                    <GroupImagesPage images={images} />
+                    <GroupImagesPage images={images} groupId={groupId} />
                   </Route>
                 )}
                 <Route path={`/groups/${groupId}`}>

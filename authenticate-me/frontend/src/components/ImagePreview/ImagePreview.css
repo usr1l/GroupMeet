@@ -3,6 +3,12 @@
   height: 100%;
 }
 
+.group-image-large {
+  height: auto;
+  width: auto;
+  max-height: 600px;
+  max-width: 900px;
+}
 
 .img-preview {
   max-height: 100%;
