@@ -65,8 +65,10 @@ View all events.
 ![This is an image](./README/assets/groupmeet2.PNG)
 
 ### Memberships
+![This is an image](./README/assets/memberships.gif)
 
 ### GroupImages
+![This is an image](./README/assets/groupimages.gif)
 
 ## React Components
 
