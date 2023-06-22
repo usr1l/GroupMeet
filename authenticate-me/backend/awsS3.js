@@ -55,6 +55,16 @@ const singleMulterUpload = (nameOfKey) =>
 const multipleMulterUpload = (nameOfKey) =>
   multer({ storage: storage }).array(nameOfKey);
 
+const deleteFile = async (key) => {
+  const deleteParams = {
+    Bucket: NAME_OF_BUCKET,
+    Key: key
+  };
+
+  return await s3.deleteObject(deleteParams).promise();
+};
+
+
 module.exports = {
   s3,
   singleFileUpload,

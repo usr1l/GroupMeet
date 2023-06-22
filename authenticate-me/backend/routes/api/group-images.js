@@ -18,13 +18,13 @@ router.delete('/:imageId', requireAuth, async (req, res, next) => {
     return next(err);
   };
 
-  const group = await imageExists.getGroup();
+  // const group = await imageExists.getGroup();
 
-  const cohostBool = await checkCohost(userId, group.organizerId, group.id);
+  // const cohostBool = await checkCohost(userId, group.organizerId, group.id);
 
-  if (cohostBool instanceof Error) {
-    return next(cohostBool);
-  };
+  // if (cohostBool instanceof Error) {
+  //   return next(cohostBool);
+  // };
 
   await imageExists.destroy();
 

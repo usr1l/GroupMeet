@@ -433,7 +433,6 @@ router.post('/:groupId/events', requireAuth, singleMulterUpload("image"), valida
     };
   };
 
-
   // create a new event if it doesn't already exist
   const eventExists = await Event.findOne({
     where: {
@@ -455,7 +454,6 @@ router.post('/:groupId/events', requireAuth, singleMulterUpload("image"), valida
     return next(newError);
   };
 
-
   await Event.create({
     name,
     description,
@@ -467,7 +465,6 @@ router.post('/:groupId/events', requireAuth, singleMulterUpload("image"), valida
     venueId,
     groupId
   });
-
 
   // find if successful
   const newEvent = await Event.findOne({
@@ -579,7 +576,6 @@ router.post('/:groupId/venues', requireAuth, validateVenueData, async (req, res,
 
   return res.json(newVenue);
 });
-
 
 
 // // add an image by groupid
@@ -879,7 +875,6 @@ router.get('/', async (_req, res) => {
   const groupsArr = await getGroups(groups);
   return res.json({ "Groups": groupsArr });
 });
-
 
 
 // create a group

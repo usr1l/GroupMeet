@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
       const { id, url, preview } = this;
       return { id, url, preview }
     };
-
+    3
     static associate(models) {
       GroupImage.belongsTo(models.Group, { foreignKey: 'groupId' })
     };

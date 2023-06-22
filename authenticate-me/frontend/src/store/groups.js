@@ -17,6 +17,7 @@ const CREATE_MEMBERSHIP = 'groups/membership/CREATE';
 const DELETE_MEMBERSHIP = 'groups/membership/DELETE';
 // const JOIN_GROUP = 'group/membership/CREATE';
 const UPLOAD_IMAGES = 'groups/images/UPLOAD';
+const DELETE_GROUP_IMAGE = 'groups/images/DELETE';
 
 export const thunkUploadImages = (images, groupId) => async dispatch => {
   const formData = new FormData();
@@ -267,6 +268,13 @@ export const actionCreateGroup = (group) => {
   };
 };
 
+export const actionDeleteGroupImage = (imgId) => {
+  return {
+    type: DELETE_GROUP_IMAGE,
+    payload: imgId
+  }
+}
+
 const initialState = {
   groups: {},
   group: { Events: {}, GroupImages: {}, Organizer: {}, Venues: {}, Members: {} },
@@ -371,6 +379,18 @@ const groupReducer = (state = initialState, action) => {
           }
         }
       }
+    case DELETE_GROUP_IMAGE:
+      updatedState = {
+        ...state,
+        group: {
+          ...state.group,
+          GroupImages: {
+            ...state.group.GroupImages,
+          }
+        },
+      }
+      console.log(updatedState.group.GroupImages[ action.payload ])
+      return updatedState;
     default:
       return state;
   };

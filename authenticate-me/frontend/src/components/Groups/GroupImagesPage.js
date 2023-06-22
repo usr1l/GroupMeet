@@ -3,8 +3,9 @@ import './GroupImagesPage.css';
 import { useModal } from '../../context/Modal';
 import ImageUpload from '../ImageUpload';
 import ImagePreview from '../ImagePreview';
+import ImagesDisplay from '../ImagesDisplay';
 
-function GroupImagesPage({ images, groupId }) {
+function GroupImagesPage({ images, groupId, organizerBool = false }) {
 
   const [ image, setImage ] = useState(null);
 
@@ -38,7 +39,7 @@ function GroupImagesPage({ images, groupId }) {
         </div>
         {
           images.map((image) => (
-            <div onClick={() => setModalContent(<ImagePreview imgClassName={'group-image-large'} imgSrc={image.url} />)} className='image-card'>
+            <div onClick={() => setModalContent(<ImagesDisplay organizerBool={organizerBool} img={image} />)} className='image-card'>
               <img src={image.url}></img>
             </div>
           ))

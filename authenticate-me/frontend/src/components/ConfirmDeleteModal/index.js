@@ -8,9 +8,9 @@ import errorPageHandler from "../ErrorPage";
 import { useModal } from "../../context/Modal";
 import './ConfirmDeleteModal.css';
 
-const ConfirmDeleteModal = ({ groupId, eventId, deleteFn, directTo }) => {
+const ConfirmDeleteModal = ({ deleteId, deleteFn, directTo }) => {
 
-  const itemId = groupId ? groupId : eventId;
+  const itemId = deleteId;
   const dispatch = useDispatch();
   const history = useHistory();
   const { closeModal } = useModal();
@@ -25,7 +25,7 @@ const ConfirmDeleteModal = ({ groupId, eventId, deleteFn, directTo }) => {
     const data = await dispatch(deleteFn(itemId));
     closeModal();
 
-    if (data.ok === true) {
+    if (data.ok) {
       history.push(`${directTo}`);
     };
 
