@@ -20,14 +20,12 @@ const UPLOAD_IMAGES = 'groups/images/UPLOAD';
 
 export const thunkUploadImages = (images, groupId) => async dispatch => {
   const formData = new FormData();
-  console.log("images", images)
   Array.from(images).forEach(image => formData.append("images", image));
   const response = await csrfFetch(`/api/group-images/groups/${groupId}`, {
     method: "POST",
     body: formData
   });
   const data = await response.json();
-  console.log(response, data);
   if (response.ok) {
     dispatch(actionUploadImages(data, groupId));
   }

@@ -38,7 +38,6 @@ router.post('/groups/:groupId', multipleMulterUpload("images"), requireAuth, asy
   const keys = await multipleFilesUpload({ files: req.files, public: true });
   const userId = req.user.id;
 
-  console.log(keys)
   const images = await Promise.all(
     keys.map(key => GroupImage.create({ url: key, preview: false, groupId }))
   );
@@ -49,7 +48,6 @@ router.post('/groups/:groupId', multipleMulterUpload("images"), requireAuth, asy
       groupId
     }
   });
-  console.log(resImages, "====================")
   return res.json(resImages);
 });
 

@@ -10,7 +10,6 @@ const { venueDoesNotExist } = require('./venues');
 const { validateAttendanceData } = require('./attendances');
 const { Sequelize } = require('sequelize');
 
-
 const validateEventData = [
   check('name')
     .exists({ checkFalsy: true })
@@ -33,15 +32,16 @@ const validateEventData = [
     .withMessage('Capacity must be a positive integer'),
   check('price')
     .custom(price => {
-      if ((!isNaN(price)) && price >= 0) {
+      if (!(isNaN(parseFloat(price))) && parseFloat(price) >= 0) {
         const newPrice = parseFloat(price).toFixed(2);
         const newPriceParsed = parseFloat(newPrice);
-        const bool = newPriceParsed === price;
+        const bool = newPriceParsed === parseFloat(price);
         if (!bool) {
           return Promise.reject('price');
         };
         return true;
-      } else if (price === undefined || price === null) {
+      };
+      if (price === undefined || price === null) {
         return true;
       }
     })

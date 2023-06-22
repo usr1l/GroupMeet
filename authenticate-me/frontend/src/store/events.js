@@ -34,7 +34,7 @@ export const thunkDeleteEvent = (eventId) => async (dispatch) => {
 };
 
 export const thunkCreateEvent = (eventInfo) => async (dispatch) => {
-
+  const formData = new FormData();
   const {
     name,
     description,
@@ -43,23 +43,23 @@ export const thunkCreateEvent = (eventInfo) => async (dispatch) => {
     capacity,
     startDate,
     endDate,
-    previewImage,
+    image,
     groupId
   } = eventInfo;
+  formData.append("name", name);
+  formData.append("description", description);
+  formData.append("type", type);
+  formData.append("price", price);
+  formData.append("capacity", capacity);
+  formData.append("startDate", startDate);
+  formData.append("endDate", endDate);
+  formData.append("groupId", groupId);
+
+  if (image) formData.append("image", image);
 
   const response = await csrfFetch(`/api/groups/${groupId}/events`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      name,
-      description,
-      type,
-      price,
-      capacity,
-      startDate,
-      endDate,
-      previewImage
-    })
+    body: formData
   })
     .catch(err => err)
 
