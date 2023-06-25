@@ -393,7 +393,7 @@ router.get('/:groupId/events', async (req, res, next) => {
 
 
 // create an event for a group specified by its id
-router.post('/:groupId/events', requireAuth, validateEventData, async (req, res, next) => {
+router.post('/:groupId/events', requireAuth, singleMulterUpload("image"), validateEventData, async (req, res, next) => {
 
   const userId = req.user.id;
   const { groupId } = req.params;
@@ -411,6 +411,8 @@ router.post('/:groupId/events', requireAuth, validateEventData, async (req, res,
     return next(cohostBool);
   };
 
+  const imageUrl = req.file ? await singleFileUpload({ file: req.file, public: true }) : null;
+
   const {
     name,
     description,
@@ -420,7 +422,7 @@ router.post('/:groupId/events', requireAuth, validateEventData, async (req, res,
     startDate,
     endDate,
     venueId,
-    previewImage
+    // previewImage
   } = req.body;
 
   // check if venue exists
@@ -430,7 +432,6 @@ router.post('/:groupId/events', requireAuth, validateEventData, async (req, res,
       return venueDoesNotExist(next);
     };
   };
-
 
   // create a new event if it doesn't already exist
   const eventExists = await Event.findOne({
@@ -453,7 +454,6 @@ router.post('/:groupId/events', requireAuth, validateEventData, async (req, res,
     return next(newError);
   };
 
-
   await Event.create({
     name,
     description,
@@ -465,7 +465,6 @@ router.post('/:groupId/events', requireAuth, validateEventData, async (req, res,
     venueId,
     groupId
   });
-
 
   // find if successful
   const newEvent = await Event.findOne({
@@ -482,9 +481,9 @@ router.post('/:groupId/events', requireAuth, validateEventData, async (req, res,
     }
   });
 
-  if (previewImage) {
+  if (imageUrl) {
     await EventImage.create({
-      url: previewImage,
+      url: imageUrl,
       preview: true,
       eventId: newEvent.id
     });
@@ -530,7 +529,6 @@ router.get('/:groupId/venues', requireAuth, async (req, res, next) => {
   });
 
   return res.json({ Venues: venues });
-
 });
 
 
@@ -577,69 +575,67 @@ router.post('/:groupId/venues', requireAuth, validateVenueData, async (req, res,
   });
 
   return res.json(newVenue);
-
 });
 
 
+// // add an image by groupid
+// router.post('/:groupId/images', requireAuth, async (req, res, next) => {
+//   const { groupId } = req.params;
+//   const userId = req.user.id;
 
-// add an image by groupid
-router.post('/:groupId/images', requireAuth, async (req, res, next) => {
-  const { groupId } = req.params;
-  const userId = req.user.id;
+//   // if group does not exist throw error
+//   let groupExists = await Group.findByPk(groupId)
+//   if (!groupExists) {
+//     return groupDoesNotExist(next);
+//   };
 
-  // if group does not exist throw error
-  let groupExists = await Group.findByPk(groupId)
-  if (!groupExists) {
-    return groupDoesNotExist(next);
-  };
+//   // only organizer can add an image
+//   const { organizerId } = groupExists;
 
-  // only organizer can add an image
-  const { organizerId } = groupExists;
+//   const checkAuthBool = checkAuth(userId, organizerId);
 
-  const checkAuthBool = checkAuth(userId, organizerId);
+//   if ((checkAuthBool) instanceof Error) {
+//     return next(checkAuthBool);
+//   };
 
-  if ((checkAuthBool) instanceof Error) {
-    return next(checkAuthBool);
-  };
+//   const { url, preview } = req.body;
 
-  const { url, preview } = req.body;
+//   // change preview img
+//   if (preview === true) {
+//     const img = await GroupImage.findOne({
+//       where: {
+//         [ Op.and ]: [ { groupId }, { preview: true } ]
+//       }
+//     })
 
-  // change preview img
-  if (preview === true) {
-    const img = await GroupImage.findOne({
-      where: {
-        [ Op.and ]: [ { groupId }, { preview: true } ]
-      }
-    })
+//     if (img) {
+//       const imgJSON = img.toJSON();
+//       const imgId = imgJSON.id
 
-    if (img) {
-      const imgJSON = img.toJSON();
-      const imgId = imgJSON.id
+//       const currPreviewImg = await GroupImage.findByPk(imgId);
+//       await currPreviewImg.update({
+//         preview: false
+//       });
+//     };
+//   };
 
-      const currPreviewImg = await GroupImage.findByPk(imgId);
-      await currPreviewImg.update({
-        preview: false
-      });
-    };
-  };
+//   // add the new img
+//   const newImg = await GroupImage.create({
+//     url,
+//     preview,
+//     groupId
+//   });
 
-  // add the new img
-  const newImg = await GroupImage.create({
-    url,
-    preview,
-    groupId
-  });
+//   let addedImg;
 
-  let addedImg;
+//   if (newImg) {
+//     addedImg = newImg.toSafeObject();
+//   } else {
+//     addedImg = null;
+//   };
 
-  if (newImg) {
-    addedImg = newImg.toSafeObject();
-  } else {
-    addedImg = null;
-  };
-
-  return res.json(addedImg);
-});
+//   return res.json(addedImg);
+// });
 
 
 // get all groups joined or organized by current user
@@ -881,9 +877,8 @@ router.get('/', async (_req, res) => {
 });
 
 
-
 // create a group
-router.post('/', singleMulterUpload("image"), requireAuth, validateGroupData, async (req, res, next) => {
+router.post('/', requireAuth, singleMulterUpload("image"), validateGroupData, async (req, res, next) => {
   const { name, about, type, isPrivate, city, state } = req.body;
   const organizerId = req.user.id;
   const imageUrl = req.file ? await singleFileUpload({ file: req.file, public: true }) : null;

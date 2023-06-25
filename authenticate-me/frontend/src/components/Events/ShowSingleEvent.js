@@ -114,7 +114,7 @@ const SingleEventPage = ({ eventData }) => {
                         itemText='Delete Event'
                         buttonStyle='btn--delete'
                         buttonSize='btn--large'
-                        modalComponent={<ConfirmDeleteModal directTo={'/events'} eventId={eventId} deleteFn={thunkDeleteEvent} />}
+                        modalComponent={<ConfirmDeleteModal directTo={'/events'} deleteId={eventId} deleteFn={thunkDeleteEvent} />}
                       />
                     </section>
                   )}

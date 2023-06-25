@@ -29,7 +29,7 @@ const CreateEventForm = (event) => {
   const [ endTime, setEndTime ] = useState(currTime);
   const [ capacity, setCapacity ] = useState('');
   const [ price, setPrice ] = useState('');
-  const [ previewImage, setPreviewImage ] = useState('')
+  const [ image, setImage ] = useState('');
   const [ errors, setErrors ] = useState([]);
   const [ disableSubmit, setDisableSubmit ] = useState(true);
   const [ isLoaded, setIsLoaded ] = useState(false);
@@ -60,8 +60,12 @@ const CreateEventForm = (event) => {
     if ((price && parseFloat(price) < 0) || (!Number.isInteger(100 * parseFloat(price)))) validationErrors.push('Please enter a valid price');
     if (capacity && capacity < 0) validationErrors.push('Invalid Capacity');
 
-
     return validationErrors;
+  };
+
+  const updateFile = (e) => {
+    const file = e.target.files[ 0 ];
+    if (file) setImage(file);
   };
 
   const onSubmit = async (e) => {
@@ -79,7 +83,7 @@ const CreateEventForm = (event) => {
       capacity: capacity ? parseFloat(capacity) : null,
       startDate: `${startDate} ${startTime}`,
       endDate: `${endDate} ${endTime}`,
-      previewImage,
+      image,
       groupId,
       venueId: null
     };
@@ -192,13 +196,12 @@ const CreateEventForm = (event) => {
                 <InputDiv divStyle="event-form__block" labelStyle="event-form__label" labelFor="event-profile-img" label='Event Profile Image: '>
                   <input
                     name="event-profile-img"
-                    type='url'
-                    value={previewImage}
-                    onChange={(e) => setPreviewImage(e.target.value)}
+                    type='file'
+                    onChange={updateFile}
                   />
                 </InputDiv>
                 <div id='create-event-button-div'>
-                  <ImagePreview imgSrc={previewImage}></ImagePreview>
+                  {/* <ImagePreview imgSrc={previewImage}></ImagePreview> */}
                   <Button type='submit' disableButton={disableSubmit} buttonStyle='btn--delete' buttonSize='btn--large'>Create Event</Button>
                 </div>
               </form>

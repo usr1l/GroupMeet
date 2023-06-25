@@ -17,17 +17,16 @@ const CREATE_MEMBERSHIP = 'groups/membership/CREATE';
 const DELETE_MEMBERSHIP = 'groups/membership/DELETE';
 // const JOIN_GROUP = 'group/membership/CREATE';
 const UPLOAD_IMAGES = 'groups/images/UPLOAD';
+const DELETE_GROUP_IMAGE = 'groups/images/DELETE';
 
 export const thunkUploadImages = (images, groupId) => async dispatch => {
   const formData = new FormData();
-  console.log("images", images)
   Array.from(images).forEach(image => formData.append("images", image));
   const response = await csrfFetch(`/api/group-images/groups/${groupId}`, {
     method: "POST",
     body: formData
   });
   const data = await response.json();
-  console.log(response, data);
   if (response.ok) {
     dispatch(actionUploadImages(data, groupId));
   }
@@ -269,6 +268,13 @@ export const actionCreateGroup = (group) => {
   };
 };
 
+export const actionDeleteGroupImage = (imgId) => {
+  return {
+    type: DELETE_GROUP_IMAGE,
+    payload: imgId
+  }
+}
+
 const initialState = {
   groups: {},
   group: { Events: {}, GroupImages: {}, Organizer: {}, Venues: {}, Members: {} },
@@ -364,15 +370,29 @@ const groupReducer = (state = initialState, action) => {
       delete updatedState.group.Members[ memberId ];
       return updatedState;
     case UPLOAD_IMAGES:
+      const images = {};
+      for (const key in action.payload.data) {
+        images[ action.payload.data[ key ].id ] = action.payload.data[ key ];
+      };
       return {
         ...state,
         group: {
           ...state.group,
-          GroupImages: {
-            ...action.payload.data
-          }
+          GroupImages: images
         }
       }
+    case DELETE_GROUP_IMAGE:
+      updatedState = {
+        ...state,
+        group: {
+          ...state.group,
+          GroupImages: {
+            ...state.group.GroupImages,
+          }
+        },
+      }
+      delete updatedState.group.GroupImages[ action.payload ]
+      return updatedState;
     default:
       return state;
   };

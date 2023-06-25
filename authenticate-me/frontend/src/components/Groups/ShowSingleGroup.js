@@ -128,7 +128,6 @@ const SingleGroupPage = ({ groupData }) => {
   return (
     <>
       {isLoaded && (
-
         <>
           <div className="group-header-background">
             <div className="group-header">
@@ -184,7 +183,7 @@ const SingleGroupPage = ({ groupData }) => {
                       itemText='Delete Group'
                       buttonStyle='btn--delete'
                       buttonSize='btn--large'
-                      modalComponent={<ConfirmDeleteModal directTo={'/groups'} groupId={groupId} deleteFn={thunkDeleteGroup} />}
+                      modalComponent={<ConfirmDeleteModal directTo={'/groups'} deleteId={groupId} deleteFn={thunkDeleteGroup} />}
                     />
                   </>
                 )}
@@ -209,7 +208,7 @@ const SingleGroupPage = ({ groupData }) => {
                 )}
                 {user && (
                   <Route path={`/groups/${groupId}/images`}>
-                    <GroupImagesPage images={images} groupId={groupId} />
+                    <GroupImagesPage organizerBool={organizerBool} images={images} groupId={groupId} />
                   </Route>
                 )}
                 <Route path={`/groups/${groupId}`}>
