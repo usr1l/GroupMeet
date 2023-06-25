@@ -128,7 +128,6 @@ const SingleGroupPage = ({ groupData }) => {
   return (
     <>
       {isLoaded && (
-
         <>
           <div className="group-header-background">
             <div className="group-header">

@@ -18,15 +18,16 @@ router.delete('/:imageId', requireAuth, async (req, res, next) => {
     return next(err);
   };
 
-  // const group = await imageExists.getGroup();
+  const group = await imageExists.getGroup();
 
-  // const cohostBool = await checkCohost(userId, group.organizerId, group.id);
+  const cohostBool = await checkCohost(userId, group.organizerId, group.id);
 
-  // if (cohostBool instanceof Error) {
-  //   return next(cohostBool);
-  // };
+  if (cohostBool instanceof Error) {
+    return next(cohostBool);
+  };
 
   await imageExists.destroy();
+  // await
 
   res.message = "Succesfully deleted";
   res.status = 200;
@@ -42,7 +43,6 @@ router.post('/groups/:groupId', multipleMulterUpload("images"), requireAuth, asy
     keys.map(key => GroupImage.create({ url: key, preview: false, groupId }))
   );
 
-
   const resImages = await GroupImage.findAll({
     where: {
       groupId
@@ -51,14 +51,14 @@ router.post('/groups/:groupId', multipleMulterUpload("images"), requireAuth, asy
   return res.json(resImages);
 });
 
-// get from aws
-router.get(
-  '/:userId',
-  async (req, res) => {
-    const images = await Image.findAll({ where: { userId: req.params[ "userId" ] } });
-    const imageUrls = images.map(image => retrievePrivateFile(image.key));
-    return res.json(imageUrls);
-  }
-);
+// // get from aws
+// router.get(
+//   '/:userId',
+//   async (req, res) => {
+//     const images = await Image.findAll({ where: { userId: req.params[ "userId" ] } });
+//     const imageUrls = images.map(image => retrievePrivateFile(image.key));
+//     return res.json(imageUrls);
+//   }
+// );
 
 module.exports = router;

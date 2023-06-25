@@ -370,13 +370,15 @@ const groupReducer = (state = initialState, action) => {
       delete updatedState.group.Members[ memberId ];
       return updatedState;
     case UPLOAD_IMAGES:
+      const images = {};
+      for (const key in action.payload.data) {
+        images[ action.payload.data[ key ].id ] = action.payload.data[ key ];
+      };
       return {
         ...state,
         group: {
           ...state.group,
-          GroupImages: {
-            ...action.payload.data
-          }
+          GroupImages: images
         }
       }
     case DELETE_GROUP_IMAGE:
@@ -389,7 +391,7 @@ const groupReducer = (state = initialState, action) => {
           }
         },
       }
-      console.log(updatedState.group.GroupImages[ action.payload ])
+      delete updatedState.group.GroupImages[ action.payload ]
       return updatedState;
     default:
       return state;

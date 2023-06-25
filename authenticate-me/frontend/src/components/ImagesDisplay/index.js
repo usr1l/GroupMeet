@@ -4,7 +4,7 @@ import ImagePreview from '../ImagePreview';
 import IconDescriptionCard from '../IconDescriptionCard';
 import ConfirmDeleteModal from '../ConfirmDeleteModal';
 import OpenModalMenuItem from '../Navigation/OpenModalMenuItem';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { csrfFetch } from '../../store/csrf';
 import { actionDeleteGroupImage } from '../../store/groups';
 
@@ -13,6 +13,25 @@ const ImagesDisplay = ({ img, organizerBool = false }) => {
   const ulRef = useRef();
   const dispatch = useDispatch();
 
+  const group = useSelector(state => state.groups.group);
+
+  function getDisplayDate(isoDateString) {
+    // Parse the ISO date string into a Date object
+    const date = new Date(isoDateString);
+
+    // Array to map month number to month name
+    const months = [ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ];
+
+    // Format the Date object into desired format
+    const formattedDate = months[ date.getUTCMonth() ] + ' ' +
+      date.getUTCDate() + ', ' +
+      date.getUTCFullYear() + ' ' +
+      date.getUTCHours() + ':' +
+      String(date.getUTCMinutes()).padStart(2, '0') + ':' +
+      String(date.getUTCSeconds()).padStart(2, '0');
+
+    return formattedDate;
+  }
 
   const thunkDeleteGroupImage = (imageId) => async dispatch => {
     const response = await csrfFetch(`/api/group-images/${imageId}`, {
@@ -20,7 +39,6 @@ const ImagesDisplay = ({ img, organizerBool = false }) => {
     });
     const data = await response.json();
     if (response.ok) {
-      console.log("done", imageId)
       dispatch(actionDeleteGroupImage(imageId));
     };
 
@@ -88,12 +106,12 @@ const ImagesDisplay = ({ img, organizerBool = false }) => {
         }}>
           <IconDescriptionCard
             cardStyle='group-page-oragnizer-element'
-            iconClass="fas fa-user-circle"
-            heading={'heading'}
-            subHeading={'Co-Host'}
+            heading={group.name}
+            subHeading={getDisplayDate(img.createdAt)}
+            previewBool={true}
+            previewSrc={group.previewImage}
           />
-          {organizerBool && (
-
+          {organizerBool && !img.preview && (
             <div
               ref={ulRef}
               onClick={() => setEditDivBool(true)}

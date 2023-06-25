@@ -37,13 +37,11 @@ function GroupImagesPage({ images, groupId, organizerBool = false }) {
             class="fa-solid fa-circle-plus">
           </i>
         </div>
-        {
-          images.map((image) => (
-            <div onClick={() => setModalContent(<ImagesDisplay organizerBool={organizerBool} img={image} />)} className='image-card'>
-              <img src={image.url}></img>
-            </div>
-          ))
-        }
+        {images.map((image) => (
+          <div onClick={() => setModalContent(<ImagesDisplay organizerBool={organizerBool} img={image} />)} className='image-card'>
+            <img src={image.url}></img>
+          </div>
+        ))}
       </div>
     </div >
   )

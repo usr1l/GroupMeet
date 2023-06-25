@@ -71,5 +71,6 @@ module.exports = {
   multipleFilesUpload,
   retrievePrivateFile,
   singleMulterUpload,
-  multipleMulterUpload
+  multipleMulterUpload,
+  deleteFile
 };
