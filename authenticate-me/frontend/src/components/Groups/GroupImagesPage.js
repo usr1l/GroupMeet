@@ -14,29 +14,32 @@ function GroupImagesPage({ images, groupId, organizerBool = false }) {
   return (
     <div id='groups-images-wrapper'>
       <div id='groups-images-container'>
-        <div
-          style={{
-            width: "175px",
-            height: "225px",
-            boxSizing: "border-box",
-            margin: "30px 20px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            borderRadius: "15px",
-            boxShadow: "0 0 10px rgba(0, 0, 0, 0.4)",
-            cursor: "pointer",
-            color: "lightgrey"
+        {organizerBool && (
 
-          }}
-          onClick={() => setModalContent(<ImageUpload groupId={groupId} />)}>
-          <i
+          <div
             style={{
-              fontSize: "40px",
+              width: "175px",
+              height: "225px",
+              boxSizing: "border-box",
+              margin: "30px 20px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              borderRadius: "15px",
+              boxShadow: "0 0 10px rgba(0, 0, 0, 0.4)",
+              cursor: "pointer",
+              color: "lightgrey"
+
             }}
-            class="fa-solid fa-circle-plus">
-          </i>
-        </div>
+            onClick={() => setModalContent(<ImageUpload groupId={groupId} />)}>
+            <i
+              style={{
+                fontSize: "40px",
+              }}
+              class="fa-solid fa-circle-plus">
+            </i>
+          </div>
+        )}
         {images.map((image) => (
           <div onClick={() => setModalContent(<ImagesDisplay organizerBool={organizerBool} img={image} />)} className='image-card'>
             <img src={image.url}></img>
